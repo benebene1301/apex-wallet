@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX WALLET V2</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --border: #2a2a32;
+    --text: #e8e6e0;
+    --muted: #6b6a72;
+    --accent: #7c6aff;
+    --accent-soft: rgba(124,106,255,0.12);
+    --accent-border: rgba(124,106,255,0.3);
+    --green: #22c55e;
+    --green-soft: rgba(34,197,94,0.1);
+    --red: #ef4444;
+    --red-soft: rgba(239,68,68,0.1);
+    --yellow: #f59e0b;
+    --yellow-soft: rgba(245,158,11,0.1);
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 100px;
+  }
+
+  /* HEADER */
+  header {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+
+  .logo {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .header-right { display: flex; align-items: center; gap: 10px; }
+
+  .network-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent-border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+  }
+
+  /* LANGUAGE SELECTOR */
+  .lang-select {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 5px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* CARD */
+  .card {
+    width: 100%;
+    max-width: 500px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 12px;
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* BUTTONS */
+  .btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-primary:hover { background: #6a57f0; border-color: #6a57f0; color: #fff; }
+  .btn-full { width: 100%; }
+  .btn-sm { font-size: 11px; padding: 7px 12px; }
+  .btn-danger { border-color: var(--red); color: var(--red); }
+  .btn-danger:hover { background: var(--red-soft); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* INPUTS */
+  input[type="text"], input[type="password"], textarea, select {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, textarea:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--muted); }
+
+  .input-group { margin-top: 12px; display: none; }
+  .input-group.visible { display: block; }
+
+  .field { margin-bottom: 12px; }
+  .field-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  /* BALANCE */
+  .balance-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4px; }
+  .balance-amount { font-size: 38px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .balance-unit { font-size: 16px; color: var(--muted); margin-left: 6px; }
+  .balance-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+  .wallet-address {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .copy-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 4px 9px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .refresh-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .refresh-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 18px;
+    background: var(--surface2);
+    padding: 3px;
+    border-radius: 11px;
+  }
+
+  .tab {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tab.active { background: var(--surface); color: var(--text); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* STATUS */
+  .tx-status {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-top: 12px;
+    display: none;
+    line-height: 1.5;
+  }
+
+  .tx-status.success { background: var(--green-soft); color: var(--green); display: block; border: 1px solid rgba(34,197,94,0.2); }
+  .tx-status.error { background: var(--red-soft); color: var(--red); display: block; border: 1px solid rgba(239,68,68,0.2); }
+  .tx-status.pending { background: var(--accent-soft); color: var(--accent); display: block; border: 1px solid var(--accent-border); }
+
+  /* CONTACTS */
+  .contacts-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.15s;
+  }
+
+  .contact-item:hover { border-color: var(--accent-border); }
+
+  .contact-info { flex: 1; min-width: 0; }
+  .contact-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .contact-addr { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .contact-actions { display: flex; gap: 6px; flex-shrink: 0; margin-left: 10px; }
+
+  .add-contact-form {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 14px;
+    display: none;
+  }
+
+  .add-contact-form.visible { display: block; }
+
+  .no-contacts {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* MNEMONIC */
+  .mnemonic-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin: 12px 0;
+  }
+
+  .mnemonic-word {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 7px 8px;
+    text-align: center;
+    color: var(--text);
+  }
+
+  .mnemonic-word span { color: var(--muted); font-size: 8px; display: block; }
+
+  .mnemonic-warning {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--yellow);
+    background: var(--yellow-soft);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+
+  /* RECEIVE */
+  .receive-view { text-align: center; }
+  .qr-box {
+    width: 130px;
+    height: 130px;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 9px;
+  }
+
+  .full-address-box {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    word-break: break-all;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+
+  /* CHAT */
+  .chat-area { width: 100%; max-width: 500px; }
+
+  .chat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .api-notice {
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .api-key-row { display: flex; gap: 8px; margin-top: 8px; }
+  .api-key-row input { flex: 1; font-size: 11px; padding: 8px 12px; }
+  .api-key-row button {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .chat-messages {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    padding: 16px;
+    min-height: 180px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .msg {
+    max-width: 88%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .msg.user {
+    background: var(--accent);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg.ai {
+    background: var(--surface2);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .msg.ai.thinking { color: var(--muted); font-style: italic; }
+
+  /* CONFIRMATION */
+  .msg.confirm {
+    background: var(--yellow-soft);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--yellow);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    max-width: 95%;
+  }
+
+  .confirm-btns { display: flex; gap: 8px; margin-top: 10px; }
+
+  .confirm-yes {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 7px 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--green);
+    color: white;
+    cursor: pointer;
+  }
+
+  .confirm-no {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .chat-input-row {
+    display: flex;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 12px;
+  }
+
+  .chat-input {
+    flex: 1;
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-input::placeholder { color: var(--muted); }
+
+  .send-btn {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .send-btn:hover { background: #6a57f0; }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* FAUCET */
+  .faucet-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 15px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .faucet-item:hover { border-color: var(--accent-border); background: rgba(124,106,255,0.05); }
+
+  .faucet-info { flex: 1; }
+  .faucet-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .faucet-desc { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+  .faucet-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    max-width: 500px;
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 6px 0 18px;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .card, .chat-area { animation: fadeIn 0.3s ease; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">APEX <span>WALLET</span></div>
+  <div class="header-right">
+    <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+      <option value="en">🇺🇸 EN</option>
+      <option value="fil">🇵🇭 Filipino</option>
+      <option value="id">🇮🇩 Bahasa</option>
+      <option value="th">🇹🇭 Thai</option>
+      <option value="vi">🇻🇳 Tiếng Việt</option>
+      <option value="ms">🇲🇾 Malay</option>
+      <option value="km">🇰🇭 Khmer</option>
+    </select>
+    <div class="network-badge">MONAD TESTNET</div>
+  </div>
+</header>
+
+<!-- WALLET SETUP -->
+<div class="card" id="setupCard">
+  <div class="card-label" id="lbl_setup">Connect or Create Wallet</div>
+  <div class="setup-grid">
+    <button class="btn" onclick="showImport()" id="btn_import">Import Wallet</button>
+    <button class="btn btn-primary" onclick="createWallet()" id="btn_create">Create New</button>
+  </div>
+
+  <div class="input-group" id="importGroup">
+    <input type="password" id="importKey" placeholder="Private key or seed phrase..."/>
+    <button class="btn btn-primary btn-full" style="margin-top:8px" onclick="importWallet()" id="btn_import_confirm">Import</button>
+  </div>
+
+  <div id="newMnemonic" class="hidden" style="margin-top:14px">
+    <div class="mnemonic-warning" id="lbl_mnemonic_warning">⚠ Write down these 12 words in order. Never share them.</div>
+    <div class="mnemonic-grid" id="mnemonicGrid"></div>
+    <button class="btn btn-primary btn-full" onclick="confirmWallet()" id="btn_saved">I've saved it — Continue</button>
+  </div>
+</div>
+
+<!-- BALANCE -->
+<div class="card hidden" id="balanceCard">
+  <div class="refresh-row">
+    <div class="card-label" style="margin-bottom:0" id="lbl_balance_title">Balance</div>
+    <button class="refresh-btn" onclick="refreshBalance()">↻</button>
+  </div>
+  <div class="balance-row">
+    <div>
+      <div class="balance-amount"><span id="balanceAmount">—</span><span class="balance-unit">MON</span></div>
+      <div class="balance-sub" id="lbl_testnet">Monad Testnet</div>
+    </div>
+  </div>
+  <div class="wallet-address">
+    <div style="flex:1;min-width:0">
+      <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px">Your Address</div>
+      <div id="walletAddressShort" style="word-break:break-all;user-select:all;-webkit-user-select:all;cursor:text;line-height:1.6;color:var(--text);font-size:11px">—</div>
+    </div>
+    <button class="copy-btn" onclick="copyAddress()" id="btn_copy" style="margin-left:12px;align-self:flex-start;margin-top:18px">Copy</button>
+  </div>
+</div>
+
+<!-- SEND / RECEIVE / CONTACTS -->
+<div class="card hidden" id="txCard">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('send',this)" id="tab_send">Send</button>
+    <button class="tab" onclick="switchTab('receive',this)" id="tab_receive">Receive</button>
+    <button class="tab" onclick="switchTab('contacts',this)" id="tab_contacts">Contacts</button>
+    <button class="tab" onclick="switchTab('faucet',this)" id="tab_faucet">Faucet</button>
+  </div>
+
+  <!-- SEND -->
+  <div class="tab-content active" id="sendTab">
+    <div class="field">
+      <div class="field-label" id="lbl_to">To Address or Contact Name</div>
+      <input type="text" id="toAddress" placeholder="0x... or 'Mama'"/>
+    </div>
+    <div class="field">
+      <div class="field-label" id="lbl_amount">Amount (MON)</div>
+      <input type="text" id="sendAmount" placeholder="0.0"/>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="initiateSend()" id="btn_send">Send MON</button>
+    <div class="tx-status" id="txStatus"></div>
+  </div>
+
+  <!-- RECEIVE -->
+  <div class="tab-content" id="receiveTab">
+    <div class="receive-view">
+      <div class="qr-box">QR Soon</div>
+      <div class="full-address-box" id="receiveAddress">—</div>
+      <button class="btn btn-primary btn-full" onclick="copyAddress()" id="btn_copy_addr">Copy Address</button>
+    </div>
+  </div>
+
+  <!-- FAUCET -->
+  <div class="tab-content" id="faucetTab">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+      Get free testnet MON to start testing. Your wallet address is auto-copied when you click a faucet. Paste it on the faucet site.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+
+      <a href="https://faucet.monad.xyz/" target="_blank" onclick="copyAddressForFaucet()" class="faucet-item">
+        <div class="faucet-info">
+          <div class="faucet-name">🟣 Official Monad Faucet</div>
+          <div class="faucet-desc">Best source — most reliable & consistent</div>
+        </div>
+        <div class="faucet-badge">Open ↗</div>
+      </a>
+
+      <a href="https://www.alchemy.com/faucets/monad-testnet" target="_blank" onclick="copyAddressForFaucet()" class="faucet-item">
+        <div class="faucet-info">
+          <div class="faucet-name">⚗️ Alchemy Faucet</div>
+          <div class="faucet-desc">No auth required — 1 claim per 24 hours</div>
+        </div>
+        <div class="faucet-badge">Open ↗</div>
+      </a>
+
+      <a href="https://faucet.quicknode.com/monad" target="_blank" onclick="copyAddressForFaucet()" class="faucet-item">
+        <div class="faucet-info">
+          <div class="faucet-name">⚡ QuickNode Faucet</div>
+          <div class="faucet-desc">Refill every 12 hours — good for heavy testing</div>
+        </div>
+        <div class="faucet-badge">Open ↗</div>
+      </a>
+
+      <a href="https://faucets.chain.link/monad-testnet" target="_blank" onclick="copyAddressForFaucet()" class="faucet-item">
+        <div class="faucet-info">
+          <div class="faucet-name">🔗 Chainlink Faucet</div>
+          <div class="faucet-desc">Connect wallet directly to claim</div>
+        </div>
+        <div class="faucet-badge">Open ↗</div>
+      </a>
+
+      <a href="https://ethglobal.com/faucet/monad-testnet-10143" target="_blank" onclick="copyAddressForFaucet()" class="faucet-item">
+        <div class="faucet-info">
+          <div class="faucet-name">🌐 ETHGlobal Faucet</div>
+          <div class="faucet-desc">0.2 MON/day — requires ETHGlobal login</div>
+        </div>
+        <div class="faucet-badge">Open ↗</div>
+      </a>
+
+    </div>
+    <div class="tx-status" id="faucetCopyStatus" style="margin-top:12px"></div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div class="tab-content" id="contactsTab">
+    <div class="contacts-list" id="contactsList"></div>
+    <button class="btn btn-full" onclick="toggleAddContact()" id="btn_add_contact">+ Add Contact</button>
+
+    <div class="add-contact-form" id="addContactForm">
+      <div class="field">
+        <div class="field-label" id="lbl_contact_name">Name</div>
+        <input type="text" id="newContactName" placeholder="Mama, Kuya, Boss..."/>
+      </div>
+      <div class="field">
+        <div class="field-label" id="lbl_contact_addr">Wallet Address</div>
+        <input type="text" id="newContactAddr" placeholder="0x..."/>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" style="flex:1" onclick="saveContact()" id="btn_save_contact">Save</button>
+        <button class="btn" style="flex:1" onclick="toggleAddContact()" id="btn_cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div class="chat-area">
+  <div class="chat-label" id="lbl_agent">AI Agent — Talk to your wallet</div>
+
+  <div class="api-notice" id="apiNotice">
+    <span id="lbl_api_notice">Enter your Claude API key to activate the AI agent.</span>
+    <div class="api-key-row">
+      <input type="password" id="apiKeyInput" placeholder="sk-ant-..."/>
+      <button onclick="saveApiKey()" id="btn_api_save">Save</button>
+    </div>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg ai" id="welcomeMsg">Hey! I'm your APEX wallet agent. Connect a wallet and add your API key, then you can say things like:<br><br>• "What's my balance?"<br>• "Send 1 MON to Mama"<br>• "Add contact Kuya 0x..."<br>• "Show my contacts"</div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button class="send-btn" onclick="sendChat()" id="chatSendBtn">→</button>
+  </div>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────
+let wallet = null;
+let provider = null;
+let apiKey = "";
+let currentLang = "en";
+let contacts = JSON.parse(localStorage.getItem("apex_contacts") || "[]");
+let pendingTx = null; // for confirmation flow
+
+const MONAD_RPC = "https://testnet-rpc.monad.xyz";
+
+// ─── TRANSLATIONS ─────────────────────────────
+const T = {
+  en: {
+    setup: "Connect or Create Wallet",
+    import_btn: "Import Wallet",
+    create_btn: "Create New",
+    import_confirm: "Import",
+    saved_btn: "I've saved it — Continue",
+    mnemonic_warning: "⚠ Write down these 12 words in order. Never share them.",
+    balance_title: "Balance",
+    testnet: "Monad Testnet",
+    copy: "Copy",
+    tab_send: "Send",
+    tab_receive: "Receive",
+    tab_contacts: "Contacts",
+    to: "To Address or Contact Name",
+    amount: "Amount (MON)",
+    send_btn: "Send MON",
+    copy_addr: "Copy Address",
+    contact_name: "Name",
+    contact_addr: "Wallet Address",
+    add_contact: "+ Add Contact",
+    save_contact: "Save",
+    cancel: "Cancel",
+    agent: "AI Agent — Talk to your wallet",
+    api_notice: "Enter your Claude API key to activate the AI agent.",
+    api_save: "Save",
+    welcome: "Hey! I'm your APEX wallet agent. Connect a wallet and add your API key, then you can say things like:\n\n• \"What's my balance?\"\n• \"Send 1 MON to Mama\"\n• \"Add contact Kuya 0x...\"\n• \"Show my contacts\"",
+    placeholder_chat: "Ask me anything...",
+    no_contacts: "No contacts yet. Add one below.",
+  },
+  fil: {
+    setup: "I-connect o Gumawa ng Wallet",
+    import_btn: "I-import ang Wallet",
+    create_btn: "Gumawa ng Bago",
+    import_confirm: "I-import",
+    saved_btn: "Nai-save na — Ituloy",
+    mnemonic_warning: "⚠ Isulat ang 12 salitang ito sa pagkakasunod. Huwag ibahagi.",
+    balance_title: "Balanse",
+    testnet: "Monad Testnet",
+    copy: "Kopyahin",
+    tab_send: "Magpadala",
+    tab_receive: "Tumanggap",
+    tab_contacts: "Mga Contact",
+    to: "Address o Pangalan ng Contact",
+    amount: "Halaga (MON)",
+    send_btn: "Magpadala ng MON",
+    copy_addr: "Kopyahin ang Address",
+    contact_name: "Pangalan",
+    contact_addr: "Wallet Address",
+    add_contact: "+ Magdagdag ng Contact",
+    save_contact: "I-save",
+    cancel: "Kanselahin",
+    agent: "AI Agent — Makipag-usap sa iyong wallet",
+    api_notice: "Ilagay ang iyong Claude API key para i-activate ang AI agent.",
+    api_save: "I-save",
+    welcome: "Hoy! Ako ang iyong APEX wallet agent. I-connect ang wallet at lagyan ng API key, tapos pwede kang magsabi ng:\n\n• \"Magkano ang balanse ko?\"\n• \"Magpadala ng 1 MON kay Mama\"\n• \"I-add si Kuya 0x...\"\n• \"Ipakita ang mga contact\"",
+    placeholder_chat: "Magtanong ng kahit ano...",
+    no_contacts: "Wala pang contact. Magdagdag sa ibaba.",
+  },
+  id: {
+    setup: "Hubungkan atau Buat Wallet",
+    import_btn: "Impor Wallet",
+    create_btn: "Buat Baru",
+    import_confirm: "Impor",
+    saved_btn: "Sudah disimpan — Lanjutkan",
+    mnemonic_warning: "⚠ Catat 12 kata ini secara berurutan. Jangan dibagikan.",
+    balance_title: "Saldo",
+    testnet: "Monad Testnet",
+    copy: "Salin",
+    tab_send: "Kirim",
+    tab_receive: "Terima",
+    tab_contacts: "Kontak",
+    to: "Alamat atau Nama Kontak",
+    amount: "Jumlah (MON)",
+    send_btn: "Kirim MON",
+    copy_addr: "Salin Alamat",
+    contact_name: "Nama",
+    contact_addr: "Alamat Wallet",
+    add_contact: "+ Tambah Kontak",
+    save_contact: "Simpan",
+    cancel: "Batal",
+    agent: "AI Agent — Bicara dengan wallet Anda",
+    api_notice: "Masukkan Claude API key Anda untuk mengaktifkan AI agent.",
+    api_save: "Simpan",
+    welcome: "Hei! Saya adalah APEX wallet agent Anda. Hubungkan wallet dan tambahkan API key, lalu Anda bisa berkata:\n\n• \"Berapa saldo saya?\"\n• \"Kirim 1 MON ke Mama\"\n• \"Tambahkan kontak Kakak 0x...\"\n• \"Tampilkan kontak saya\"",
+    placeholder_chat: "Tanya apa saja...",
+    no_contacts: "Belum ada kontak. Tambahkan di bawah.",
+  },
+  th: {
+    setup: "เชื่อมต่อหรือสร้างกระเป๋าเงิน",
+    import_btn: "นำเข้ากระเป๋าเงิน",
+    create_btn: "สร้างใหม่",
+    import_confirm: "นำเข้า",
+    saved_btn: "บันทึกแล้ว — ดำเนินการต่อ",
+    mnemonic_warning: "⚠ จดคำ 12 คำนี้ตามลำดับ อย่าแบ่งปันกับใคร",
+    balance_title: "ยอดเงิน",
+    testnet: "Monad Testnet",
+    copy: "คัดลอก",
+    tab_send: "ส่ง",
+    tab_receive: "รับ",
+    tab_contacts: "รายชื่อ",
+    to: "ที่อยู่หรือชื่อผู้ติดต่อ",
+    amount: "จำนวน (MON)",
+    send_btn: "ส่ง MON",
+    copy_addr: "คัดลอกที่อยู่",
+    contact_name: "ชื่อ",
+    contact_addr: "ที่อยู่กระเป๋าเงิน",
+    add_contact: "+ เพิ่มผู้ติดต่อ",
+    save_contact: "บันทึก",
+    cancel: "ยกเลิก",
+    agent: "AI Agent — คุยกับกระเป๋าเงินของคุณ",
+    api_notice: "ใส่ Claude API key เพื่อเปิดใช้งาน AI agent",
+    api_save: "บันทึก",
+    welcome: "สวัสดี! ฉันคือ APEX wallet agent ของคุณ เชื่อมต่อกระเป๋าเงินและเพิ่ม API key แล้วพูดว่า:\n\n• \"ยอดเงินเท่าไหร่?\"\n• \"ส่ง 1 MON ให้แม่\"\n• \"เพิ่มผู้ติดต่อพี่ 0x...\"\n• \"แสดงรายชื่อ\"",
+    placeholder_chat: "ถามอะไรก็ได้...",
+    no_contacts: "ยังไม่มีผู้ติดต่อ เพิ่มด้านล่าง",
+  },
+  vi: {
+    setup: "Kết nối hoặc Tạo Ví",
+    import_btn: "Nhập Ví",
+    create_btn: "Tạo Mới",
+    import_confirm: "Nhập",
+    saved_btn: "Đã lưu — Tiếp tục",
+    mnemonic_warning: "⚠ Ghi lại 12 từ này theo thứ tự. Không chia sẻ với ai.",
+    balance_title: "Số dư",
+    testnet: "Monad Testnet",
+    copy: "Sao chép",
+    tab_send: "Gửi",
+    tab_receive: "Nhận",
+    tab_contacts: "Danh bạ",
+    to: "Địa chỉ hoặc Tên liên hệ",
+    amount: "Số lượng (MON)",
+    send_btn: "Gửi MON",
+    copy_addr: "Sao chép địa chỉ",
+    contact_name: "Tên",
+    contact_addr: "Địa chỉ ví",
+    add_contact: "+ Thêm liên hệ",
+    save_contact: "Lưu",
+    cancel: "Hủy",
+    agent: "AI Agent — Nói chuyện với ví của bạn",
+    api_notice: "Nhập Claude API key để kích hoạt AI agent.",
+    api_save: "Lưu",
+    welcome: "Xin chào! Tôi là APEX wallet agent của bạn. Kết nối ví và thêm API key, sau đó bạn có thể nói:\n\n• \"Số dư của tôi là bao nhiêu?\"\n• \"Gửi 1 MON cho Mẹ\"\n• \"Thêm liên hệ Anh 0x...\"\n• \"Hiển thị danh bạ\"",
+    placeholder_chat: "Hỏi bất cứ điều gì...",
+    no_contacts: "Chưa có liên hệ. Thêm bên dưới.",
+  },
+  ms: {
+    setup: "Sambung atau Cipta Dompet",
+    import_btn: "Import Dompet",
+    create_btn: "Cipta Baharu",
+    import_confirm: "Import",
+    saved_btn: "Sudah disimpan — Teruskan",
+    mnemonic_warning: "⚠ Tuliskan 12 perkataan ini mengikut urutan. Jangan kongsi.",
+    balance_title: "Baki",
+    testnet: "Monad Testnet",
+    copy: "Salin",
+    tab_send: "Hantar",
+    tab_receive: "Terima",
+    tab_contacts: "Kenalan",
+    to: "Alamat atau Nama Kenalan",
+    amount: "Jumlah (MON)",
+    send_btn: "Hantar MON",
+    copy_addr: "Salin Alamat",
+    contact_name: "Nama",
+    contact_addr: "Alamat Dompet",
+    add_contact: "+ Tambah Kenalan",
+    save_contact: "Simpan",
+    cancel: "Batal",
+    agent: "AI Agent — Bercakap dengan dompet anda",
+    api_notice: "Masukkan Claude API key anda untuk mengaktifkan AI agent.",
+    api_save: "Simpan",
+    welcome: "Hai! Saya adalah APEX wallet agent anda. Sambungkan dompet dan tambah API key, kemudian anda boleh berkata:\n\n• \"Berapa baki saya?\"\n• \"Hantar 1 MON kepada Ibu\"\n• \"Tambah kenalan Abang 0x...\"\n• \"Tunjukkan kenalan saya\"",
+    placeholder_chat: "Tanya apa sahaja...",
+    no_contacts: "Tiada kenalan lagi. Tambah di bawah.",
+  },
+  km: {
+    setup: "ភ្ជាប់ ឬ បង្កើតកាបូប",
+    import_btn: "នាំចូលកាបូប",
+    create_btn: "បង្កើតថ្មី",
+    import_confirm: "នាំចូល",
+    saved_btn: "បានរក្សា — បន្ត",
+    mnemonic_warning: "⚠ សរសេរពាក្យ ១២ ទាំងនេះតាមលំដាប់។ កុំចែករំលែក។",
+    balance_title: "សមតុល្យ",
+    testnet: "Monad Testnet",
+    copy: "ចម្លង",
+    tab_send: "ផ្ញើ",
+    tab_receive: "ទទួល",
+    tab_contacts: "ទំនាក់ទំនង",
+    to: "អាសយដ្ឋាន ឬ ឈ្មោះទំនាក់ទំនង",
+    amount: "ចំនួន (MON)",
+    send_btn: "ផ្ញើ MON",
+    copy_addr: "ចម្លងអាសយដ្ឋាន",
+    contact_name: "ឈ្មោះ",
+    contact_addr: "អាសយដ្ឋានកាបូប",
+    add_contact: "+ បន្ថែមទំនាក់ទំនង",
+    save_contact: "រក្សា",
+    cancel: "បោះបង់",
+    agent: "AI Agent — និយាយជាមួយកាបូបរបស់អ្នក",
+    api_notice: "បញ្ចូល Claude API key ដើម្បីធ្វើឱ្យ AI agent សកម្ម",
+    api_save: "រក្សា",
+    welcome: "សួស្តី! ខ្ញុំជា APEX wallet agent របស់អ្នក។ ភ្ជាប់កាបូប ហើយបន្ថែម API key បន្ទាប់មកអ្នកអាចនិយាយថា:\n\n• \"សមតុល្យខ្ញុំប៉ុន្មាន?\"\n• \"ផ្ញើ ១ MON ទៅម្ដាយ\"\n• \"បន្ថែមទំនាក់ទំនង 0x...\"\n• \"បង្ហាញទំនាក់ទំនង\"",
+    placeholder_chat: "សួរអ្វីក៏បាន...",
+    no_contacts: "មិនទាន់មានទំនាក់ទំនង។ បន្ថែមខាងក្រោម។",
+  }
+};
+
+function t(key) { return (T[currentLang] && T[currentLang][key]) || T.en[key] || key; }
+
+function changeLanguage(lang) {
+  currentLang = lang;
+  applyTranslations();
+}
+
+function applyTranslations() {
+  const ids = [
+    ["lbl_setup","setup"],["btn_import","import_btn"],["btn_create","create_btn"],
+    ["btn_import_confirm","import_confirm"],["btn_saved","saved_btn"],
+    ["lbl_mnemonic_warning","mnemonic_warning"],["lbl_balance_title","balance_title"],
+    ["lbl_testnet","testnet"],["btn_copy","copy"],["tab_send","tab_send"],
+    ["tab_receive","tab_receive"],["tab_contacts","tab_contacts"],["lbl_to","to"],
+    ["lbl_amount","amount"],["btn_send","send_btn"],["btn_copy_addr","copy_addr"],
+    ["lbl_contact_name","contact_name"],["lbl_contact_addr","contact_addr"],
+    ["btn_add_contact","add_contact"],["btn_save_contact","save_contact"],
+    ["btn_cancel","cancel"],["lbl_agent","agent"],["lbl_api_notice","api_notice"],
+    ["btn_api_save","api_save"],
+  ];
+  ids.forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  });
+  const ci = document.getElementById("chatInput");
+  if (ci) ci.placeholder = t("placeholder_chat");
+  renderContacts();
+}
+
+// ─── WALLET ───────────────────────────────────
+function createWallet() {
+  const w = ethers.Wallet.createRandom();
+  wallet = w;
+  const words = w.mnemonic.phrase.split(" ");
+  const grid = document.getElementById("mnemonicGrid");
+  grid.innerHTML = words.map((word, i) =>
+    `<div class="mnemonic-word"><span>${i+1}</span>${word}</div>`
+  ).join("");
+  document.getElementById("newMnemonic").classList.remove("hidden");
+  document.getElementById("importGroup").classList.remove("visible");
+}
+
+function confirmWallet() {
+  connectProvider();
+  showWalletUI();
+}
+
+function showImport() {
+  document.getElementById("importGroup").classList.toggle("visible");
+  document.getElementById("newMnemonic").classList.add("hidden");
+}
+
+function importWallet() {
+  const val = document.getElementById("importKey").value.trim();
+  try {
+    wallet = val.split(" ").length >= 12
+      ? ethers.Wallet.fromPhrase(val)
+      : new ethers.Wallet(val);
+    connectProvider();
+    showWalletUI();
+  } catch(e) {
+    alert("Invalid key or phrase.");
+  }
+}
+
+function connectProvider() {
+  provider = new ethers.JsonRpcProvider(MONAD_RPC);
+  wallet = wallet.connect(provider);
+  refreshBalance();
+}
+
+function showWalletUI() {
+  document.getElementById("setupCard").classList.add("hidden");
+  document.getElementById("balanceCard").classList.remove("hidden");
+  document.getElementById("txCard").classList.remove("hidden");
+  const addr = wallet.address;
+  document.getElementById("walletAddressShort").textContent = addr;
+  document.getElementById("receiveAddress").textContent = addr;
+  renderContacts();
+}
+
+async function refreshBalance() {
+  if (!wallet || !provider) return;
+  document.getElementById("balanceAmount").textContent = "…";
+  try {
+    const bal = await provider.getBalance(wallet.address);
+    document.getElementById("balanceAmount").textContent = parseFloat(ethers.formatEther(bal)).toFixed(4);
+  } catch { document.getElementById("balanceAmount").textContent = "Err"; }
+}
+
+function copyAddress() {
+  if (!wallet) return;
+  navigator.clipboard.writeText(wallet.address);
+  const btn = document.getElementById("btn_copy");
+  if(btn){ btn.textContent = "✓"; setTimeout(()=>btn.textContent=t("copy"),1500); }
+}
+
+// ─── TABS ─────────────────────────────────────
+function switchTab(tab, el) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById(tab+"Tab").classList.add("active");
+}
+
+// ─── CONTACTS ─────────────────────────────────
+function saveContacts() { localStorage.setItem("apex_contacts", JSON.stringify(contacts)); }
+
+function renderContacts() {
+  const list = document.getElementById("contactsList");
+  if (!contacts.length) {
+    list.innerHTML = `<div class="no-contacts">${t("no_contacts")}</div>`;
+    return;
+  }
+  list.innerHTML = contacts.map((c, i) => `
+    <div class="contact-item">
+      <div class="contact-info">
+        <div class="contact-name">${c.name}</div>
+        <div class="contact-addr">${c.address}</div>
+      </div>
+      <div class="contact-actions">
+        <button class="btn btn-sm" onclick="useContact('${c.address}')">Use</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteContact(${i})">✕</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function toggleAddContact() {
+  const form = document.getElementById("addContactForm");
+  form.classList.toggle("visible");
+}
+
+function saveContact() {
+  const name = document.getElementById("newContactName").value.trim();
+  const address = document.getElementById("newContactAddr").value.trim();
+  if (!name || !address) return alert("Please fill in both fields.");
+  if (!address.startsWith("0x") || address.length !== 42) return alert("Invalid wallet address.");
+  contacts.push({ name, address });
+  saveContacts();
+  renderContacts();
+  document.getElementById("newContactName").value = "";
+  document.getElementById("newContactAddr").value = "";
+  document.getElementById("addContactForm").classList.remove("visible");
+}
+
+function deleteContact(i) {
+  if (!confirm("Remove this contact?")) return;
+  contacts.splice(i, 1);
+  saveContacts();
+  renderContacts();
+}
+
+function useContact(addr) {
+  document.getElementById("toAddress").value = addr;
+  switchTab("send", document.getElementById("tab_send"));
+}
+
+function resolveRecipient(input) {
+  const match = contacts.find(c => c.name.toLowerCase() === input.toLowerCase());
+  return match ? match.address : input;
+}
+
+// ─── SEND ─────────────────────────────────────
+async function initiateSend() {
+  if (!wallet) return alert("No wallet connected.");
+  const rawTo = document.getElementById("toAddress").value.trim();
+  const amount = document.getElementById("sendAmount").value.trim();
+  if (!rawTo || !amount) return;
+  const to = resolveRecipient(rawTo);
+  const displayTo = rawTo !== to ? `${rawTo} (${to.slice(0,8)}...${to.slice(-4)})` : to.slice(0,10)+"..."+to.slice(-6);
+
+  // Show confirm in chat
+  addConfirmMsg(`Confirm sending ${amount} MON to ${displayTo}?`, async () => {
+    await executeSend(to, amount);
+  });
+  switchTab("send", document.getElementById("tab_send"));
+}
+
+async function executeSend(to, amount) {
+  const status = document.getElementById("txStatus");
+  try {
+    status.className = "tx-status pending";
+    status.textContent = "⏳ Sending...";
+    const tx = await wallet.sendTransaction({ to, value: ethers.parseEther(amount) });
+    status.textContent = "⏳ Confirming... " + tx.hash.slice(0,16)+"...";
+    await tx.wait();
+    status.className = "tx-status success";
+    status.textContent = "✓ Sent! TX: " + tx.hash.slice(0,20)+"...";
+    refreshBalance();
+  } catch(e) {
+    status.className = "tx-status error";
+    status.textContent = "✗ " + (e.message || "Failed");
+  }
+}
+
+// ─── API KEY ──────────────────────────────────
+function saveApiKey() {
+  const key = document.getElementById("apiKeyInput").value.trim();
+  if (!key.startsWith("sk-ant-")) return alert("Invalid API key format. Should start with sk-ant-");
+  apiKey = key;
+  try { localStorage.setItem("apex_api_key", key); } catch(e) {}
+  try { sessionStorage.setItem("apex_api_key", key); } catch(e) {}
+  document.getElementById("apiNotice").classList.add("hidden");
+  addMsg("ai", "✓ API key saved! " + (currentLang === "fil" ? "Magtanong ka na!" : "Ask me anything!"));
+}
+
+function loadSavedApiKey() {
+  const saved = localStorage.getItem("apex_api_key");
+  if (saved && saved.startsWith("sk-ant-")) {
+    apiKey = saved;
+    document.getElementById("apiNotice").classList.add("hidden");
+  }
+}
+
+// ─── CHAT ─────────────────────────────────────
+function addMsg(role, text) {
+  const box = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.textContent = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+function addConfirmMsg(text, onConfirm) {
+  const box = document.getElementById("chatMessages");
+  const div = document.createElement("div");
+  div.className = "msg confirm";
+  div.innerHTML = `<div>⚠ ${text}</div>`;
+  const btns = document.createElement("div");
+  btns.className = "confirm-btns";
+
+  const yes = document.createElement("button");
+  yes.className = "confirm-yes";
+  yes.textContent = "✓ Confirm";
+  yes.onclick = () => { div.remove(); onConfirm(); };
+
+  const no = document.createElement("button");
+  no.className = "confirm-no";
+  no.textContent = "✕ Cancel";
+  no.onclick = () => { div.remove(); addMsg("ai", "Transaction cancelled."); };
+
+  btns.appendChild(yes);
+  btns.appendChild(no);
+  div.appendChild(btns);
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendChat() {
+  const input = document.getElementById("chatInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMsg("user", text);
+  input.value = "";
+
+  let balanceInfo = "unknown";
+  let addressInfo = "not connected";
+  if (wallet) {
+    addressInfo = wallet.address;
+    try {
+      const bal = await provider.getBalance(wallet.address);
+      balanceInfo = parseFloat(ethers.formatEther(bal)).toFixed(4) + " MON";
+    } catch {}
+  }
+
+  const contactList = contacts.map(c => `${c.name}: ${c.address}`).join("\n") || "none";
+
+  const thinkingMsg = addMsg("ai", "…");
+  thinkingMsg.classList.add("thinking");
+
+  const systemPrompt = `You are APEX, an AI wallet agent for Monad Testnet built for Southeast Asian users.
+
+Current wallet address: ${addressInfo}
+Current balance: ${balanceInfo}
+Network: Monad Testnet (chainId: 10143)
+User language: ${currentLang}
+Saved contacts:
+${contactList}
+
+RULES:
+- Respond in the user's language (${currentLang}). If Filipino/Tagalog, mix Tagalog and English naturally.
+- Keep responses short: 1-3 sentences max.
+- If user wants to SEND tokens, extract: recipient name/address and amount. Reply with a clear confirmation summary. Do NOT execute — just confirm details. Format: "SEND_INTENT:to=<address_or_name>,amount=<number>"
+- If user wants to ADD a contact, extract name and address. Format: "ADD_CONTACT:name=<name>,address=<0x...>"
+- If user asks for balance, reply with the current balance info.
+- If user asks to show contacts, list the saved contacts.
+- Be warm, simple, and friendly — this app is for everyday people, not crypto experts.`;
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system: systemPrompt,
+        messages: [{ role: "user", content: text }]
+      })
+    });
+
+    const data = await response.json();
+    let reply = data.content?.[0]?.text || "Sorry, I couldn't process that.";
+
+    // Parse intents
+    if (reply.includes("SEND_INTENT:")) {
+      const match = reply.match(/SEND_INTENT:to=([^,]+),amount=([\d.]+)/);
+      if (match) {
+        const toRaw = match[1].trim();
+        const amount = match[2].trim();
+        const toAddr = resolveRecipient(toRaw);
+        const displayTo = toRaw !== toAddr ? `${toRaw} (${toAddr.slice(0,8)}...${toAddr.slice(-4)})` : toAddr.slice(0,10)+"..."+toAddr.slice(-6);
+        thinkingMsg.classList.remove("thinking");
+        thinkingMsg.textContent = reply.replace(/SEND_INTENT:[^\n]*/g, "").trim() || `Send ${amount} MON to ${displayTo}?`;
+        addConfirmMsg(`Send ${amount} MON to ${displayTo}`, async () => {
+          await executeSend(toAddr, amount);
+        });
+        return;
+      }
+    }
+
+    if (reply.includes("ADD_CONTACT:")) {
+      const match = reply.match(/ADD_CONTACT:name=([^,]+),address=(0x[a-fA-F0-9]{40})/);
+      if (match) {
+        const name = match[1].trim();
+        const address = match[2].trim();
+        contacts.push({ name, address });
+        saveContacts();
+        renderContacts();
+        reply = reply.replace(/ADD_CONTACT:[^\n]*/g, "").trim() ||
+          (currentLang === "fil" ? `✓ Na-save si ${name}!` : `✓ Contact "${name}" saved!`);
+      }
+    }
+
+    thinkingMsg.classList.remove("thinking");
+    thinkingMsg.textContent = reply;
+
+    if (text.toLowerCase().includes("balance") || text.includes("balanse") || text.includes("saldo")) {
+      refreshBalance();
+    }
+
+  } catch(e) {
+    thinkingMsg.classList.remove("thinking");
+    thinkingMsg.textContent = "Error connecting to AI. Check your API key.";
+  }
+}
+
+// ─── FAUCET ───────────────────────────────────
+function copyAddressForFaucet() {
+  if (!wallet) return;
+  navigator.clipboard.writeText(wallet.address);
+  const status = document.getElementById("faucetCopyStatus");
+  status.className = "tx-status success";
+  status.textContent = "✓ Wallet address copied! Paste it on the faucet site.";
+  setTimeout(() => { status.className = "tx-status"; status.textContent = ""; }, 4000);
+}
+
+// ─── INIT ─────────────────────────────────────
+// HARDCODED API KEY — replace the empty string below with your key
+const HARDCODED_API_KEY = "";
+
+function loadSavedApiKey() {
+  // Try hardcoded first
+  if (HARDCODED_API_KEY && HARDCODED_API_KEY.startsWith("sk-ant-")) {
+    apiKey = HARDCODED_API_KEY;
+    document.getElementById("apiNotice").classList.add("hidden");
+    return;
+  }
+  // Try sessionStorage (works on file:// protocol)
+  const saved = sessionStorage.getItem("apex_api_key") || localStorage.getItem("apex_api_key");
+  if (saved && saved.startsWith("sk-ant-")) {
+    apiKey = saved;
+    document.getElementById("apiNotice").classList.add("hidden");
+  }
+}
+
+loadSavedApiKey();
+renderContacts();
+</script>
+</body>
+</html>
