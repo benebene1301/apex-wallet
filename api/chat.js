@@ -25,6 +25,7 @@ module.exports = async function handler(req, res) {
         system,
         messages
       })
+      
     });
 
     const data = await response.json();
