@@ -1014,6 +1014,156 @@ body.light-mode .balance-card {
   max-width: 88%;
 }
 
+
+/* SETTINGS PAGE */
+.settings-overlay {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 500;
+  overflow-y: auto;
+  padding: 20px 16px 80px;
+  display: none;
+  animation: slideUp 0.25s ease;
+}
+.settings-overlay.visible { display: block; }
+
+.settings-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto;
+}
+
+.back-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--card2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; transition: all 0.15s;
+  flex-shrink: 0;
+}
+.back-btn:hover { border-color: var(--purple); color: var(--purple2); }
+
+.settings-title { font-size: 18px; font-weight: 800; }
+
+.settings-section {
+  max-width: 480px; margin: 0 auto 20px;
+}
+
+.settings-section-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px; padding: 0 4px;
+}
+
+.settings-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: all 0.15s; margin-bottom: 6px;
+}
+.settings-item:hover { border-color: var(--purple-border); background: var(--purple-soft); }
+.settings-item:last-child { margin-bottom: 0; }
+
+.settings-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--card2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.settings-item-info { flex: 1; }
+.settings-item-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.settings-item-sub { font-size: 11px; color: var(--muted2); }
+.settings-item-arrow { color: var(--muted); font-size: 14px; }
+
+/* SUB-SETTINGS PAGE */
+.sub-settings {
+  max-width: 480px; margin: 0 auto;
+}
+
+.info-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 10px;
+}
+
+.info-row {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.info-row:last-child { border-bottom: none; padding-bottom: 0; }
+.info-row:first-child { padding-top: 0; }
+
+.info-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+
+.info-value {
+  font-family: var(--mono); font-size: 12px; color: var(--text);
+  word-break: break-all; line-height: 1.6;
+  user-select: all; -webkit-user-select: all; cursor: text;
+}
+
+.secret-blur {
+  filter: blur(6px); transition: filter 0.3s; cursor: pointer;
+  user-select: none !important; -webkit-user-select: none !important;
+}
+.secret-blur:hover { filter: blur(0); }
+
+.reveal-hint {
+  font-size: 11px; color: var(--muted2); margin-top: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* MULTI-WALLET */
+.wallet-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+
+.wallet-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px;
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: all 0.15s;
+}
+.wallet-item:hover { border-color: var(--purple-border); }
+.wallet-item.active-wallet { border-color: var(--purple); background: var(--purple-soft); }
+
+.wallet-item-avatar {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--purple-soft); border: 1px solid var(--purple-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+
+.wallet-item-info { flex: 1; min-width: 0; }
+.wallet-item-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.wallet-item-addr { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.wallet-item-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  background: var(--purple); color: white;
+  padding: 3px 8px; border-radius: 20px;
+}
+
+/* WALLET SWITCHER IN HEADER */
+.wallet-switcher {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 10px; background: var(--card2);
+  border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; transition: all 0.15s; font-size: 12px; font-weight: 700;
+}
+.wallet-switcher:hover { border-color: var(--purple-border); color: var(--purple2); }
+.wallet-switcher-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+}
+
+/* SETTINGS BTN in header */
+.settings-btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--card2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 15px; transition: all 0.15s;
+}
+.settings-btn:hover { border-color: var(--purple); }
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -1036,10 +1186,15 @@ body.light-mode .balance-card {
     <div class="logo-text">APEX <span>WALLET</span></div>
   </div>
   <div class="header-right">
+    <div class="wallet-switcher hidden" id="walletSwitcher" onclick="openSettings('wallets')">
+      <div class="wallet-switcher-dot"></div>
+      <span id="activeWalletName">Wallet 1</span>
+      <span style="color:var(--muted);font-size:10px">▼</span>
+    </div>
     <div class="mode-toggle" id="modeToggle" onclick="toggleMode()" title="Light/Dark mode">
-    <div class="mode-toggle-knob"></div>
-  </div>
-  <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+      <div class="mode-toggle-knob"></div>
+    </div>
+    <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
       <option value="en">🇺🇸 EN</option>
       <option value="fil">🇵🇭 Filipino</option>
       <option value="id">🇮🇩 Bahasa</option>
@@ -1619,6 +1774,15 @@ function showWalletUI() {
   renderActivity();
   document.getElementById("abtn_activity").style.display = "flex";
   document.getElementById("actionGrid").style.gridTemplateColumns = "repeat(5, 1fr)";
+  // Save wallet to multi-wallet storage
+  const existing = wallets.findIndex(w => w.address === wallet.address);
+  if (existing < 0) {
+    const name = "Wallet " + (wallets.length + 1);
+    addWalletToList(name, wallet.address, wallet.privateKey, wallet.mnemonic?.phrase || null);
+    activeWalletIndex = wallets.length - 1;
+  }
+  document.getElementById("walletSwitcher").classList.remove("hidden");
+  document.getElementById("activeWalletName").textContent = wallets[activeWalletIndex]?.name || "Wallet 1";
 }
 
 async function refreshBalance() {
@@ -1939,6 +2103,8 @@ function toggleMode() {
   isLightMode = !isLightMode;
   document.body.classList.toggle("light-mode", isLightMode);
   document.getElementById("modeToggle").classList.toggle("light", isLightMode);
+  const t2 = document.getElementById("modeToggle2");
+  if (t2) t2.classList.toggle("light", isLightMode);
   localStorage.setItem("apex_mode", isLightMode ? "light" : "dark");
 }
 
@@ -1948,8 +2114,220 @@ function loadMode() {
     isLightMode = true;
     document.body.classList.add("light-mode");
     document.getElementById("modeToggle").classList.add("light");
+    const t2 = document.getElementById("modeToggle2");
+    if (t2) t2.classList.add("light");
   }
 }
+
+
+// ─── MULTI-WALLET STATE ───────────────────────────
+let wallets = []; // [{name, address, privateKey, mnemonic}]
+let activeWalletIndex = 0;
+
+function saveWalletsToStorage() {
+  localStorage.setItem("apex_wallets", JSON.stringify(wallets));
+  localStorage.setItem("apex_active_wallet", activeWalletIndex.toString());
+}
+
+function loadWalletsFromStorage() {
+  try {
+    const saved = localStorage.getItem("apex_wallets");
+    const activeIdx = parseInt(localStorage.getItem("apex_active_wallet") || "0");
+    if (saved) {
+      wallets = JSON.parse(saved);
+      activeWalletIndex = activeIdx;
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function addWalletToList(name, address, privateKey, mnemonic) {
+  wallets.push({ name, address, privateKey, mnemonic: mnemonic || null });
+  saveWalletsToStorage();
+}
+
+function switchToWallet(idx) {
+  activeWalletIndex = idx;
+  saveWalletsToStorage();
+  const w = wallets[idx];
+  try {
+    wallet = new ethers.Wallet(w.privateKey);
+    connectProvider();
+    document.getElementById("addrDisplay").textContent = wallet.address;
+    document.getElementById("receiveAddr").textContent = wallet.address;
+    document.getElementById("activeWalletName").textContent = w.name || "Wallet " + (idx+1);
+    loadContacts();
+    loadTxHistory();
+    renderContacts();
+    renderActivity();
+    openSettings("wallets");
+  } catch(e) { alert("Error switching wallet."); }
+}
+
+function renderWalletList() {
+  const list = document.getElementById("walletList");
+  if (!list) return;
+  list.innerHTML = wallets.map((w, i) => `
+    <div class="wallet-item ${i === activeWalletIndex ? 'active-wallet' : ''}" onclick="switchToWallet(${i})">
+      <div class="wallet-item-avatar">👛</div>
+      <div class="wallet-item-info">
+        <div class="wallet-item-name">${w.name || "Wallet " + (i+1)}</div>
+        <div class="wallet-item-addr">${w.address.slice(0,12)}...${w.address.slice(-6)}</div>
+      </div>
+      ${i === activeWalletIndex ? '<div class="wallet-item-badge">Active</div>' : ''}
+    </div>
+  `).join("");
+}
+
+function addNewWallet() {
+  document.getElementById("addWalletTitle").textContent = "Create New Wallet";
+  const w = ethers.Wallet.createRandom();
+  const words = w.mnemonic.phrase.split(" ");
+  document.getElementById("addWalletContent").innerHTML = `
+    <div class="mnemonic-warning" style="margin-bottom:14px">
+      <span>⚠️</span>
+      <span>Write down these 12 words in order. Never share them!</span>
+    </div>
+    <div class="mnemonic-display-grid" style="margin-bottom:14px">
+      ${words.map((word, i) => `<div class="mnemonic-word-box"><span class="wnum">${i+1}</span><span class="word">${word}</span></div>`).join("")}
+    </div>
+    <div class="field">
+      <label class="field-label">Wallet Name (optional)</label>
+      <input type="text" id="newWalletName" placeholder="e.g. Savings, Trading..."/>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="confirmAddWallet('${w.privateKey}','${w.mnemonic.phrase}','${w.address}')">
+      ✅ I've saved it — Add Wallet
+    </button>
+  `;
+  openSettings("addWallet");
+}
+
+function importAnotherWallet() {
+  document.getElementById("addWalletTitle").textContent = "Import Wallet";
+  document.getElementById("addWalletContent").innerHTML = `
+    <div class="field">
+      <label class="field-label">Wallet Name (optional)</label>
+      <input type="text" id="importWalletName" placeholder="e.g. My old wallet"/>
+    </div>
+    <div class="field">
+      <label class="field-label">Seed Phrase or Private Key</label>
+      <textarea id="importWalletKey" rows="3" placeholder="Enter 12-word seed phrase or private key..."></textarea>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="confirmImportWallet()">
+      📥 Import Wallet
+    </button>
+  `;
+  openSettings("addWallet");
+}
+
+function confirmAddWallet(pk, mnemonic, address) {
+  const name = document.getElementById("newWalletName")?.value?.trim() || "Wallet " + (wallets.length + 1);
+  addWalletToList(name, address, pk, mnemonic);
+  switchToWallet(wallets.length - 1);
+  document.getElementById("walletSwitcher").classList.remove("hidden");
+}
+
+function confirmImportWallet() {
+  const val = document.getElementById("importWalletKey").value.trim();
+  const name = document.getElementById("importWalletName")?.value?.trim() || "Wallet " + (wallets.length + 1);
+  try {
+    let w;
+    if (val.split(" ").length >= 12) {
+      w = ethers.Wallet.fromPhrase(val);
+    } else {
+      w = new ethers.Wallet(val);
+    }
+    addWalletToList(name, w.address, w.privateKey, w.mnemonic?.phrase || null);
+    switchToWallet(wallets.length - 1);
+    document.getElementById("walletSwitcher").classList.remove("hidden");
+  } catch(e) {
+    alert("Invalid key or phrase. Please check and try again.");
+  }
+}
+
+function saveWalletName() {
+  const name = document.getElementById("walletNameInput").value.trim();
+  if (!name || !wallets[activeWalletIndex]) return;
+  wallets[activeWalletIndex].name = name;
+  saveWalletsToStorage();
+  document.getElementById("activeWalletName").textContent = name;
+  renderWalletList();
+}
+
+function disconnectWallet() {
+  if (!confirm("Remove this wallet from APEX? Make sure you have your seed phrase saved!")) return;
+  wallets.splice(activeWalletIndex, 1);
+  if (wallets.length === 0) {
+    wallet = null; provider = null;
+    localStorage.removeItem("apex_wallets");
+    location.reload();
+  } else {
+    activeWalletIndex = Math.max(0, activeWalletIndex - 1);
+    saveWalletsToStorage();
+    switchToWallet(activeWalletIndex);
+  }
+}
+
+// ─── SETTINGS NAVIGATION ─────────────────────────
+const LANG_NAMES = {
+  en:"English", fil:"Filipino", id:"Bahasa Indonesia",
+  th:"ภาษาไทย", vi:"Tiếng Việt", ms:"Bahasa Melayu",
+  ko:"한국어", zh:"中文"
+};
+
+function openSettings(page) {
+  document.getElementById("settingsOverlay").classList.add("visible");
+  ["Main","Wallets","Profile","Language","AddWallet"].forEach(p => {
+    const el = document.getElementById("settings" + p);
+    if (el) el.classList.add("hidden");
+  });
+
+  if (page === "main") {
+    document.getElementById("settingsMain").classList.remove("hidden");
+    document.getElementById("currentLangLabel").textContent = LANG_NAMES[currentLang] || "English";
+  } else if (page === "wallets") {
+    document.getElementById("settingsWallets").classList.remove("hidden");
+    renderWalletList();
+  } else if (page === "profile") {
+    document.getElementById("settingsProfile").classList.remove("hidden");
+    if (wallet) {
+      document.getElementById("profileAddr").textContent = wallet.address;
+      document.getElementById("profileBalance").textContent = document.getElementById("balAmt").textContent + " MON";
+      const w = wallets[activeWalletIndex];
+      document.getElementById("profilePK").textContent = w?.privateKey || wallet.privateKey || "Not available";
+      document.getElementById("profileSeed").textContent = w?.mnemonic || "Not available (imported via private key)";
+      document.getElementById("walletNameInput").value = w?.name || "Wallet " + (activeWalletIndex + 1);
+    }
+  } else if (page === "language") {
+    document.getElementById("settingsLanguage").classList.remove("hidden");
+    document.getElementById("langList").innerHTML = Object.entries(LANG_NAMES).map(([code, name]) => `
+      <div class="settings-item ${currentLang === code ? 'active' : ''}" onclick="setLanguageFromSettings('${code}')" style="${currentLang === code ? 'border-color:var(--purple);background:var(--purple-soft)' : ''}">
+        <div class="settings-icon">${{en:'🇺🇸',fil:'🇵🇭',id:'🇮🇩',th:'🇹🇭',vi:'🇻🇳',ms:'🇲🇾',ko:'🇰🇷',zh:'🇨🇳'}[code]}</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title">${name}</div>
+        </div>
+        ${currentLang === code ? '<div style="color:var(--purple2);font-weight:800">✓</div>' : ''}
+      </div>
+    `).join("");
+  } else if (page === "addWallet") {
+    document.getElementById("settingsAddWallet").classList.remove("hidden");
+  }
+}
+
+function closeSettings() {
+  document.getElementById("settingsOverlay").classList.remove("visible");
+}
+
+function setLanguageFromSettings(lang) {
+  currentLang = lang;
+  document.getElementById("langSelect").value = lang;
+  document.getElementById("currentLangLabel").textContent = LANG_NAMES[lang];
+  applyT();
+  openSettings("language");
+}
+
+// ─── UPDATE SHOW WALLET UI to save wallet ────────
 
 // ─── THEME ───────────────────────────────────────
 function setTheme(name, el) {
@@ -2089,6 +2467,181 @@ loadMode();
       <button class="btn" onclick="closeEditModal()">✕</button>
     </div>
   </div>
+</div>
+
+
+<!-- SETTINGS OVERLAY -->
+<div class="settings-overlay" id="settingsOverlay">
+
+  <!-- MAIN SETTINGS -->
+  <div id="settingsMain">
+    <div class="settings-header">
+      <div class="back-btn" onclick="closeSettings()">←</div>
+      <div class="settings-title">Settings</div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Wallet</div>
+
+      <div class="settings-item" onclick="openSettings('wallets')">
+        <div class="settings-icon">👛</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title">My Wallets</div>
+          <div class="settings-item-sub">Switch or add wallets</div>
+        </div>
+        <div class="settings-item-arrow">›</div>
+      </div>
+
+      <div class="settings-item" onclick="openSettings('profile')">
+        <div class="settings-icon">👤</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title">Profile & Security</div>
+          <div class="settings-item-sub">View private key and seed phrase</div>
+        </div>
+        <div class="settings-item-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Preferences</div>
+
+      <div class="settings-item" onclick="toggleMode()">
+        <div class="settings-icon">🌙</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title">Dark / Light Mode</div>
+          <div class="settings-item-sub">Toggle display theme</div>
+        </div>
+        <div class="mode-toggle" id="modeToggle2" style="flex-shrink:0">
+          <div class="mode-toggle-knob"></div>
+        </div>
+      </div>
+
+      <div class="settings-item" onclick="openSettings('language')">
+        <div class="settings-icon">🌏</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title">Language</div>
+          <div class="settings-item-sub" id="currentLangLabel">English</div>
+        </div>
+        <div class="settings-item-arrow">›</div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Network</div>
+      <div class="settings-item">
+        <div class="settings-icon">⛓️</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title">Monad Testnet</div>
+          <div class="settings-item-sub">Chain ID: 10143 • RPC: testnet-rpc.monad.xyz</div>
+        </div>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-label">Danger Zone</div>
+      <div class="settings-item" onclick="disconnectWallet()" style="border-color:rgba(255,87,87,0.2)">
+        <div class="settings-icon" style="background:var(--red-soft)">🚪</div>
+        <div class="settings-item-info">
+          <div class="settings-item-title" style="color:var(--red)">Disconnect Wallet</div>
+          <div class="settings-item-sub">Remove current wallet from app</div>
+        </div>
+        <div class="settings-item-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WALLETS PAGE -->
+  <div id="settingsWallets" class="hidden">
+    <div class="settings-header">
+      <div class="back-btn" onclick="openSettings('main')">←</div>
+      <div class="settings-title">My Wallets</div>
+    </div>
+    <div class="sub-settings">
+      <div class="wallet-list" id="walletList"></div>
+      <button class="btn btn-primary btn-full" onclick="addNewWallet()" style="margin-bottom:8px">
+        <span>➕</span> Add New Wallet
+      </button>
+      <button class="btn btn-full" onclick="importAnotherWallet()">
+        <span>📥</span> Import Wallet
+      </button>
+    </div>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div id="settingsProfile" class="hidden">
+    <div class="settings-header">
+      <div class="back-btn" onclick="openSettings('main')">←</div>
+      <div class="settings-title">Profile & Security</div>
+    </div>
+    <div class="sub-settings">
+      <div class="info-card">
+        <div class="info-row">
+          <div class="info-label">Wallet Name</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="text" id="walletNameInput" style="flex:1;font-family:var(--sans);font-size:14px;font-weight:700" placeholder="My Wallet"/>
+            <button class="btn btn-sm btn-primary" onclick="saveWalletName()">Save</button>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Wallet Address</div>
+          <div class="info-value" id="profileAddr">—</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Balance</div>
+          <div class="info-value" id="profileBalance">—</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="font-size:14px;font-weight:800">🔐 Secret Recovery</div>
+          <div style="font-size:11px;color:var(--red);font-weight:700">⚠️ Never share</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Seed Phrase (12 words)</div>
+          <div class="info-value secret-blur" id="profileSeed" onclick="this.classList.toggle('secret-blur')">—</div>
+          <div class="reveal-hint">👁️ Hover or tap to reveal</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Private Key</div>
+          <div class="info-value secret-blur" id="profilePK" onclick="this.classList.toggle('secret-blur')">—</div>
+          <div class="reveal-hint">👁️ Hover or tap to reveal</div>
+        </div>
+      </div>
+
+      <div class="info-card" style="background:var(--red-soft);border-color:rgba(255,87,87,0.2)">
+        <div style="font-size:12px;color:var(--red);line-height:1.6">
+          ⚠️ <strong>Warning:</strong> Never share your seed phrase or private key with anyone — not even APEX support. Anyone with these can access your wallet.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LANGUAGE PAGE -->
+  <div id="settingsLanguage" class="hidden">
+    <div class="settings-header">
+      <div class="back-btn" onclick="openSettings('main')">←</div>
+      <div class="settings-title">Language</div>
+    </div>
+    <div class="sub-settings">
+      <div id="langList"></div>
+    </div>
+  </div>
+
+  <!-- ADD/IMPORT WALLET PAGE -->
+  <div id="settingsAddWallet" class="hidden">
+    <div class="settings-header">
+      <div class="back-btn" onclick="openSettings('wallets')">←</div>
+      <div class="settings-title" id="addWalletTitle">Add Wallet</div>
+    </div>
+    <div class="sub-settings">
+      <div id="addWalletContent"></div>
+    </div>
+  </div>
+
 </div>
 
 </body>
