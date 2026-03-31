@@ -3165,6 +3165,7 @@ function deleteEditContact() {
 }
 
 // ─── INIT ────────────────────────────────────────
+loadWalletsFromStorage(); // ← must load FIRST so wallet names are preserved
 buildSeedGrid();
 renderContacts();
 loadTheme();
