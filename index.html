@@ -2191,6 +2191,159 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 }
 .toggle-switch.on .toggle-knob { left: 24px; background: white; }
 
+
+/* ═══ HEADER OVERFLOW FIX ═══ */
+header {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px 10px;
+  margin-bottom: 0;
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  background: rgba(13,14,20,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 50;
+  gap: 8px;
+  overflow: visible;
+}
+
+.logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.logo-text { font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
+
+.header-right {
+  display: flex; align-items: center; gap: 5px;
+  flex: 1; justify-content: flex-end;
+  min-width: 0; overflow: visible;
+}
+
+/* Wallet dropdown trigger — compact */
+.wallet-dropdown-trigger {
+  min-width: unset; max-width: 140px;
+  padding: 5px 8px 5px 7px;
+  overflow: hidden;
+}
+.wallet-trigger-name {
+  font-size: 11px; font-weight: 700;
+  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; max-width: 80px;
+}
+.wallet-trigger-bal { display: none; }
+
+/* Hide theme dots on mobile — in settings */
+@media (max-width: 600px) {
+  .theme-picker { display: none !important; }
+  .lang-select { display: none !important; }
+  .mode-toggle { width: 28px; height: 16px; flex-shrink: 0; }
+  .mode-toggle-knob { width: 10px; height: 10px; top: 2px; left: 2px; }
+  .mode-toggle.light .mode-toggle-knob { left: 14px; }
+  .network-pill { font-size: 8px; padding: 3px 7px; white-space: nowrap; }
+  .hamburger-btn { width: 28px; height: 28px; padding: 5px; flex-shrink: 0; }
+}
+
+/* ═══ LIGHT MODE FULL TEXT FIX ═══ */
+body.light-mode {
+  --bg: #f0f0f8;
+  --card: #ffffff;
+  --card2: #f5f4ff;
+  --card3: #eceaff;
+  --border: rgba(0,0,0,0.09);
+  --border2: rgba(0,0,0,0.16);
+  --text: #0d0e20;
+  --muted: #6e6b85;
+  --muted2: #4a4764;
+}
+
+body.light-mode header {
+  background: rgba(240,240,248,0.92);
+}
+
+body.light-mode .logo-text { color: #0d0e20; }
+body.light-mode .logo-text span { color: var(--purple); }
+body.light-mode .balance-big { background: linear-gradient(135deg, #0d0e20 30%, var(--purple) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+body.light-mode .hero-greeting { color: var(--muted2); }
+body.light-mode .hero-wallet-name { color: #0d0e20; }
+body.light-mode .balance-sub-label { color: var(--muted2); }
+body.light-mode .hero-btn-receive { background: #fff; color: #0d0e20; border-color: rgba(0,0,0,0.2); }
+body.light-mode .hero-btn-receive:hover { border-color: var(--green); color: var(--green); }
+body.light-mode .address-pill { background: #f0f0f8; border-color: rgba(0,0,0,0.12); }
+body.light-mode .address-pill-text { color: var(--muted2); }
+body.light-mode .card-label { color: var(--muted2); }
+body.light-mode .field-label { color: var(--muted2); }
+body.light-mode input, body.light-mode textarea { background: #fff; color: #0d0e20; border-color: rgba(0,0,0,0.15); }
+body.light-mode input::placeholder, body.light-mode textarea::placeholder { color: #9896b0; }
+body.light-mode .btn { background: #f0f0f8; color: #0d0e20; border-color: rgba(0,0,0,0.15); }
+body.light-mode .btn:hover { border-color: var(--purple); color: var(--purple); }
+body.light-mode .msg.ai { background: #eceaff; color: #0d0e20; border-color: rgba(0,0,0,0.08); }
+body.light-mode .chat-box { background: #fafaff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .chat-input-row { background: #fafaff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .chat-input { background: #fff; color: #0d0e20; border-color: rgba(0,0,0,0.15); }
+body.light-mode .chat-input::placeholder { color: #9896b0; }
+body.light-mode .activity-item { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .activity-type { color: #0d0e20; }
+body.light-mode .activity-addr { color: var(--muted2); }
+body.light-mode .contact-card { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .contact-name { color: #0d0e20; }
+body.light-mode .faucet-card { background: #fff; color: #0d0e20; border-color: rgba(0,0,0,0.1); }
+body.light-mode .faucet-name { color: #0d0e20; }
+body.light-mode .faucet-desc { color: var(--muted2); }
+body.light-mode .wallet-item { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .wallet-item-name { color: #0d0e20; }
+body.light-mode .dropdown-account { color: #0d0e20; }
+body.light-mode .dropdown-account-name { color: #0d0e20; }
+body.light-mode .wallet-dropdown-menu { background: #fff; border-color: rgba(0,0,0,0.15); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+body.light-mode .dropdown-action { color: #0d0e20; }
+body.light-mode .dropdown-danger { color: var(--red); }
+body.light-mode .settings-overlay { background: #f0f0f8; }
+body.light-mode .settings-item { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .settings-item-title { color: #0d0e20; }
+body.light-mode .settings-item-sub { color: var(--muted2); }
+body.light-mode .settings-section-label { color: var(--muted2); }
+body.light-mode .settings-title { color: #0d0e20; }
+body.light-mode .back-btn { background: #f0f0f8; border-color: rgba(0,0,0,0.12); color: #0d0e20; }
+body.light-mode .info-card { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .info-label { color: var(--muted2); }
+body.light-mode .info-value { color: #0d0e20; }
+body.light-mode .chip { background: #fff; color: var(--muted2); border-color: rgba(0,0,0,0.12); }
+body.light-mode .chip:hover { color: var(--purple); border-color: var(--purple-border); }
+body.light-mode .bottom-nav { background: rgba(255,255,255,0.92); border-color: rgba(0,0,0,0.1); }
+body.light-mode .nav-label { color: var(--muted2); }
+body.light-mode .nav-icon { color: var(--muted2); }
+body.light-mode .send-panel-wrap { background: #fff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .panel { background: transparent; }
+body.light-mode .mnemonic-word-box { background: #f0f0f8; border-color: rgba(0,0,0,0.1); }
+body.light-mode .mnemonic-word-box .word { color: #0d0e20; }
+body.light-mode .seed-word-input input { background: #fff; color: #0d0e20; }
+body.light-mode .seed-word-input input.filled { background: var(--purple-soft); }
+body.light-mode .no-contacts { color: var(--muted2); }
+body.light-mode .autocomplete-list { background: #fff; border-color: rgba(0,0,0,0.15); }
+body.light-mode .autocomplete-name { color: #0d0e20; }
+body.light-mode .pin-overlay { background: #f0f0f8; }
+body.light-mode .pin-title { color: #0d0e20; }
+body.light-mode .pin-subtitle { color: var(--muted2); }
+body.light-mode .pin-key { background: #fff; border-color: rgba(0,0,0,0.12); color: #0d0e20; }
+body.light-mode .tx-modal { background: #fff; }
+body.light-mode .tx-modal-title { color: #0d0e20; }
+body.light-mode .tx-detail-label { color: var(--muted2); }
+body.light-mode .tx-detail-value { color: #0d0e20; }
+body.light-mode .wallet-trigger-name { color: #0d0e20; }
+body.light-mode .wallet-dropdown-trigger { background: #fff; border-color: rgba(0,0,0,0.15); }
+body.light-mode .lang-select { background: #fff; color: #0d0e20; border-color: rgba(0,0,0,0.15); }
+body.light-mode .hamburger-btn span { background: #0d0e20; }
+body.light-mode .hamburger-btn { background: #fff; border-color: rgba(0,0,0,0.15); }
+body.light-mode .modal-box { background: #fff; }
+body.light-mode .modal-title { color: #0d0e20; }
+body.light-mode .rename-modal { background: #fff; }
+body.light-mode .rename-modal-title { color: #0d0e20; }
+body.light-mode .rename-modal-sub { color: var(--muted2); }
+body.light-mode .hero-section { background: transparent; }
+body.light-mode .section-title { color: #0d0e20; }
+body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color: #0d0e20; }
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -2212,7 +2365,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
     <div class="logo-icon">⬡</div>
     <div class="logo-text">APEX <span>WALLET</span></div>
   </div>
-  <div class="header-right">
+  <div class="header-right" style="display:flex;align-items:center;gap:5px;flex:1;justify-content:flex-end;min-width:0">
     <div class="wallet-dropdown-wrap hidden" id="walletSwitcher">
       <div class="wallet-dropdown-trigger" onclick="toggleWalletDropdown()">
         <div class="wallet-trigger-avatar">👛</div>
@@ -2248,10 +2401,10 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
         </div>
       </div>
     </div>
-    <div class="mode-toggle" id="modeToggle" onclick="toggleMode()" title="Light/Dark mode">
+    <div class="mode-toggle" id="modeToggle" onclick="toggleMode()" title="Light/Dark mode" style="flex-shrink:0">
       <div class="mode-toggle-knob"></div>
     </div>
-    <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+    <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)" style="display:none">
       <option value="en">🇺🇸 EN</option>
       <option value="fil">🇵🇭 Filipino</option>
       <option value="id">🇮🇩 Bahasa</option>
@@ -3598,18 +3751,22 @@ function handleQrResult(raw) {
   if (addr.startsWith("ethereum:")) addr = addr.replace("ethereum:", "").split("?")[0].split("@")[0];
   if (addr.startsWith("monad:")) addr = addr.replace("monad:", "").split("?")[0];
 
-  if (addr.startsWith("0x") && addr.length === 42) {
-    // Valid address!
+  // Validate — ETH addresses are 0x + 40 hex chars = 42 total
+  const isValidAddr = /^0x[0-9a-fA-F]{40}$/.test(addr);
+  if (isValidAddr) {
     document.getElementById("qrResultBanner").classList.remove("hidden");
     document.getElementById("qrResultBanner").textContent = "✓ " + addr.slice(0,10)+"..."+addr.slice(-6);
     setTimeout(() => {
       document.getElementById("toAddr").value = addr;
       closeQrScanner();
-      showToast("Address scanned!");
+      showToast("✓ Address scanned: " + addr.slice(0,8)+"...");
       showSuggestions(addr);
-    }, 800);
+    }, 600);
+  } else if (addr.length > 10) {
+    // Partial scan — keep trying
+    qrScanning = true;
+    qrAnimFrame = requestAnimationFrame(scanQrFrame);
   } else {
-    // Not a valid address, keep scanning
     qrScanning = true;
     qrAnimFrame = requestAnimationFrame(scanQrFrame);
   }
@@ -3921,10 +4078,13 @@ let isLightMode = false;
 function toggleMode() {
   isLightMode = !isLightMode;
   document.body.classList.toggle("light-mode", isLightMode);
-  document.getElementById("modeToggle").classList.toggle("light", isLightMode);
-  const t2 = document.getElementById("modeToggle2");
-  if (t2) t2.classList.toggle("light", isLightMode);
+  ["modeToggle","modeToggle2"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle("light", isLightMode);
+  });
   localStorage.setItem("apex_mode", isLightMode ? "light" : "dark");
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = isLightMode ? "#f0f0f8" : "#0d0e14";
 }
 
 function loadMode() {
@@ -3932,10 +4092,14 @@ function loadMode() {
   if (saved === "light") {
     isLightMode = true;
     document.body.classList.add("light-mode");
-    document.getElementById("modeToggle").classList.add("light");
-    const t2 = document.getElementById("modeToggle2");
-    if (t2) t2.classList.add("light");
+    ["modeToggle","modeToggle2"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add("light");
+    });
   }
+  // Apply theme color to status bar
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = isLightMode ? "#f0f0f8" : "#0d0e14";
 }
 
 
