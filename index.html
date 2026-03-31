@@ -2150,15 +2150,15 @@ function copyForFaucet() {
 }
 
 // ─── CHAT ────────────────────────────────────────
-function addMsg(role, text) {
+function addMsg(role, text, skipSave) {
   const box = document.getElementById("chatBox");
   const div = document.createElement("div");
   div.className = "msg " + role;
   div.textContent = text;
   box.appendChild(div);
   box.scrollTop = box.scrollHeight;
-  // Auto-save chat history after each message
-  if (wallet) saveChatHistory();
+  // Only save if not a temporary thinking message
+  if (wallet && !skipSave) saveChatHistory();
   return div;
 }
 
@@ -2223,7 +2223,7 @@ async function sendChat() {
   }
 
   const contactList = contacts.map(c => `${c.name}: ${c.address}`).join("\n") || "none";
-  const thinkingMsg = addMsg("ai", "thinking...");
+  const thinkingMsg = addMsg("ai", "thinking...", true); // skip save — temp msg
   thinkingMsg.classList.add("thinking");
 
   const systemPrompt = `You are APEX, an AI wallet agent for Monad Testnet built for Southeast Asian users.
@@ -2285,6 +2285,7 @@ RULES:
 
     thinkingMsg.classList.remove("thinking");
     thinkingMsg.textContent = reply;
+    if (wallet) saveChatHistory(); // Save AFTER real reply replaces thinking
 
     if (text.toLowerCase().includes("balance") || text.includes("balanse") || text.includes("saldo")) {
       refreshBalance();
@@ -2292,6 +2293,7 @@ RULES:
   } catch(e) {
     thinkingMsg.classList.remove("thinking");
     thinkingMsg.textContent = "❌ Error connecting to AI. Please try again.";
+    if (wallet) saveChatHistory(); // Save error state too
   }
 }
 
@@ -2361,9 +2363,17 @@ function saveChatHistory() {
   const box = document.getElementById("chatBox");
   const msgs = [];
   box.querySelectorAll(".msg").forEach(m => {
-    msgs.push({ role: m.classList.contains("user") || m.classList.contains("user-confirm") ? "user" : "ai", text: m.textContent });
+    // Skip thinking messages and dividers
+    if (m.classList.contains("thinking")) return;
+    if (m.classList.contains("confirm")) return; // skip confirm cards
+    const text = m.textContent?.trim();
+    if (!text || text === "thinking..." || text === "─── chat history restored ───") return;
+    msgs.push({
+      role: m.classList.contains("user") || m.classList.contains("user-confirm") ? "user" : "ai",
+      text: text
+    });
   });
-  localStorage.setItem("apex_chat_" + wallet.address, JSON.stringify(msgs.slice(-40)));
+  localStorage.setItem("apex_chat_" + wallet.address, JSON.stringify(msgs.slice(-50)));
 }
 
 function loadChatHistory() {
