@@ -2041,9 +2041,17 @@ function showWalletUI() {
   renderActivity();
   document.getElementById("abtn_activity").style.display = "flex";
   document.getElementById("actionGrid").style.gridTemplateColumns = "repeat(5, 1fr)";
-  // Save wallet to multi-wallet storage
-  const existing = wallets.findIndex(w => w.address === wallet.address);
-  if (existing < 0) {
+  // Save wallet to multi-wallet storage — preserve existing name
+  const existing = wallets.findIndex(w => w.address.toLowerCase() === wallet.address.toLowerCase());
+  if (existing >= 0) {
+    // Wallet already saved — use existing index and preserve name
+    activeWalletIndex = existing;
+    // Update private key and mnemonic in case they changed
+    wallets[existing].privateKey = wallet.privateKey;
+    if (wallet.mnemonic?.phrase) wallets[existing].mnemonic = wallet.mnemonic.phrase;
+    saveWalletsToStorage();
+  } else {
+    // New wallet — add with default name
     const name = "Wallet " + (wallets.length + 1);
     addWalletToList(name, wallet.address, wallet.privateKey, wallet.mnemonic?.phrase || null);
     activeWalletIndex = wallets.length - 1;
@@ -2667,7 +2675,7 @@ function loadWalletsFromStorage() {
     const activeIdx = parseInt(localStorage.getItem("apex_active_wallet") || "0");
     if (saved) {
       wallets = JSON.parse(saved);
-      activeWalletIndex = activeIdx;
+      activeWalletIndex = Math.min(activeIdx, wallets.length - 1);
       return true;
     }
   } catch(e) {}
@@ -2797,8 +2805,10 @@ function saveWalletName() {
   if (!name || !wallets[activeWalletIndex]) return;
   wallets[activeWalletIndex].name = name;
   saveWalletsToStorage();
+  // Update ALL places showing wallet name
   document.getElementById("activeWalletName").textContent = name;
   renderWalletList();
+  renderDropdownAccounts();
   showToast("Wallet renamed to \"" + name + "\"");
 }
 
@@ -2911,6 +2921,7 @@ function confirmRename() {
     document.getElementById("activeWalletName").textContent = name;
   }
   renderWalletList();
+  renderDropdownAccounts();
   closeRenameModal();
   showToast("Renamed to \"" + name + "\"");
 }
