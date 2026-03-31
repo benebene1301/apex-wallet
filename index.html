@@ -744,7 +744,7 @@
   </div>
 
   <div class="chat-messages" id="chatMessages">
-    <div class="msg ai" id="welcomeMsg">Hey! I'm your APEX wallet agent. Connect a wallet and add your API key, then you can say things like:<br><br>• "What's my balance?"<br>• "Send 1 MON to Mama"<br>• "Add contact Kuya 0x..."<br>• "Show my contacts"</div>
+    <div class="msg ai" id="welcomeMsg">Hey! I'm your APEX wallet agent. Connect a wallet to get started. You can say things like:<br><br>• "What's my balance?"<br>• "Send 1 MON to Mama"<br>• "Add contact Kuya 0x..."<br>• "Show my contacts"</div>
   </div>
   <div class="chat-input-row">
     <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"/>
@@ -758,7 +758,19 @@ let wallet = null;
 let provider = null;
 let apiKey = "";
 let currentLang = "en";
-let contacts = JSON.parse(localStorage.getItem("apex_contacts") || "[]");
+let contacts = [];
+
+function loadContacts() {
+  if (!wallet) return;
+  const key = "apex_contacts_" + wallet.address;
+  contacts = JSON.parse(localStorage.getItem(key) || "[]");
+}
+
+function saveContacts() { 
+  if (!wallet) return;
+  const key = "apex_contacts_" + wallet.address;
+  localStorage.setItem(key, JSON.stringify(contacts));
+}
 let pendingTx = null; // for confirmation flow
 
 const MONAD_RPC = "https://testnet-rpc.monad.xyz";
@@ -790,7 +802,7 @@ const T = {
     agent: "AI Agent — Talk to your wallet",
     api_notice: "Enter your Claude API key to activate the AI agent.",
     api_save: "Save",
-    welcome: "Hey! I'm your APEX wallet agent. Connect a wallet and add your API key, then you can say things like:\n\n• \"What's my balance?\"\n• \"Send 1 MON to Mama\"\n• \"Add contact Kuya 0x...\"\n• \"Show my contacts\"",
+    welcome: "Hey! I'm your APEX wallet agent. Connect a wallet to get started. You can say things like:\n\n• \"What's my balance?\"\n• \"Send 1 MON to Mama\"\n• \"Add contact Kuya 0x...\"\n• \"Show my contacts\"",
     placeholder_chat: "Ask me anything...",
     no_contacts: "No contacts yet. Add one below.",
   },
@@ -1048,6 +1060,7 @@ function showWalletUI() {
   const addr = wallet.address;
   document.getElementById("walletAddressShort").textContent = addr;
   document.getElementById("receiveAddress").textContent = addr;
+  loadContacts();
   renderContacts();
 }
 
@@ -1076,7 +1089,7 @@ function switchTab(tab, el) {
 }
 
 // ─── CONTACTS ─────────────────────────────────
-function saveContacts() { localStorage.setItem("apex_contacts", JSON.stringify(contacts)); }
+
 
 function renderContacts() {
   const list = document.getElementById("contactsList");
