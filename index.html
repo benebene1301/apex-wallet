@@ -2383,7 +2383,10 @@ function openTxModal(idx) {
     </div>
     <div class="tx-detail-row">
       <div class="tx-detail-label">${isSend ? 'To' : 'From'}</div>
-      <div class="tx-detail-value">${isSend ? displayTo : (tx.from || "—")}</div>
+      <div class="tx-detail-value" style="text-align:right">
+        ${contactName ? '<span style="font-weight:700;color:var(--purple2)">' + contactName + '</span><br>' : ''}
+        <span style="font-size:11px;color:var(--muted2)">${peerForModal && peerForModal !== "unknown" ? peerForModal : "Unknown"}</span>
+      </div>
     </div>
     <div class="tx-detail-row">
       <div class="tx-detail-label">Network Fee</div>
@@ -3035,11 +3038,20 @@ function renderActivity() {
     const displayTo = peerLabel;
     const timeAgo = getTimeAgo(tx.time);
     const failedBadge = tx.failed ? `<span style="font-size:9px;color:var(--red);font-weight:700;margin-left:4px">FAILED</span>` : "";
+    // Build peer display — contact name or address
+    const peerAddrFull = isSend ? tx.to : tx.from;
+    const peerShort = peerAddrFull && peerAddrFull !== "unknown" && peerAddrFull !== "null"
+      ? peerAddrFull.slice(0,14)+"..."+peerAddrFull.slice(-6)
+      : "Unknown";
+    const peerLine = displayTo !== "Unknown" && displayTo !== peerShort
+      ? displayTo + " · " + peerShort   // show "Mama · 0xabc...123"
+      : peerShort;                        // just show address if no contact
+    const txSnippet = tx.hash ? " · " + tx.hash.slice(0,8)+"..." : "";
     return `<div class="activity-item" onclick="openTxModal(${i})" style="cursor:pointer">
       <div class="activity-icon ${tx.failed ? 'failed' : tx.type}">${tx.failed ? '❌' : isSend ? "↗" : "↙"}</div>
       <div class="activity-info">
         <div class="activity-type">${isSend ? "Sent" : "Received"} ${tx.amount} MON${failedBadge}</div>
-        <div class="activity-addr">${isSend ? "To: " + displayTo : "From: " + (tx.from||"").slice(0,10)+"..."}</div>
+        <div class="activity-addr">${isSend ? "To: " : "From: "}${peerLine}${txSnippet}</div>
       </div>
       <div class="activity-right">
         <div class="activity-amount ${tx.failed ? 'failed' : tx.type}" style="${tx.failed ? 'color:var(--red)' : ''}">${isSend ? "-" : "+"}${tx.amount}</div>
