@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#0a0a0f">
 <title>APEX WALLET</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -2414,13 +2415,40 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 
 <!-- RECEIVE PANEL -->
 <div class="panel" id="receivePanel">
-  <div class="card-label" id="lbl_receive_title">Receive MON</div>
-  <div class="receive-center">
-    <div class="qr-box">📱<span>QR Coming Soon</span></div>
-    <div class="full-addr-box" id="receiveAddr">—</div>
-    <button class="btn btn-primary btn-full" onclick="copyAddress()" id="btn_copy_addr">
-      <span>📋</span> <span id="lbl_copy_addr">Copy Address</span>
-    </button>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px">
+    <div class="card-label" id="lbl_receive_title">Receive MON</div>
+    <div style="text-align:center">
+      <!-- QR CODE BOX -->
+      <div style="display:inline-block;background:white;padding:16px;border-radius:16px;margin-bottom:16px;box-shadow:0 4px 24px rgba(0,0,0,0.3)">
+        <div id="qrCodeDisplay" style="width:180px;height:180px;display:flex;align-items:center;justify-content:center">
+          <span style="color:#999;font-size:12px">Loading QR...</span>
+        </div>
+      </div>
+      <!-- NETWORK BADGE -->
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,206,201,0.1);border:1px solid rgba(0,206,201,0.2);border-radius:20px;padding:5px 12px;margin-bottom:14px">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div>
+        <span style="font-size:11px;color:var(--green);font-weight:700;font-family:var(--mono)">MONAD TESTNET</span>
+      </div>
+      <!-- ADDRESS -->
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;text-align:left">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Your Address</div>
+        <div id="receiveAddr" style="font-family:var(--mono);font-size:11px;color:var(--muted2);word-break:break-all;line-height:1.6;user-select:all;-webkit-user-select:all">—</div>
+      </div>
+      <!-- ACTION BUTTONS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn btn-primary" onclick="copyAddress()" id="btn_copy_addr">
+          📋 <span id="lbl_copy_addr">Copy</span>
+        </button>
+        <button class="btn" onclick="shareAddress()" style="border-color:var(--border2)">
+          📤 Share
+        </button>
+      </div>
+      <!-- NETWORK INFO -->
+      <div style="margin-top:14px;background:var(--purple-soft);border:1px solid var(--purple-border);border-radius:10px;padding:12px;text-align:left">
+        <div style="font-size:11px;color:var(--purple2);font-weight:700;margin-bottom:6px">⚠️ Send only on Monad Testnet</div>
+        <div style="font-size:11px;color:var(--muted2);line-height:1.6">Make sure the sender adds Monad Testnet to their wallet first. Sending on wrong network will lose your tokens!</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2844,6 +2872,8 @@ function showWalletUI() {
   document.getElementById("receiveAddr").textContent = addr;
   // Show hero section
   document.getElementById("balanceCard").style.display = "block";
+  // Generate QR code
+  setTimeout(() => generateQrCode(addr), 200);
   loadContacts();
   loadTxHistory();
   renderContacts();
@@ -3316,23 +3346,19 @@ function loadChatHistory() {
 
 
 // ═══════════════════════════════════════
-// PIN LOCK SYSTEM
+// PASSWORD LOCK SYSTEM
 // ═══════════════════════════════════════
-let pinBuffer = "";
-let setPinBuffer = "";
-let setPinFirst = "";
-let setPinStep = 1;
 const PIN_KEY = "apex_pin_hash";
 const PIN_ENABLED_KEY = "apex_pin_enabled";
+let setPwStep = 1;
 
-function hashPin(pin) {
-  // Simple hash — XOR + rotate for basic obfuscation
-  let h = 0;
-  for (let i = 0; i < pin.length; i++) {
-    h = ((h << 5) - h) + pin.charCodeAt(i);
+function hashPin(pw) {
+  let h = 5381;
+  for (let i = 0; i < pw.length; i++) {
+    h = ((h << 5) + h) + pw.charCodeAt(i);
     h |= 0;
   }
-  return h.toString(36) + pin.length;
+  return Math.abs(h).toString(36) + "_" + pw.length;
 }
 
 function isPinEnabled() {
@@ -3340,152 +3366,143 @@ function isPinEnabled() {
 }
 
 function checkPinOnLoad() {
-  if (isPinEnabled() && wallet) {
-    showPinLock();
-  }
+  if (isPinEnabled() && wallet) showPinLock();
 }
 
 function showPinLock() {
-  pinBuffer = "";
-  updatePinDots("pin");
+  const input = document.getElementById("pwInput");
+  if (input) { input.value = ""; input.type = "password"; }
   document.getElementById("pinErrorMsg").textContent = "";
-  document.getElementById("pinTitle").textContent = "Welcome Back";
-  document.getElementById("pinSubtitle").textContent = "Enter your PIN to unlock APEX Wallet";
   document.getElementById("pinOverlay").classList.remove("hidden");
-}
-
-function pinInput(digit) {
-  if (!digit || pinBuffer.length >= 6) return;
-  pinBuffer += digit;
-  updatePinDots("pin");
-  if (pinBuffer.length === 6) {
-    setTimeout(() => verifyPin(), 150);
-  }
-}
-
-function pinDelete() {
-  pinBuffer = pinBuffer.slice(0, -1);
-  updatePinDots("pin");
-  document.getElementById("pinErrorMsg").textContent = "";
+  setTimeout(() => { if (input) input.focus(); }, 300);
 }
 
 function verifyPin() {
+  const pw = document.getElementById("pwInput")?.value || "";
+  if (!pw) return;
   const stored = localStorage.getItem(PIN_KEY);
-  if (hashPin(pinBuffer) === stored) {
-    // Correct PIN
+  if (hashPin(pw) === stored) {
     document.getElementById("pinOverlay").classList.add("hidden");
-    showToast("✓ Unlocked!");
+    showToast("✓ Wallet unlocked!");
   } else {
-    // Wrong PIN
-    pinBuffer = "";
-    const dots = document.querySelectorAll("#pinDots .pin-dot");
-    dots.forEach(d => { d.classList.remove("filled"); d.classList.add("error"); });
-    document.getElementById("pinErrorMsg").textContent = "Incorrect PIN. Try again.";
-    setTimeout(() => {
-      dots.forEach(d => d.classList.remove("error"));
-      updatePinDots("pin");
-    }, 600);
+    document.getElementById("pinErrorMsg").textContent = "Incorrect password. Try again.";
+    const input = document.getElementById("pwInput");
+    if (input) {
+      input.style.borderColor = "var(--red)";
+      input.style.animation = "shake 0.4s ease";
+      setTimeout(() => { input.style.borderColor = ""; input.style.animation = ""; }, 600);
+    }
   }
 }
 
-function updatePinDots(type) {
-  const buf = type === "pin" ? pinBuffer : setPinBuffer;
-  const prefix = type === "pin" ? "pd" : "spd";
-  for (let i = 0; i < 6; i++) {
-    const dot = document.getElementById(prefix + i);
-    if (dot) dot.classList.toggle("filled", i < buf.length);
-  }
+function togglePwVisibility(id) {
+  const inp = document.getElementById(id);
+  if (inp) inp.type = inp.type === "password" ? "text" : "password";
 }
 
 function pinForgot() {
-  if (confirm("Reset PIN? You'll need to re-enter your wallet seed phrase.")) {
+  if (confirm("Reset password? You can set a new one in Settings.")) {
     localStorage.removeItem(PIN_KEY);
     localStorage.removeItem(PIN_ENABLED_KEY);
     document.getElementById("pinOverlay").classList.add("hidden");
     updatePinToggleUI();
-    showToast("PIN removed. Please set a new one in Settings.");
+    showToast("Password removed. Set a new one in Settings.");
   }
 }
 
-// SET PIN
+// ─── SET PASSWORD ──────────────────────
 function togglePinLock() {
   if (isPinEnabled()) {
-    // Disable PIN
-    if (confirm("Remove PIN lock?")) {
+    if (confirm("Remove password lock?")) {
       localStorage.removeItem(PIN_KEY);
       localStorage.removeItem(PIN_ENABLED_KEY);
       updatePinToggleUI();
-      showToast("PIN lock disabled");
+      showToast("Password lock disabled");
     }
   } else {
-    // Enable PIN — show set PIN screen
-    setPinBuffer = "";
-    setPinFirst = "";
-    setPinStep = 1;
+    setPwStep = 1;
     updateSetPinUI();
+    const inp = document.getElementById("setPwInput");
+    const conf = document.getElementById("setPwConfirm");
+    if (inp) { inp.value = ""; inp.type = "password"; }
+    if (conf) { conf.value = ""; conf.type = "password"; }
+    document.getElementById("setPinErrorMsg").textContent = "";
+    document.getElementById("setPwConfirmWrap").classList.add("hidden");
+    document.getElementById("pwStrengthWrap").classList.add("hidden");
     document.getElementById("setPinOverlay").classList.remove("hidden");
+    setTimeout(() => { if (inp) inp.focus(); }, 300);
   }
 }
 
-function setPinInput(digit) {
-  if (!digit || setPinBuffer.length >= 6) return;
-  setPinBuffer += digit;
-  updatePinDots("set");
-  if (setPinBuffer.length === 6) {
-    setTimeout(() => confirmSetPin(), 150);
+function updateSetPwStep() {
+  const pw = document.getElementById("setPwInput")?.value || "";
+  // Show strength meter
+  const strengthWrap = document.getElementById("pwStrengthWrap");
+  if (pw.length > 0) {
+    strengthWrap.classList.remove("hidden");
+    const strength = calcPwStrength(pw);
+    const colors = ["var(--red)","var(--red)","var(--yellow)","var(--green)"];
+    const labels = ["Weak","Fair","Good","Strong"];
+    for (let i = 1; i <= 4; i++) {
+      const bar = document.getElementById("ps" + i);
+      if (bar) bar.style.background = i <= strength ? colors[strength-1] : "var(--border)";
+    }
+    document.getElementById("pwStrengthLabel").textContent = "Strength: " + labels[strength-1];
+    document.getElementById("pwStrengthLabel").style.color = colors[strength-1];
+  } else {
+    strengthWrap.classList.add("hidden");
   }
 }
 
-function setPinDelete() {
-  setPinBuffer = setPinBuffer.slice(0, -1);
-  updatePinDots("set");
-  document.getElementById("setPinErrorMsg").textContent = "";
+function calcPwStrength(pw) {
+  let s = 0;
+  if (pw.length >= 6) s++;
+  if (pw.length >= 10) s++;
+  if (/[A-Z]/.test(pw) || /[0-9]/.test(pw)) s++;
+  if (/[^a-zA-Z0-9]/.test(pw)) s++;
+  return Math.max(1, Math.min(4, s));
 }
 
 function confirmSetPin() {
-  if (setPinStep === 1) {
-    // First entry — ask to confirm
-    setPinFirst = setPinBuffer;
-    setPinBuffer = "";
-    setPinStep = 2;
-    updateSetPinUI();
-    updatePinDots("set");
-  } else {
-    // Confirm entry
-    if (setPinBuffer === setPinFirst) {
-      localStorage.setItem(PIN_KEY, hashPin(setPinBuffer));
-      localStorage.setItem(PIN_ENABLED_KEY, "true");
-      document.getElementById("setPinOverlay").classList.add("hidden");
-      updatePinToggleUI();
-      showToast("🔐 PIN lock enabled!");
-    } else {
-      // Mismatch
-      setPinBuffer = "";
-      setPinFirst = "";
-      setPinStep = 1;
-      const dots = document.querySelectorAll("#setPinDots .pin-dot");
-      dots.forEach(d => { d.classList.remove("filled"); d.classList.add("error"); });
-      document.getElementById("setPinErrorMsg").textContent = "PINs don't match. Try again.";
-      setTimeout(() => {
-        dots.forEach(d => d.classList.remove("error"));
-        updateSetPinUI();
-        updatePinDots("set");
-      }, 700);
+  if (setPwStep === 1) {
+    const pw = document.getElementById("setPwInput")?.value || "";
+    if (pw.length < 6) {
+      document.getElementById("setPinErrorMsg").textContent = "Password must be at least 6 characters.";
+      return;
     }
+    setPwStep = 2;
+    updateSetPinUI();
+    document.getElementById("setPwConfirmWrap").classList.remove("hidden");
+    document.getElementById("setPwBtn").textContent = "Set Password ✓";
+    setTimeout(() => { document.getElementById("setPwConfirm")?.focus(); }, 100);
+  } else {
+    const pw = document.getElementById("setPwInput")?.value || "";
+    const conf = document.getElementById("setPwConfirm")?.value || "";
+    if (pw !== conf) {
+      document.getElementById("setPinErrorMsg").textContent = "Passwords don't match. Try again.";
+      const confInp = document.getElementById("setPwConfirm");
+      if (confInp) { confInp.value = ""; confInp.style.borderColor = "var(--red)"; setTimeout(() => confInp.style.borderColor = "", 600); confInp.focus(); }
+      return;
+    }
+    localStorage.setItem(PIN_KEY, hashPin(pw));
+    localStorage.setItem(PIN_ENABLED_KEY, "true");
+    document.getElementById("setPinOverlay").classList.add("hidden");
+    updatePinToggleUI();
+    showToast("🔐 Password lock enabled!");
   }
 }
 
 function updateSetPinUI() {
   const step1 = document.getElementById("setPinStep1");
   const step2 = document.getElementById("setPinStep2");
-  if (setPinStep === 1) {
-    document.getElementById("setPinTitle").textContent = "Create PIN";
-    document.getElementById("setPinSubtitle").textContent = "Choose a 6-digit PIN to secure your wallet";
+  if (setPwStep === 1) {
+    document.getElementById("setPinTitle").textContent = "Set Password";
+    document.getElementById("setPinSubtitle").textContent = "Create a password to lock your wallet";
     if (step1) step1.classList.add("done");
     if (step2) step2.classList.remove("done");
   } else {
-    document.getElementById("setPinTitle").textContent = "Confirm PIN";
-    document.getElementById("setPinSubtitle").textContent = "Enter your PIN again to confirm";
+    document.getElementById("setPinTitle").textContent = "Confirm Password";
+    document.getElementById("setPinSubtitle").textContent = "Enter your password again to confirm";
     if (step2) step2.classList.add("done");
   }
   document.getElementById("setPinErrorMsg").textContent = "";
@@ -3496,21 +3513,14 @@ function updatePinToggleUI() {
   const label = document.getElementById("pinStatusLabel");
   const enabled = isPinEnabled();
   if (toggle) toggle.classList.toggle("on", enabled);
-  if (label) label.textContent = enabled ? "PIN lock is ON" : "Protect wallet with a PIN";
+  if (label) label.textContent = enabled ? "Password lock is ON" : "Protect wallet with a password";
 }
 
-// Lock on page hide
+// Lock when switching away
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden && isPinEnabled() && wallet) {
-    // Will show PIN on return
-  }
+  if (!document.hidden && isPinEnabled() && wallet) showPinLock();
 });
 
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && isPinEnabled() && wallet) {
-    showPinLock();
-  }
-});
 
 // ═══════════════════════════════════════
 // QR CODE SCANNER
@@ -3639,6 +3649,10 @@ function mobileNav(name, el) {
   if (target) {
     const panel = document.getElementById(target.panel);
     if (panel) panel.classList.add("visible");
+    // Generate QR when opening receive
+    if (name === "receive" && wallet) {
+      setTimeout(() => generateQrCode(wallet.address), 100);
+    }
     // Also sync desktop action buttons
     document.querySelectorAll(".action-btn").forEach(b => b.classList.remove("active"));
     const actionBtn = document.getElementById(target.action);
@@ -3833,6 +3847,39 @@ function stopReceiveWatcher() {
 
 async function scanPastReceives() {
   // Placeholder — future: use indexer API
+}
+
+
+// ─── QR CODE GENERATION ──────────────────────────
+function generateQrCode(address) {
+  const container = document.getElementById("qrCodeDisplay");
+  if (!container || !address) return;
+  container.innerHTML = "";
+  try {
+    new QRCode(container, {
+      text: address,
+      width: 180,
+      height: 180,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) {
+    container.innerHTML = '<div style="font-size:11px;color:#999;padding:20px;text-align:center">QR unavailable</div>';
+  }
+}
+
+function shareAddress() {
+  if (!wallet) return;
+  if (navigator.share) {
+    navigator.share({
+      title: "My APEX Wallet Address",
+      text: "Send MON to my wallet on Monad Testnet:\n" + wallet.address,
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(wallet.address);
+    showToast("Address copied to clipboard!");
+  }
 }
 
 // ─── AUTOCOMPLETE ────────────────────────────────
@@ -4465,7 +4512,7 @@ updatePinToggleUI();
         <div class="settings-icon">🔐</div>
         <div class="settings-item-info">
           <div class="settings-item-title">PIN Lock</div>
-          <div class="settings-item-sub" id="pinStatusLabel">Protect wallet with a PIN</div>
+          <div class="settings-item-sub" id="pinStatusLabel">Protect wallet with a password</div>
         </div>
         <div class="toggle-switch" id="pinToggle" onclick="togglePinLock()">
           <div class="toggle-knob"></div>
@@ -4670,70 +4717,64 @@ updatePinToggleUI();
 </div>
 
 
-<!-- PIN LOCK OVERLAY -->
+<!-- PASSWORD LOCK OVERLAY -->
 <div class="pin-overlay hidden" id="pinOverlay">
   <div class="pin-logo">⬡</div>
   <div class="pin-title" id="pinTitle">Welcome Back</div>
-  <div class="pin-subtitle" id="pinSubtitle">Enter your PIN to unlock APEX Wallet</div>
-  <div class="pin-dots" id="pinDots">
-    <div class="pin-dot" id="pd0"></div>
-    <div class="pin-dot" id="pd1"></div>
-    <div class="pin-dot" id="pd2"></div>
-    <div class="pin-dot" id="pd3"></div>
-    <div class="pin-dot" id="pd4"></div>
-    <div class="pin-dot" id="pd5"></div>
+  <div class="pin-subtitle" id="pinSubtitle">Enter your password to unlock APEX Wallet</div>
+  <div style="width:100%;max-width:320px;margin-bottom:16px;position:relative">
+    <input type="password" id="pwInput"
+      placeholder="Enter password..."
+      style="font-size:16px;padding:16px 50px 16px 16px;border-radius:14px;border:2px solid var(--border2);background:var(--card2);color:var(--text);width:100%;letter-spacing:0.1em"
+      onkeydown="if(event.key==='Enter')verifyPin()"
+      oninput="document.getElementById('pinErrorMsg').textContent=''"/>
+    <span onclick="togglePwVisibility('pwInput')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;user-select:none">👁</span>
   </div>
-  <div class="pin-pad">
-    <div class="pin-key" onclick="pinInput('1')"><div class="pin-key-num">1</div></div>
-    <div class="pin-key" onclick="pinInput('2')"><div class="pin-key-num">2</div><div class="pin-key-letters">ABC</div></div>
-    <div class="pin-key" onclick="pinInput('3')"><div class="pin-key-num">3</div><div class="pin-key-letters">DEF</div></div>
-    <div class="pin-key" onclick="pinInput('4')"><div class="pin-key-num">4</div><div class="pin-key-letters">GHI</div></div>
-    <div class="pin-key" onclick="pinInput('5')"><div class="pin-key-num">5</div><div class="pin-key-letters">JKL</div></div>
-    <div class="pin-key" onclick="pinInput('6')"><div class="pin-key-num">6</div><div class="pin-key-letters">MNO</div></div>
-    <div class="pin-key" onclick="pinInput('7')"><div class="pin-key-num">7</div><div class="pin-key-letters">PQRS</div></div>
-    <div class="pin-key" onclick="pinInput('8')"><div class="pin-key-num">8</div><div class="pin-key-letters">TUV</div></div>
-    <div class="pin-key" onclick="pinInput('9')"><div class="pin-key-num">9</div><div class="pin-key-letters">WXYZ</div></div>
-    <div class="pin-key pin-key-bio" onclick="pinInput('')"></div>
-    <div class="pin-key" onclick="pinInput('0')"><div class="pin-key-num">0</div></div>
-    <div class="pin-key pin-key-del" onclick="pinDelete()">⌫</div>
-  </div>
+  <button class="btn btn-primary" style="width:100%;max-width:320px;padding:16px;font-size:16px;border-radius:14px" onclick="verifyPin()">
+    🔓 Unlock Wallet
+  </button>
   <div class="pin-error-msg" id="pinErrorMsg"></div>
-  <div class="pin-forgot" id="pinForgotBtn" onclick="pinForgot()">Forgot PIN?</div>
+  <div class="pin-forgot" id="pinForgotBtn" onclick="pinForgot()">Forgot password?</div>
 </div>
 
-<!-- SET PIN OVERLAY -->
+<!-- SET PASSWORD OVERLAY -->
 <div class="pin-overlay hidden" id="setPinOverlay">
   <div class="pin-logo">🔐</div>
   <div class="pin-step-indicator">
     <div class="pin-step-dot done" id="setPinStep1"></div>
     <div class="pin-step-dot" id="setPinStep2"></div>
   </div>
-  <div class="pin-title" id="setPinTitle">Create PIN</div>
-  <div class="pin-subtitle" id="setPinSubtitle">Choose a 6-digit PIN to secure your wallet</div>
-  <div class="pin-dots" id="setPinDots">
-    <div class="pin-dot" id="spd0"></div>
-    <div class="pin-dot" id="spd1"></div>
-    <div class="pin-dot" id="spd2"></div>
-    <div class="pin-dot" id="spd3"></div>
-    <div class="pin-dot" id="spd4"></div>
-    <div class="pin-dot" id="spd5"></div>
+  <div class="pin-title" id="setPinTitle">Set Password</div>
+  <div class="pin-subtitle" id="setPinSubtitle">Create a password to lock your wallet</div>
+  <div style="width:100%;max-width:320px;margin-bottom:12px;position:relative">
+    <input type="password" id="setPwInput"
+      placeholder="Create password (min 6 chars)..."
+      style="font-size:16px;padding:16px 50px 16px 16px;border-radius:14px;border:2px solid var(--border2);background:var(--card2);color:var(--text);width:100%"
+      oninput="updateSetPwStep()"/>
+    <span onclick="togglePwVisibility('setPwInput')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;user-select:none">👁</span>
   </div>
-  <div class="pin-pad">
-    <div class="pin-key" onclick="setPinInput('1')"><div class="pin-key-num">1</div></div>
-    <div class="pin-key" onclick="setPinInput('2')"><div class="pin-key-num">2</div><div class="pin-key-letters">ABC</div></div>
-    <div class="pin-key" onclick="setPinInput('3')"><div class="pin-key-num">3</div><div class="pin-key-letters">DEF</div></div>
-    <div class="pin-key" onclick="setPinInput('4')"><div class="pin-key-num">4</div><div class="pin-key-letters">GHI</div></div>
-    <div class="pin-key" onclick="setPinInput('5')"><div class="pin-key-num">5</div><div class="pin-key-letters">JKL</div></div>
-    <div class="pin-key" onclick="setPinInput('6')"><div class="pin-key-num">6</div><div class="pin-key-letters">MNO</div></div>
-    <div class="pin-key" onclick="setPinInput('7')"><div class="pin-key-num">7</div><div class="pin-key-letters">PQRS</div></div>
-    <div class="pin-key" onclick="setPinInput('8')"><div class="pin-key-num">8</div><div class="pin-key-letters">TUV</div></div>
-    <div class="pin-key" onclick="setPinInput('9')"><div class="pin-key-num">9</div><div class="pin-key-letters">WXYZ</div></div>
-    <div class="pin-key pin-key-bio" onclick="setPinInput('')"></div>
-    <div class="pin-key" onclick="setPinInput('0')"><div class="pin-key-num">0</div></div>
-    <div class="pin-key pin-key-del" onclick="setPinDelete()">⌫</div>
+  <div style="width:100%;max-width:320px;margin-bottom:16px;position:relative" id="setPwConfirmWrap" class="hidden">
+    <input type="password" id="setPwConfirm"
+      placeholder="Confirm password..."
+      style="font-size:16px;padding:16px 50px 16px 16px;border-radius:14px;border:2px solid var(--border2);background:var(--card2);color:var(--text);width:100%"
+      onkeydown="if(event.key==='Enter')confirmSetPin()"/>
+    <span onclick="togglePwVisibility('setPwConfirm')" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;user-select:none">👁</span>
   </div>
+  <!-- STRENGTH METER -->
+  <div style="width:100%;max-width:320px;margin-bottom:16px" id="pwStrengthWrap" class="hidden">
+    <div style="display:flex;gap:4px;margin-bottom:4px">
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--border)" id="ps1"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--border)" id="ps2"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--border)" id="ps3"></div>
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--border)" id="ps4"></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted2)" id="pwStrengthLabel">Strength: —</div>
+  </div>
+  <button class="btn btn-primary" style="width:100%;max-width:320px;padding:16px;font-size:16px;border-radius:14px" onclick="confirmSetPin()" id="setPwBtn">
+    Continue →
+  </button>
   <div class="pin-error-msg" id="setPinErrorMsg"></div>
-  <div class="pin-forgot" onclick="document.getElementById('setPinOverlay').classList.add('hidden')" style="color:var(--muted2)">Cancel</div>
+  <div class="pin-forgot" onclick="document.getElementById('setPinOverlay').classList.add('hidden')" style="color:var(--muted2);margin-top:16px">Cancel</div>
 </div>
 
 <!-- QR SCANNER OVERLAY -->
