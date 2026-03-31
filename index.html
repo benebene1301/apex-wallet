@@ -1250,6 +1250,109 @@ body.light-mode .quick-chips .chip { background: #fff; color: #5a5470; }
 .wallet-name-display:hover .edit-hint { opacity: 1; }
 .edit-hint { opacity: 0; font-size: 10px; color: var(--purple2); transition: opacity 0.2s; }
 
+
+/* WALLET DROPDOWN */
+.wallet-dropdown-wrap { position: relative; }
+
+.wallet-dropdown-trigger {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px 6px 8px;
+  background: var(--card2); border: 1px solid var(--border2);
+  border-radius: 12px; cursor: pointer; transition: all 0.15s;
+  min-width: 130px;
+}
+.wallet-dropdown-trigger:hover { border-color: var(--purple-border); background: var(--purple-soft); }
+
+.wallet-trigger-avatar {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: var(--purple); display: flex; align-items: center;
+  justify-content: center; font-size: 13px; flex-shrink: 0;
+}
+
+.wallet-trigger-info { flex: 1; min-width: 0; }
+.wallet-trigger-name { font-size: 12px; font-weight: 700; line-height: 1.2; }
+.wallet-trigger-bal { font-family: var(--mono); font-size: 9px; color: var(--muted2); }
+
+.wallet-trigger-chevron { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+.wallet-dropdown-wrap.open .wallet-trigger-chevron { transform: rotate(180deg); }
+
+.wallet-dropdown-menu {
+  position: absolute; top: calc(100% + 8px); left: 0;
+  width: 240px; background: var(--card);
+  border: 1px solid var(--border2); border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  z-index: 200; overflow: hidden;
+  display: none; animation: dropDown 0.15s ease;
+}
+
+@keyframes dropDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.wallet-dropdown-wrap.open .wallet-dropdown-menu { display: block; }
+
+.dropdown-search {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dropdown-search input {
+  font-size: 12px; padding: 8px 12px;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: var(--card2); color: var(--text); width: 100%;
+}
+
+.dropdown-accounts { max-height: 220px; overflow-y: auto; padding: 6px; }
+
+.dropdown-account {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 10px; border-radius: 10px;
+  cursor: pointer; transition: all 0.12s;
+}
+.dropdown-account:hover { background: var(--purple-soft); }
+.dropdown-account.active-account { background: var(--purple-soft); }
+
+.dropdown-account-avatar {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--purple); display: flex; align-items: center;
+  justify-content: center; font-size: 15px; flex-shrink: 0;
+  position: relative;
+}
+
+.dropdown-account-avatar .active-dot {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 10px; height: 10px; background: var(--green);
+  border: 2px solid var(--card); border-radius: 50%;
+}
+
+.dropdown-account-info { flex: 1; min-width: 0; }
+.dropdown-account-name { font-size: 13px; font-weight: 700; margin-bottom: 1px; }
+.dropdown-account-addr { font-family: var(--mono); font-size: 9px; color: var(--muted2); }
+.dropdown-account-bal { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+
+.dropdown-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+.dropdown-action {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px; cursor: pointer; transition: all 0.12s;
+  font-size: 13px; font-weight: 600; color: var(--text);
+}
+.dropdown-action:hover { background: var(--purple-soft); color: var(--purple2); }
+.dropdown-action-icon { font-size: 16px; width: 24px; text-align: center; }
+
+.dropdown-footer {
+  border-top: 1px solid var(--border); padding: 6px;
+}
+
+.dropdown-danger {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 10px; cursor: pointer; transition: all 0.12s;
+  font-size: 13px; font-weight: 600; color: var(--red);
+  border-radius: 8px;
+}
+.dropdown-danger:hover { background: var(--red-soft); }
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -1272,10 +1375,40 @@ body.light-mode .quick-chips .chip { background: #fff; color: #5a5470; }
     <div class="logo-text">APEX <span>WALLET</span></div>
   </div>
   <div class="header-right">
-    <div class="wallet-switcher hidden" id="walletSwitcher" onclick="openSettings('wallets')">
-      <div class="wallet-switcher-dot"></div>
-      <span id="activeWalletName">Wallet 1</span>
-      <span style="color:var(--muted);font-size:10px">▼</span>
+    <div class="wallet-dropdown-wrap hidden" id="walletSwitcher">
+      <div class="wallet-dropdown-trigger" onclick="toggleWalletDropdown()">
+        <div class="wallet-trigger-avatar">👛</div>
+        <div class="wallet-trigger-info">
+          <div class="wallet-trigger-name" id="activeWalletName">Wallet 1</div>
+          <div class="wallet-trigger-bal" id="activeWalletBal">— MON</div>
+        </div>
+        <div class="wallet-trigger-chevron">▼</div>
+      </div>
+      <div class="wallet-dropdown-menu" id="walletDropdownMenu">
+        <!-- Search -->
+        <div class="dropdown-search">
+          <input type="text" placeholder="🔍 Search wallets..." oninput="filterDropdownWallets(this.value)" id="walletSearchInput"/>
+        </div>
+        <!-- Accounts list -->
+        <div class="dropdown-accounts" id="dropdownAccountsList"></div>
+        <!-- Actions -->
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-action" onclick="addNewWallet();closeWalletDropdown()">
+          <span class="dropdown-action-icon">➕</span> Add New Wallet
+        </div>
+        <div class="dropdown-action" onclick="importAnotherWallet();closeWalletDropdown()">
+          <span class="dropdown-action-icon">📥</span> Import Wallet
+        </div>
+        <div class="dropdown-action" onclick="openSettings('main');closeWalletDropdown()">
+          <span class="dropdown-action-icon">⚙️</span> Settings
+        </div>
+        <!-- Footer -->
+        <div class="dropdown-footer">
+          <div class="dropdown-danger" onclick="disconnectWallet();closeWalletDropdown()">
+            <span class="dropdown-action-icon">🚪</span> Disconnect
+          </div>
+        </div>
+      </div>
     </div>
     <div class="mode-toggle" id="modeToggle" onclick="toggleMode()" title="Light/Dark mode">
       <div class="mode-toggle-knob"></div>
@@ -1868,7 +2001,9 @@ function showWalletUI() {
     activeWalletIndex = wallets.length - 1;
   }
   document.getElementById("walletSwitcher").classList.remove("hidden");
-  document.getElementById("activeWalletName").textContent = wallets[activeWalletIndex]?.name || "Wallet 1";
+  const wName = wallets[activeWalletIndex]?.name || "Wallet 1";
+  document.getElementById("activeWalletName").textContent = wName;
+  document.getElementById("activeWalletBal").textContent = "— MON";
   loadChatHistory();
 }
 
@@ -1877,7 +2012,9 @@ async function refreshBalance() {
   document.getElementById("balAmt").textContent = "…";
   try {
     const bal = await provider.getBalance(wallet.address);
-    document.getElementById("balAmt").textContent = parseFloat(ethers.formatEther(bal)).toFixed(4);
+    const formatted = parseFloat(ethers.formatEther(bal)).toFixed(4);
+    document.getElementById("balAmt").textContent = formatted;
+    updateDropdownBalance();
   } catch { document.getElementById("balAmt").textContent = "—"; }
 }
 
@@ -2020,6 +2157,8 @@ function addMsg(role, text) {
   div.textContent = text;
   box.appendChild(div);
   box.scrollTop = box.scrollHeight;
+  // Auto-save chat history after each message
+  if (wallet) saveChatHistory();
   return div;
 }
 
@@ -2102,8 +2241,9 @@ RULES:
 - If asked balance, reply with current balance.
 - If asked contacts, list them.
 - Be warm, simple, friendly — for everyday people, not crypto experts.
-- If user asks how to RECEIVE tokens or asks for their address: Tell them their address is shown above, and explain they need to be on MONAD TESTNET network. Say: "Make sure the sender is using Monad Testnet (Chain ID: 10143, RPC: https://testnet-rpc.monad.xyz). Your address works on any EVM wallet like MetaMask or Backpack."
-- If user asks about network, RPC, or chain ID: Provide Monad Testnet details: Chain ID 10143, RPC https://testnet-rpc.monad.xyz, Explorer https://testnet.monadexplorer.com
+- If user asks how to RECEIVE tokens or asks for their address: Explain step by step: "To receive MON, share your address: ${addressInfo}. The sender must: 1) Use a wallet like MetaMask or Backpack, 2) Add Monad Testnet network: Network Name: Monad Testnet, RPC URL: https://testnet-rpc.monad.xyz, Chain ID: 10143, Currency Symbol: MON, Explorer: https://testnet.monadexplorer.com, 3) Then send to your address on MONAD TESTNET only. Sending on wrong network = tokens lost!"
+- If user asks about network, RPC, or chain ID: Give full details: Network: Monad Testnet, Chain ID: 10143, RPC: https://testnet-rpc.monad.xyz, Symbol: MON, Explorer: https://testnet.monadexplorer.com. Explain it clearly for non-technical users.
+- If user asks how to add Monad testnet to MetaMask or any wallet: Give step by step instructions on how to add the network manually using the details above.
 - Always end helpful responses with a follow-up suggestion like "Would you like me to help you with anything else?" in their language.`;
 
   try {
@@ -2230,15 +2370,29 @@ function loadChatHistory() {
   if (!wallet) return;
   try {
     const saved = JSON.parse(localStorage.getItem("apex_chat_" + wallet.address) || "[]");
-    if (!saved.length) return;
     const box = document.getElementById("chatBox");
-    // Keep welcome msg, add history after
+    // Clear box first, then restore
+    box.innerHTML = "";
+    if (!saved.length) {
+      // Show fresh welcome for new wallet
+      const welcome = document.createElement("div");
+      welcome.className = "msg ai";
+      welcome.innerHTML = "Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 \"How much MON do I have?\"<br>• 📤 \"Send 0.1 MON to Mama\"<br>• 📥 \"How do I receive MON?\"<br>• 👥 \"Save Kuya's wallet address\"<br>• 📋 \"Show my recent transactions\"<br><br>I'm here to help — even if this is your first time using crypto! 🌟";
+      box.appendChild(welcome);
+      return;
+    }
     saved.forEach(m => {
       const div = document.createElement("div");
       div.className = "msg " + (m.role === "user" ? "user" : "ai");
       div.textContent = m.text;
       box.appendChild(div);
     });
+    box.scrollTop = box.scrollHeight;
+    // Show divider showing history was loaded
+    const divider = document.createElement("div");
+    divider.style.cssText = "text-align:center;font-size:10px;color:var(--muted);padding:4px 0;font-family:var(--mono)";
+    divider.textContent = "─── chat history restored ───";
+    box.appendChild(divider);
     box.scrollTop = box.scrollHeight;
   } catch(e) {}
 }
@@ -2531,6 +2685,72 @@ function setLanguageFromSettings(lang) {
 }
 
 // ─── UPDATE SHOW WALLET UI to save wallet ────────
+
+
+// ─── WALLET DROPDOWN ─────────────────────────────
+function toggleWalletDropdown() {
+  const wrap = document.getElementById("walletSwitcher");
+  const isOpen = wrap.classList.contains("open");
+  if (!isOpen) {
+    renderDropdownAccounts();
+    wrap.classList.add("open");
+    // Close on outside click
+    setTimeout(() => document.addEventListener("click", closeDropdownOutside), 10);
+  } else {
+    closeWalletDropdown();
+  }
+}
+
+function closeDropdownOutside(e) {
+  const menu = document.getElementById("walletDropdownMenu");
+  const trigger = document.querySelector(".wallet-dropdown-trigger");
+  if (menu && !menu.contains(e.target) && !trigger.contains(e.target)) {
+    closeWalletDropdown();
+  }
+}
+
+function closeWalletDropdown() {
+  document.getElementById("walletSwitcher").classList.remove("open");
+  document.removeEventListener("click", closeDropdownOutside);
+}
+
+function renderDropdownAccounts(filter) {
+  const list = document.getElementById("dropdownAccountsList");
+  const currentBal = document.getElementById("balAmt")?.textContent || "—";
+  let filtered = wallets;
+  if (filter) {
+    const q = filter.toLowerCase();
+    filtered = wallets.filter((w, i) =>
+      (w.name || "Wallet "+(i+1)).toLowerCase().includes(q) ||
+      w.address.toLowerCase().includes(q)
+    );
+  }
+  list.innerHTML = filtered.map((w, i) => {
+    const realIdx = wallets.indexOf(w);
+    const isActive = realIdx === activeWalletIndex;
+    return `<div class="dropdown-account ${isActive ? 'active-account' : ''}" onclick="switchToWallet(${realIdx});closeWalletDropdown()">
+      <div class="dropdown-account-avatar">
+        ${['👛','💼','🏦','💰','🔑'][realIdx % 5]}
+        ${isActive ? '<div class="active-dot"></div>' : ''}
+      </div>
+      <div class="dropdown-account-info">
+        <div class="dropdown-account-name">${w.name || "Wallet "+(realIdx+1)}</div>
+        <div class="dropdown-account-addr">${w.address.slice(0,10)}...${w.address.slice(-6)}</div>
+      </div>
+      <div class="dropdown-account-bal">${isActive ? currentBal : "—"} MON</div>
+    </div>`;
+  }).join("") || '<div style="padding:16px;text-align:center;color:var(--muted);font-size:12px">No wallets found</div>';
+}
+
+function filterDropdownWallets(val) {
+  renderDropdownAccounts(val);
+}
+
+function updateDropdownBalance() {
+  const bal = document.getElementById("balAmt")?.textContent || "—";
+  const balEl = document.getElementById("activeWalletBal");
+  if (balEl) balEl.textContent = bal + " MON";
+}
 
 // ─── THEME ───────────────────────────────────────
 function setTheme(name, el) {
