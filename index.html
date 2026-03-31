@@ -2005,6 +2005,8 @@ function showWalletUI() {
   document.getElementById("activeWalletName").textContent = wName;
   document.getElementById("activeWalletBal").textContent = "— MON";
   loadChatHistory();
+  startReceiveWatcher();
+  scanPastReceives();
 }
 
 async function refreshBalance() {
@@ -2410,6 +2412,74 @@ function loadChatHistory() {
 // ─── RECEIVE INSTRUCTIONS IN CHAT ────────────────
 // (Handled by AI system prompt — updated below)
 
+
+// ─── RECEIVE DETECTION ───────────────────────────
+let lastCheckedBlock = null;
+let receivePolling = null;
+
+async function startReceiveWatcher() {
+  if (!wallet || !provider) return;
+  stopReceiveWatcher();
+
+  try {
+    lastCheckedBlock = await provider.getBlockNumber();
+  } catch(e) { return; }
+
+  // Poll every 8 seconds for new blocks
+  receivePolling = setInterval(async () => {
+    try {
+      const currentBlock = await provider.getBlockNumber();
+      if (currentBlock <= lastCheckedBlock) return;
+
+      // Check recent blocks for incoming txs
+      for (let b = lastCheckedBlock + 1; b <= Math.min(currentBlock, lastCheckedBlock + 5); b++) {
+        const block = await provider.getBlock(b, true);
+        if (!block || !block.transactions) continue;
+
+        for (const tx of block.transactions) {
+          if (!tx || typeof tx === 'string') continue;
+          // Check if this tx is sending TO our wallet
+          if (tx.to && tx.to.toLowerCase() === wallet.address.toLowerCase()) {
+            // Make sure we haven't recorded this tx already
+            const alreadyRecorded = txHistory.some(t => t.hash === tx.hash);
+            if (!alreadyRecorded) {
+              const amount = parseFloat(ethers.formatEther(tx.value || 0n)).toFixed(4);
+              if (parseFloat(amount) > 0) {
+                // Record as received tx
+                addTx("receive", wallet.address, tx.from, amount, tx.hash, false, null);
+                // Notify in chat
+                const senderContact = contacts.find(c => c.address.toLowerCase() === tx.from.toLowerCase());
+                const senderName = senderContact ? senderContact.name : tx.from.slice(0,10)+"..."+tx.from.slice(-4);
+                addMsg("ai", `📥 You received ${amount} MON from ${senderName}!\nTX: ${tx.hash.slice(0,20)}...\n\nTap Activity to see details.`);
+                refreshBalance();
+              }
+            }
+          }
+        }
+      }
+      lastCheckedBlock = currentBlock;
+    } catch(e) {}
+  }, 8000);
+}
+
+function stopReceiveWatcher() {
+  if (receivePolling) { clearInterval(receivePolling); receivePolling = null; }
+}
+
+async function scanPastReceives() {
+  if (!wallet || !provider) return;
+  try {
+    const currentBlock = await provider.getBlockNumber();
+    const fromBlock = Math.max(0, currentBlock - 500); // last ~500 blocks
+    // Get balance history isn't possible without indexer, so we just
+    // check if txHistory has any receives — if not, show a note
+    const hasReceives = txHistory.some(t => t.type === "receive");
+    if (!hasReceives && txHistory.length > 0) {
+      // silently ok — sends exist but no receives tracked yet
+    }
+  } catch(e) {}
+}
+
 // ─── AUTOCOMPLETE ────────────────────────────────
 function showSuggestions(val) {
   const list = document.getElementById("suggestionList");
@@ -2495,6 +2565,7 @@ function addWalletToList(name, address, privateKey, mnemonic) {
 }
 
 function switchToWallet(idx) {
+  stopReceiveWatcher();
   activeWalletIndex = idx;
   saveWalletsToStorage();
   const w = wallets[idx];
@@ -2503,11 +2574,15 @@ function switchToWallet(idx) {
     connectProvider();
     document.getElementById("addrDisplay").textContent = wallet.address;
     document.getElementById("receiveAddr").textContent = wallet.address;
-    document.getElementById("activeWalletName").textContent = w.name || "Wallet " + (idx+1);
+    const name = w.name || "Wallet " + (idx+1);
+    document.getElementById("activeWalletName").textContent = name;
+    document.getElementById("activeWalletBal").textContent = "— MON";
     loadContacts();
     loadTxHistory();
     renderContacts();
     renderActivity();
+    loadChatHistory();
+    startReceiveWatcher();
     openSettings("wallets");
   } catch(e) { alert("Error switching wallet."); }
 }
@@ -2624,6 +2699,7 @@ function saveWalletName() {
 
 function disconnectWallet() {
   if (!confirm("Remove this wallet from APEX? Make sure you have your seed phrase saved!")) return;
+  stopReceiveWatcher();
   wallets.splice(activeWalletIndex, 1);
   if (wallets.length === 0) {
     wallet = null; provider = null;
