@@ -2495,13 +2495,11 @@ async function startReceiveWatcher() {
   if (!wallet || !provider) return;
   stopReceiveWatcher();
 
-  // Get starting balance
   try {
     const bal = await provider.getBalance(wallet.address);
     lastKnownBalance = bal;
   } catch(e) { return; }
 
-  // Poll every 6 seconds — compare balance
   receivePolling = setInterval(async () => {
     if (!wallet || !provider) return;
     try {
@@ -2510,69 +2508,67 @@ async function startReceiveWatcher() {
         const diff = newBal - lastKnownBalance;
         const amount = parseFloat(ethers.formatEther(diff)).toFixed(4);
         if (parseFloat(amount) > 0.00001) {
-          // Find the incoming tx by checking latest blocks
           let fromAddr = null;
           let txHash = null;
+          let feeStr = null;
+
           try {
-            const block = await provider.getBlock("latest", true);
-            if (block && block.transactions) {
-              for (const tx of block.transactions) {
-                if (typeof tx === "object" && tx.to &&
-                    tx.to.toLowerCase() === wallet.address.toLowerCase()) {
-                  const alreadyRecorded = txHistory.some(t => t.hash === tx.hash);
-                  if (!alreadyRecorded) {
-                    fromAddr = tx.from;
-                    txHash = tx.hash;
-                    break;
+            const blockNum = await provider.getBlockNumber();
+            // Scan last 20 blocks using hash-then-fetch approach
+            scanLoop:
+            for (let b = blockNum; b >= Math.max(0, blockNum - 20); b--) {
+              let block;
+              try { block = await provider.getBlock(b); } catch(e2) { continue; }
+              if (!block || !block.transactions || !block.transactions.length) continue;
+
+              for (const hashItem of block.transactions) {
+                const hash = typeof hashItem === "string" ? hashItem : hashItem?.hash;
+                if (!hash) continue;
+                if (txHistory.some(t => t.hash === hash)) continue;
+
+                let fullTx;
+                try { fullTx = await provider.getTransaction(hash); } catch(e3) { continue; }
+                if (!fullTx || !fullTx.to) continue;
+                if (fullTx.to.toLowerCase() !== wallet.address.toLowerCase()) continue;
+
+                fromAddr = fullTx.from;
+                txHash = hash;
+
+                try {
+                  const receipt = await provider.getTransactionReceipt(hash);
+                  if (receipt && receipt.gasUsed) {
+                    const gasPrice = fullTx.gasPrice || fullTx.maxFeePerGas || 0n;
+                    const feeWei = receipt.gasUsed * gasPrice;
+                    feeStr = parseFloat(ethers.formatEther(feeWei)).toFixed(6) + " MON";
                   }
-                }
+                } catch(e4) {}
+                break scanLoop;
               }
             }
-          } catch(e) {}
+          } catch(e) { console.log("Receive scan error:", e.message); }
 
-          // Also check previous block in case we missed it
-          if (!txHash) {
-            try {
-              const blockNum = await provider.getBlockNumber();
-              for (let b = blockNum; b >= Math.max(0, blockNum - 3); b--) {
-                const block = await provider.getBlock(b, true);
-                if (!block || !block.transactions) continue;
-                for (const tx of block.transactions) {
-                  if (typeof tx === "object" && tx.to &&
-                      tx.to.toLowerCase() === wallet.address.toLowerCase()) {
-                    const alreadyRecorded = txHistory.some(t => t.hash === tx.hash);
-                    if (!alreadyRecorded) {
-                      fromAddr = tx.from;
-                      txHash = tx.hash;
-                      break;
-                    }
-                  }
-                }
-                if (txHash) break;
-              }
-            } catch(e) {}
-          }
-
-          // Record receive
-          addTx("receive", wallet.address, fromAddr || "unknown", amount, txHash || null, false, null);
-
-          // Chat notification — use contact name if saved
-          const senderContact = fromAddr ? contacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase()) : null;
-          const senderName = senderContact
+          // Resolve contact name
+          const senderContact = fromAddr
+            ? contacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase())
+            : null;
+          const senderDisplay = senderContact
             ? senderContact.name
-            : (fromAddr && fromAddr !== "unknown"
-                ? fromAddr.slice(0,10)+"..."+fromAddr.slice(-4)
-                : "someone");
-          addMsg("ai", `📥 You just received ${amount} MON from ${senderName}!\n${txHash ? "TX: " + txHash.slice(0,20)+"..." : ""}\n\nTap Activity to see details. 🎉`);
+            : (fromAddr ? fromAddr : "Unknown");
 
-          // Update display
+          // Record in history
+          addTx("receive", wallet.address, fromAddr || null, amount, txHash || null, false, feeStr);
+
+          // Chat notification
+          const txLine = txHash ? "\nTX: " + txHash.slice(0,22)+"..." : "";
+          addMsg("ai", `📥 Received ${amount} MON!\nFrom: ${senderDisplay}${txLine}\n\nTap Activity to view details. 🎉`);
+
           document.getElementById("balAmt").textContent = parseFloat(ethers.formatEther(newBal)).toFixed(4);
           updateDropdownBalance();
         }
       }
       lastKnownBalance = newBal;
-    } catch(e) {}
-  }, 6000);
+    } catch(e) { console.log("Watcher poll error:", e.message); }
+  }, 5000);
 }
 
 function stopReceiveWatcher() {
