@@ -2499,6 +2499,37 @@ function loadChatHistory() {
 let lastKnownBalance = null;
 let receivePolling = null;
 
+// Helper: scan blocks for incoming TX to our address
+async function findIncomingTx(targetAddress, excludeHashes, scanDepth) {
+  try {
+    const blockNum = await provider.getBlockNumber();
+    for (let b = blockNum; b >= Math.max(0, blockNum - scanDepth); b--) {
+      let block;
+      try { block = await provider.getBlock(b); } catch(e) { continue; }
+      if (!block || !block.transactions || !block.transactions.length) continue;
+      for (const hashItem of block.transactions) {
+        const hash = typeof hashItem === "string" ? hashItem : hashItem?.hash;
+        if (!hash || excludeHashes.has(hash)) continue;
+        let fullTx;
+        try { fullTx = await provider.getTransaction(hash); } catch(e) { continue; }
+        if (!fullTx || !fullTx.to) continue;
+        if (fullTx.to.toLowerCase() !== targetAddress.toLowerCase()) continue;
+        // Found it!
+        let feeStr = null;
+        try {
+          const receipt = await provider.getTransactionReceipt(hash);
+          if (receipt && receipt.gasUsed) {
+            const gasPrice = fullTx.gasPrice || fullTx.maxFeePerGas || 0n;
+            feeStr = parseFloat(ethers.formatEther(receipt.gasUsed * gasPrice)).toFixed(6) + " MON";
+          }
+        } catch(e) {}
+        return { fromAddr: fullTx.from, txHash: hash, feeStr };
+      }
+    }
+  } catch(e) { console.log("findIncomingTx error:", e.message); }
+  return null;
+}
+
 async function startReceiveWatcher() {
   if (!wallet || !provider) return;
   stopReceiveWatcher();
@@ -2508,7 +2539,7 @@ async function startReceiveWatcher() {
     lastKnownBalance = bal;
   } catch(e) { return; }
 
-  let isProcessing = false; // prevent duplicate processing
+  let isProcessing = false;
 
   receivePolling = setInterval(async () => {
     if (!wallet || !provider || isProcessing) return;
@@ -2518,48 +2549,35 @@ async function startReceiveWatcher() {
         const diff = newBal - lastKnownBalance;
         const amount = parseFloat(ethers.formatEther(diff)).toFixed(4);
 
-        // Update balance IMMEDIATELY so next poll doesn't re-trigger
+        // Update balance IMMEDIATELY to prevent re-trigger
         lastKnownBalance = newBal;
 
         if (parseFloat(amount) > 0.00001) {
           isProcessing = true;
-          let fromAddr = null;
-          let txHash = null;
-          let feeStr = null;
 
-          try {
-            const blockNum = await provider.getBlockNumber();
-            scanLoop:
-            for (let b = blockNum; b >= Math.max(0, blockNum - 30); b--) {
-              let block;
-              try { block = await provider.getBlock(b); } catch(e2) { continue; }
-              if (!block || !block.transactions || !block.transactions.length) continue;
+          // Build set of already-recorded hashes
+          const knownHashes = new Set(txHistory.filter(t => t.hash).map(t => t.hash));
 
-              for (const hashItem of block.transactions) {
-                const hash = typeof hashItem === "string" ? hashItem : hashItem?.hash;
-                if (!hash) continue;
-                // Skip already recorded
-                if (txHistory.some(t => t.hash === hash)) continue;
-                let fullTx;
-                try { fullTx = await provider.getTransaction(hash); } catch(e3) { continue; }
-                if (!fullTx || !fullTx.to) continue;
-                if (fullTx.to.toLowerCase() !== wallet.address.toLowerCase()) continue;
-                fromAddr = fullTx.from;
-                txHash = hash;
-                try {
-                  const receipt = await provider.getTransactionReceipt(hash);
-                  if (receipt && receipt.gasUsed) {
-                    const gasPrice = fullTx.gasPrice || fullTx.maxFeePerGas || 0n;
-                    const feeWei = receipt.gasUsed * gasPrice;
-                    feeStr = parseFloat(ethers.formatEther(feeWei)).toFixed(6) + " MON";
-                  }
-                } catch(e4) {}
-                break scanLoop;
-              }
-            }
-          } catch(e) { console.log("Scan error:", e.message); }
+          // First attempt — scan last 30 blocks
+          let result = await findIncomingTx(wallet.address, knownHashes, 30);
 
-          // Check if this exact TX was already recorded (double-safety)
+          // If not found, wait 4 seconds and retry with deeper scan
+          if (!result) {
+            await new Promise(resolve => setTimeout(resolve, 4000));
+            result = await findIncomingTx(wallet.address, knownHashes, 50);
+          }
+
+          // If still not found, wait 4 more seconds and try once more
+          if (!result) {
+            await new Promise(resolve => setTimeout(resolve, 4000));
+            result = await findIncomingTx(wallet.address, knownHashes, 80);
+          }
+
+          const fromAddr = result?.fromAddr || null;
+          const txHash = result?.txHash || null;
+          const feeStr = result?.feeStr || null;
+
+          // Double-check not already recorded
           if (txHash && txHistory.some(t => t.hash === txHash)) {
             isProcessing = false;
             return;
@@ -3031,7 +3049,11 @@ let showAllActivity = false;
 
 function loadTxHistory() {
   if (!wallet) return;
-  try { txHistory = JSON.parse(localStorage.getItem("apex_tx_" + wallet.address) || "[]"); }
+  try {
+    const raw = JSON.parse(localStorage.getItem("apex_tx_" + wallet.address) || "[]");
+    // Keep all entries but mark fixable ones
+    txHistory = raw;
+  }
   catch { txHistory = []; }
 }
 
@@ -3084,8 +3106,8 @@ function renderActivity() {
     // Build peer display — contact name or address
     const peerAddrFull = isSend ? tx.to : tx.from;
     const cleanPeer = peerAddrFull && peerAddrFull !== "unknown" && peerAddrFull !== "null" && peerAddrFull !== null ? peerAddrFull : null;
-    const peerShort = cleanPeer ? cleanPeer.slice(0,12)+"..."+cleanPeer.slice(-6) : "Unknown";
-    const peerLine = (displayTo && displayTo !== "Unknown" && displayTo !== peerShort)
+    const peerShort = cleanPeer ? cleanPeer.slice(0,12)+"..."+cleanPeer.slice(-6) : (tx.hash ? "View on Explorer" : "—");
+    const peerLine = (displayTo && displayTo !== "Unknown" && displayTo !== peerShort && displayTo !== "View on Explorer")
       ? displayTo + (cleanPeer ? " · " + peerShort : "")
       : peerShort;
     const txSnippet = tx.hash ? " · " + tx.hash.slice(0,10)+"..." : "";
