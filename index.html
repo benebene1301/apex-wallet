@@ -2383,9 +2383,9 @@ function openTxModal(idx) {
     </div>
     <div class="tx-detail-row">
       <div class="tx-detail-label">${isSend ? 'To' : 'From'}</div>
-      <div class="tx-detail-value" style="text-align:right">
-        ${contactName ? '<span style="font-weight:700;color:var(--purple2)">' + contactName + '</span><br>' : ''}
-        <span style="font-size:11px;color:var(--muted2)">${peerForModal && peerForModal !== "unknown" ? peerForModal : "Unknown"}</span>
+      <div class="tx-detail-value" style="text-align:right;word-break:break-all">
+        ${contactName ? '<div style="font-weight:700;color:var(--purple2);margin-bottom:4px">' + contactName + '</div>' : ''}
+        <span style="font-size:11px;color:var(--muted2)">${peerForModal && peerForModal !== "unknown" && peerForModal !== "null" && peerForModal !== null ? peerForModal : (contactName ? "" : "Unknown")}</span>
       </div>
     </div>
     <div class="tx-detail-row">
@@ -3040,13 +3040,12 @@ function renderActivity() {
     const failedBadge = tx.failed ? `<span style="font-size:9px;color:var(--red);font-weight:700;margin-left:4px">FAILED</span>` : "";
     // Build peer display — contact name or address
     const peerAddrFull = isSend ? tx.to : tx.from;
-    const peerShort = peerAddrFull && peerAddrFull !== "unknown" && peerAddrFull !== "null"
-      ? peerAddrFull.slice(0,14)+"..."+peerAddrFull.slice(-6)
-      : "Unknown";
-    const peerLine = displayTo !== "Unknown" && displayTo !== peerShort
-      ? displayTo + " · " + peerShort   // show "Mama · 0xabc...123"
-      : peerShort;                        // just show address if no contact
-    const txSnippet = tx.hash ? " · " + tx.hash.slice(0,8)+"..." : "";
+    const cleanPeer = peerAddrFull && peerAddrFull !== "unknown" && peerAddrFull !== "null" && peerAddrFull !== null ? peerAddrFull : null;
+    const peerShort = cleanPeer ? cleanPeer.slice(0,12)+"..."+cleanPeer.slice(-6) : "Unknown";
+    const peerLine = (displayTo && displayTo !== "Unknown" && displayTo !== peerShort)
+      ? displayTo + (cleanPeer ? " · " + peerShort : "")
+      : peerShort;
+    const txSnippet = tx.hash ? " · " + tx.hash.slice(0,10)+"..." : "";
     return `<div class="activity-item" onclick="openTxModal(${i})" style="cursor:pointer">
       <div class="activity-icon ${tx.failed ? 'failed' : tx.type}">${tx.failed ? '❌' : isSend ? "↗" : "↙"}</div>
       <div class="activity-info">
