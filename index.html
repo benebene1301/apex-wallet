@@ -1164,6 +1164,92 @@ body.light-mode .balance-card {
 }
 .settings-btn:hover { border-color: var(--purple); }
 
+
+/* HAMBURGER */
+.hamburger-btn {
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 4px; width: 36px; height: 36px; padding: 8px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 10px; cursor: pointer; transition: all 0.15s;
+  flex-shrink: 0;
+}
+.hamburger-btn span {
+  display: block; height: 2px; background: var(--text);
+  border-radius: 2px; transition: all 0.2s;
+}
+.hamburger-btn:hover { border-color: var(--purple); }
+.hamburger-btn:hover span { background: var(--purple2); }
+
+/* LIGHT MODE FULL FIX */
+body.light-mode {
+  --bg: #f0eeff;
+  --card: #ffffff;
+  --card2: #f5f3ff;
+  --border: rgba(0,0,0,0.1);
+  --border2: rgba(0,0,0,0.18);
+  --text: #1a1530;
+  --muted: #7a7590;
+  --muted2: #5a5470;
+}
+body.light-mode .balance-card { background: linear-gradient(135deg,#fff 0%,#f0eeff 100%); }
+body.light-mode .balance-amount { background: linear-gradient(135deg,#1a1530 0%,var(--purple) 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+body.light-mode .chat-box { background: #faf9ff; }
+body.light-mode .msg.ai { background: #eeeaff; color: #1a1530; border-color: rgba(0,0,0,0.08); }
+body.light-mode .msg.confirm { background: #fff8e6; color: #8a6000; }
+body.light-mode .autocomplete-list { background: #fff; }
+body.light-mode .settings-overlay { background: #f0eeff; }
+body.light-mode .info-card { background: #fff; }
+body.light-mode input, body.light-mode textarea { background: #fff; color: #1a1530; border-color: rgba(0,0,0,0.12); }
+body.light-mode .faucet-card { background: #fff; color: #1a1530; }
+body.light-mode .contact-card { background: #fff; }
+body.light-mode .activity-item { background: #fff; }
+body.light-mode .wallet-item { background: #fff; }
+body.light-mode .action-btn { background: #fff; }
+body.light-mode .panel { background: #fff; }
+body.light-mode .chat-input-row { background: #faf9ff; }
+body.light-mode .chat-input { background: #fff; color: #1a1530; }
+body.light-mode .quick-chips .chip { background: #fff; color: #5a5470; }
+
+/* TX DETAIL MODAL */
+.tx-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 999; padding: 0;
+}
+.tx-modal {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 24px 20px 36px; width: 100%; max-width: 500px;
+  animation: slideUp 0.25s ease;
+}
+.tx-modal-handle {
+  width: 40px; height: 4px; background: var(--border2);
+  border-radius: 2px; margin: 0 auto 20px;
+}
+.tx-modal-title { font-size: 16px; font-weight: 800; margin-bottom: 18px; }
+.tx-detail-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--border); gap: 10px;
+}
+.tx-detail-row:last-child { border-bottom: none; }
+.tx-detail-label { font-size: 11px; color: var(--muted2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; flex-shrink: 0; }
+.tx-detail-value { font-family: var(--mono); font-size: 12px; color: var(--text); text-align: right; word-break: break-all; line-height: 1.5; }
+.tx-hash-link { color: var(--purple2); cursor: pointer; text-decoration: underline; }
+.tx-hash-link:hover { color: var(--purple); }
+.tx-status-badge {
+  font-size: 11px; font-weight: 700; padding: 4px 10px;
+  border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;
+}
+.tx-status-badge.success { background: var(--green-soft); color: var(--green); }
+.tx-status-badge.failed { background: var(--red-soft); color: var(--red); }
+
+/* WALLET RENAME inline */
+.wallet-name-display {
+  display: flex; align-items: center; gap: 6px; cursor: pointer;
+}
+.wallet-name-display:hover .edit-hint { opacity: 1; }
+.edit-hint { opacity: 0; font-size: 10px; color: var(--purple2); transition: opacity 0.2s; }
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -1430,7 +1516,7 @@ body.light-mode .balance-card {
   </div>
 
   <div class="chat-box" id="chatBox">
-    <div class="msg ai" id="welcomeMsg">Hey! 👋 I'm APEX, your AI wallet agent. Connect a wallet and you can say things like:<br><br>• "What's my balance?"<br>• "Send 1 MON to Mama"<br>• "Add contact Kuya 0x..."</div>
+    <div class="msg ai" id="welcomeMsg">Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 "How much MON do I have?"<br>• 📤 "Send 0.1 MON to Mama"<br>• 📥 "How do I receive MON?"<br>• 👥 "Save Kuya's wallet address"<br>• 📋 "Show my recent transactions"<br><br>I'm here to help — even if this is your first time using crypto! 🌟</div>
   </div>
   <div class="chat-input-row">
     <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"/>
@@ -1783,6 +1869,7 @@ function showWalletUI() {
   }
   document.getElementById("walletSwitcher").classList.remove("hidden");
   document.getElementById("activeWalletName").textContent = wallets[activeWalletIndex]?.name || "Wallet 1";
+  loadChatHistory();
 }
 
 async function refreshBalance() {
@@ -1836,16 +1923,20 @@ async function executeSend(to, amount) {
     status.textContent = "⏳ Sending transaction...";
     const tx = await wallet.sendTransaction({ to, value: ethers.parseEther(amount) });
     status.textContent = `⏳ Confirming... ${tx.hash.slice(0,18)}...`;
-    await tx.wait();
+    const receipt = await tx.wait();
+    const feeWei = receipt.gasUsed * receipt.gasPrice;
+    const feeStr = parseFloat(ethers.formatEther(feeWei)).toFixed(6) + " MON";
     status.className = "status-msg success";
     status.textContent = `✅ Sent! TX: ${tx.hash.slice(0,22)}...`;
-    addTx("send", to, wallet.address, amount, tx.hash);
+    addTx("send", to, wallet.address, amount, tx.hash, false, feeStr);
     refreshBalance();
-    // Also post in chat
-    addMsg("ai", `✅ Transaction confirmed! Sent ${amount} MON.\nTX: ${tx.hash.slice(0,20)}...`);
+    addMsg("ai", `✅ Transaction confirmed!\n• Sent: ${amount} MON\n• Fee: ${feeStr}\n• TX: ${tx.hash.slice(0,20)}...\n\nTap Activity to see details.`);
+    saveChatHistory();
   } catch(e) {
     status.className = "status-msg error";
     status.textContent = "❌ " + (e.message || "Transaction failed");
+    addTx("send", to, wallet.address, amount, null, true, null);
+    addMsg("ai", `❌ Transaction failed. Please check your balance and try again.`);
   }
 }
 
@@ -2010,7 +2101,10 @@ RULES:
 - If user wants to ADD CONTACT: extract name and address. Format: "ADD_CONTACT:name=<n>,address=<0x...>"
 - If asked balance, reply with current balance.
 - If asked contacts, list them.
-- Be warm, simple, friendly — for everyday people, not crypto experts.`;
+- Be warm, simple, friendly — for everyday people, not crypto experts.
+- If user asks how to RECEIVE tokens or asks for their address: Tell them their address is shown above, and explain they need to be on MONAD TESTNET network. Say: "Make sure the sender is using Monad Testnet (Chain ID: 10143, RPC: https://testnet-rpc.monad.xyz). Your address works on any EVM wallet like MetaMask or Backpack."
+- If user asks about network, RPC, or chain ID: Provide Monad Testnet details: Chain ID 10143, RPC https://testnet-rpc.monad.xyz, Explorer https://testnet.monadexplorer.com
+- Always end helpful responses with a follow-up suggestion like "Would you like me to help you with anything else?" in their language.`;
 
   try {
     const response = await fetch("/api/chat", {
@@ -2062,6 +2156,95 @@ RULES:
 }
 
 
+
+
+// ─── TX DETAIL MODAL ─────────────────────────────
+function openTxModal(idx) {
+  const tx = txHistory[idx];
+  if (!tx) return;
+  const modal = document.getElementById("txDetailModal");
+  const isSend = tx.type === "send";
+  const contactName = tx.contact || null;
+  const statusBadge = tx.failed
+    ? '<span class="tx-status-badge failed">❌ Failed</span>'
+    : '<span class="tx-status-badge success">✅ Confirmed</span>';
+  const explorerUrl = `https://testnet.monadexplorer.com/tx/${tx.hash}`;
+  const displayTo = contactName ? `${contactName}<br><span style="color:var(--muted);font-size:10px">${tx.to}</span>` : (tx.to || "—");
+  const fee = tx.fee || "~0.0001 MON";
+  const timeStr = tx.time ? new Date(tx.time).toLocaleString() : "—";
+
+  document.getElementById("txModalTitle").textContent = isSend ? "📤 Sent MON" : "📥 Received MON";
+  document.getElementById("txModalContent").innerHTML = `
+    <div class="tx-detail-row">
+      <div class="tx-detail-label">Status</div>
+      <div class="tx-detail-value">${statusBadge}</div>
+    </div>
+    <div class="tx-detail-row">
+      <div class="tx-detail-label">Amount</div>
+      <div class="tx-detail-value" style="color:${isSend ? 'var(--red)' : 'var(--green)'};font-weight:700;font-size:16px">${isSend ? '-' : '+'}${tx.amount} MON</div>
+    </div>
+    <div class="tx-detail-row">
+      <div class="tx-detail-label">${isSend ? 'To' : 'From'}</div>
+      <div class="tx-detail-value">${isSend ? displayTo : (tx.from || "—")}</div>
+    </div>
+    <div class="tx-detail-row">
+      <div class="tx-detail-label">Network Fee</div>
+      <div class="tx-detail-value">${fee}</div>
+    </div>
+    <div class="tx-detail-row">
+      <div class="tx-detail-label">Network</div>
+      <div class="tx-detail-value">Monad Testnet (Chain ID: 10143)</div>
+    </div>
+    <div class="tx-detail-row">
+      <div class="tx-detail-label">Time</div>
+      <div class="tx-detail-value">${timeStr}</div>
+    </div>
+    ${tx.hash ? `<div class="tx-detail-row">
+      <div class="tx-detail-label">Transaction ID</div>
+      <div class="tx-detail-value">
+        <span class="tx-hash-link" onclick="window.open('${explorerUrl}','_blank')">${tx.hash.slice(0,22)}...${tx.hash.slice(-8)} ↗</span>
+      </div>
+    </div>` : ''}
+  `;
+  modal.classList.remove("hidden");
+}
+
+function closeTxModal(e) {
+  if (e.target === document.getElementById("txDetailModal")) {
+    document.getElementById("txDetailModal").classList.add("hidden");
+  }
+}
+
+// ─── CHAT HISTORY PER WALLET ──────────────────────
+function saveChatHistory() {
+  if (!wallet) return;
+  const box = document.getElementById("chatBox");
+  const msgs = [];
+  box.querySelectorAll(".msg").forEach(m => {
+    msgs.push({ role: m.classList.contains("user") || m.classList.contains("user-confirm") ? "user" : "ai", text: m.textContent });
+  });
+  localStorage.setItem("apex_chat_" + wallet.address, JSON.stringify(msgs.slice(-40)));
+}
+
+function loadChatHistory() {
+  if (!wallet) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem("apex_chat_" + wallet.address) || "[]");
+    if (!saved.length) return;
+    const box = document.getElementById("chatBox");
+    // Keep welcome msg, add history after
+    saved.forEach(m => {
+      const div = document.createElement("div");
+      div.className = "msg " + (m.role === "user" ? "user" : "ai");
+      div.textContent = m.text;
+      box.appendChild(div);
+    });
+    box.scrollTop = box.scrollHeight;
+  } catch(e) {}
+}
+
+// ─── RECEIVE INSTRUCTIONS IN CHAT ────────────────
+// (Handled by AI system prompt — updated below)
 
 // ─── AUTOCOMPLETE ────────────────────────────────
 function showSuggestions(val) {
@@ -2165,6 +2348,22 @@ function switchToWallet(idx) {
   } catch(e) { alert("Error switching wallet."); }
 }
 
+
+function renameWalletInline(i) {
+  const el = document.getElementById("wname_" + i);
+  if (!el) return;
+  const current = wallets[i].name || "Wallet " + (i+1);
+  const newName = prompt("Rename wallet:", current);
+  if (newName && newName.trim()) {
+    wallets[i].name = newName.trim();
+    saveWalletsToStorage();
+    if (i === activeWalletIndex) {
+      document.getElementById("activeWalletName").textContent = newName.trim();
+    }
+    renderWalletList();
+  }
+}
+
 function renderWalletList() {
   const list = document.getElementById("walletList");
   if (!list) return;
@@ -2172,8 +2371,12 @@ function renderWalletList() {
     <div class="wallet-item ${i === activeWalletIndex ? 'active-wallet' : ''}" onclick="switchToWallet(${i})">
       <div class="wallet-item-avatar">👛</div>
       <div class="wallet-item-info">
-        <div class="wallet-item-name">${w.name || "Wallet " + (i+1)}</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="wallet-item-name" id="wname_${i}">${w.name || "Wallet " + (i+1)}</div>
+          <span style="font-size:10px;color:var(--purple2);cursor:pointer" onclick="event.stopPropagation();renameWalletInline(${i})">✏️</span>
+        </div>
         <div class="wallet-item-addr">${w.address.slice(0,12)}...${w.address.slice(-6)}</div>
+        ${i === activeWalletIndex ? '<div style="font-family:var(--mono);font-size:10px;color:var(--green);margin-top:2px">' + (document.getElementById("balAmt")?.textContent || "—") + ' MON</div>' : ''}
       </div>
       ${i === activeWalletIndex ? '<div class="wallet-item-badge">Active</div>' : ''}
     </div>
@@ -2360,15 +2563,16 @@ function saveTxHistory() {
   localStorage.setItem("apex_tx_" + wallet.address, JSON.stringify(txHistory.slice(0, 50)));
 }
 
-function addTx(type, to, from, amount, hash) {
+function addTx(type, to, from, amount, hash, failed=false, fee=null) {
   const tx = {
-    type, to, from, amount, hash,
+    type, to, from, amount, hash, failed, fee,
     time: new Date().toISOString(),
     contact: type === "send" ? (contacts.find(c => c.address.toLowerCase() === to.toLowerCase())?.name || null) : null
   };
   txHistory.unshift(tx);
   saveTxHistory();
   renderActivity();
+  saveChatHistory();
 }
 
 function renderActivity() {
@@ -2379,19 +2583,20 @@ function renderActivity() {
     return;
   }
   if (noMsg) noMsg.style.display = "none";
-  list.innerHTML = txHistory.map(tx => {
+  list.innerHTML = txHistory.map((tx, i) => {
     const isSend = tx.type === "send";
     const displayTo = tx.contact ? tx.contact : (tx.to ? tx.to.slice(0,10)+"..."+tx.to.slice(-4) : "");
     const timeAgo = getTimeAgo(tx.time);
-    return `<div class="activity-item">
-      <div class="activity-icon ${tx.type}">${isSend ? "↗" : "↙"}</div>
+    const failedBadge = tx.failed ? `<span style="font-size:9px;color:var(--red);font-weight:700;margin-left:4px">FAILED</span>` : "";
+    return `<div class="activity-item" onclick="openTxModal(${i})" style="cursor:pointer">
+      <div class="activity-icon ${tx.failed ? 'failed' : tx.type}">${tx.failed ? '❌' : isSend ? "↗" : "↙"}</div>
       <div class="activity-info">
-        <div class="activity-type">${isSend ? "Sent" : "Received"} ${tx.amount} MON</div>
+        <div class="activity-type">${isSend ? "Sent" : "Received"} ${tx.amount} MON${failedBadge}</div>
         <div class="activity-addr">${isSend ? "To: " + displayTo : "From: " + (tx.from||"").slice(0,10)+"..."}</div>
       </div>
       <div class="activity-right">
-        <div class="activity-amount ${tx.type}">${isSend ? "-" : "+"}${tx.amount}</div>
-        <div class="activity-time">${timeAgo}</div>
+        <div class="activity-amount ${tx.failed ? 'failed' : tx.type}" style="${tx.failed ? 'color:var(--red)' : ''}">${isSend ? "-" : "+"}${tx.amount}</div>
+        <div class="activity-time">${timeAgo} ›</div>
       </div>
     </div>`;
   }).join("");
@@ -2642,6 +2847,17 @@ loadMode();
     </div>
   </div>
 
+</div>
+
+
+<!-- TX DETAIL MODAL -->
+<div class="tx-modal-overlay hidden" id="txDetailModal" onclick="closeTxModal(event)">
+  <div class="tx-modal">
+    <div class="tx-modal-handle"></div>
+    <div class="tx-modal-title" id="txModalTitle">Transaction Details</div>
+    <div id="txModalContent"></div>
+    <button class="btn btn-full" style="margin-top:16px" onclick="document.getElementById('txDetailModal').classList.add('hidden')">Close</button>
+  </div>
 </div>
 
 </body>
