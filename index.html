@@ -2530,6 +2530,45 @@ async function findIncomingTx(targetAddress, excludeHashes, scanDepth) {
   return null;
 }
 
+// Helper: scan blocks for ALL incoming TXs to our address since last check
+async function findAllIncomingTxs(targetAddress, knownHashes, scanDepth) {
+  const found = [];
+  try {
+    const blockNum = await provider.getBlockNumber();
+    for (let b = blockNum; b >= Math.max(0, blockNum - scanDepth); b--) {
+      let block;
+      try { block = await provider.getBlock(b); } catch(e) { continue; }
+      if (!block || !block.transactions || !block.transactions.length) continue;
+      for (const hashItem of block.transactions) {
+        const hash = typeof hashItem === "string" ? hashItem : hashItem?.hash;
+        if (!hash || knownHashes.has(hash)) continue;
+        let fullTx;
+        try { fullTx = await provider.getTransaction(hash); } catch(e) { continue; }
+        if (!fullTx || !fullTx.to) continue;
+        if (fullTx.to.toLowerCase() !== targetAddress.toLowerCase()) continue;
+        const txAmount = parseFloat(ethers.formatEther(fullTx.value || 0n));
+        if (txAmount <= 0.00001) continue;
+        let feeStr = null;
+        try {
+          const receipt = await provider.getTransactionReceipt(hash);
+          if (receipt && receipt.gasUsed) {
+            const gasPrice = fullTx.gasPrice || fullTx.maxFeePerGas || 0n;
+            feeStr = parseFloat(ethers.formatEther(receipt.gasUsed * gasPrice)).toFixed(6) + " MON";
+          }
+        } catch(e) {}
+        found.push({
+          fromAddr: fullTx.from,
+          txHash: hash,
+          feeStr,
+          amount: txAmount.toFixed(4)
+        });
+        knownHashes.add(hash); // prevent re-adding same TX
+      }
+    }
+  } catch(e) { console.log("findAllIncomingTxs error:", e.message); }
+  return found;
+}
+
 async function startReceiveWatcher() {
   if (!wallet || !provider) return;
   stopReceiveWatcher();
@@ -2546,62 +2585,55 @@ async function startReceiveWatcher() {
     try {
       const newBal = await provider.getBalance(wallet.address);
       if (lastKnownBalance !== null && newBal > lastKnownBalance) {
-        const diff = newBal - lastKnownBalance;
-        const amount = parseFloat(ethers.formatEther(diff)).toFixed(4);
-
-        // Update balance IMMEDIATELY to prevent re-trigger
+        // Update IMMEDIATELY to prevent re-trigger
         lastKnownBalance = newBal;
+        isProcessing = true;
 
-        if (parseFloat(amount) > 0.00001) {
-          isProcessing = true;
+        // Build set of already-recorded hashes
+        const knownHashes = new Set(txHistory.filter(t => t.hash).map(t => t.hash));
 
-          // Build set of already-recorded hashes
-          const knownHashes = new Set(txHistory.filter(t => t.hash).map(t => t.hash));
+        // First attempt
+        let results = await findAllIncomingTxs(wallet.address, knownHashes, 30);
 
-          // First attempt — scan last 30 blocks
-          let result = await findIncomingTx(wallet.address, knownHashes, 30);
-
-          // If not found, wait 4 seconds and retry with deeper scan
-          if (!result) {
-            await new Promise(resolve => setTimeout(resolve, 4000));
-            result = await findIncomingTx(wallet.address, knownHashes, 50);
-          }
-
-          // If still not found, wait 4 more seconds and try once more
-          if (!result) {
-            await new Promise(resolve => setTimeout(resolve, 4000));
-            result = await findIncomingTx(wallet.address, knownHashes, 80);
-          }
-
-          const fromAddr = result?.fromAddr || null;
-          const txHash = result?.txHash || null;
-          const feeStr = result?.feeStr || null;
-
-          // Double-check not already recorded
-          if (txHash && txHistory.some(t => t.hash === txHash)) {
-            isProcessing = false;
-            return;
-          }
-
-          // Resolve contact
-          const senderContact = fromAddr
-            ? contacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase())
-            : null;
-          const senderDisplay = senderContact
-            ? senderContact.name
-            : (fromAddr ? fromAddr : "Unknown sender");
-
-          // Record
-          addTx("receive", wallet.address, fromAddr || null, amount, txHash || null, false, feeStr);
-
-          // Notify
-          const txLine = txHash ? "\nTX: " + txHash.slice(0,22)+"..." : "";
-          addMsg("ai", `📥 Received ${amount} MON!\nFrom: ${senderDisplay}${txLine}\n\nTap Activity to view details. 🎉`);
-
-          document.getElementById("balAmt").textContent = parseFloat(ethers.formatEther(newBal)).toFixed(4);
-          updateDropdownBalance();
-          isProcessing = false;
+        // Retry if nothing found
+        if (!results.length) {
+          await new Promise(r => setTimeout(r, 3000));
+          results = await findAllIncomingTxs(wallet.address, knownHashes, 50);
         }
+
+        // One more retry
+        if (!results.length) {
+          await new Promise(r => setTimeout(r, 3000));
+          results = await findAllIncomingTxs(wallet.address, knownHashes, 80);
+        }
+
+        if (results.length > 0) {
+          // Record each TX separately with its REAL amount
+          for (const res of results) {
+            const senderContact = res.fromAddr
+              ? contacts.find(cx => cx.address.toLowerCase() === res.fromAddr.toLowerCase())
+              : null;
+            const senderDisplay = senderContact
+              ? senderContact.name
+              : (res.fromAddr ? res.fromAddr : "Unknown");
+
+            addTx("receive", wallet.address, res.fromAddr || null, res.amount, res.txHash, false, res.feeStr);
+
+            const txLine = res.txHash ? "\nTX: " + res.txHash.slice(0,22)+"..." : "";
+            addMsg("ai", `📥 Received ${res.amount} MON!\nFrom: ${senderDisplay}${txLine}\n\nTap Activity to view details. 🎉`);
+          }
+        } else {
+          // Fallback: use balance diff if TX scan completely failed
+          const diff = newBal - (lastKnownBalance - (newBal - lastKnownBalance));
+          const amount = parseFloat(ethers.formatEther(newBal - lastKnownBalance + (newBal - lastKnownBalance))).toFixed(4);
+          // Just record with unknown sender
+          addTx("receive", wallet.address, null, parseFloat(ethers.formatEther(newBal)).toFixed(4), null, false, null);
+          addMsg("ai", `📥 Received MON! Tap Activity to view details. 🎉`);
+        }
+
+        document.getElementById("balAmt").textContent = parseFloat(ethers.formatEther(newBal)).toFixed(4);
+        updateDropdownBalance();
+        isProcessing = false;
       } else {
         lastKnownBalance = newBal;
       }
