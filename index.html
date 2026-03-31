@@ -1373,6 +1373,34 @@ body.light-mode .quick-chips .chip { background: #fff; color: #5a5470; }
 .toast.error .toast-icon { color: var(--red); }
 .toast-icon { font-size: 16px; }
 
+
+/* RENAME WALLET MODAL */
+.rename-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+}
+.rename-modal {
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 24px;
+  width: 100%; max-width: 340px;
+  animation: slideUp 0.2s ease;
+}
+.rename-modal-title {
+  font-size: 16px; font-weight: 800; margin-bottom: 6px;
+}
+.rename-modal-sub {
+  font-size: 12px; color: var(--muted2); margin-bottom: 18px;
+}
+.rename-modal input {
+  font-family: var(--sans); font-size: 15px; font-weight: 700;
+  padding: 12px 14px; border-radius: 10px;
+  border: 2px solid var(--purple); background: var(--card2);
+  color: var(--text); width: 100%; margin-bottom: 14px;
+}
+.rename-modal input:focus { outline: none; }
+.rename-modal-btns { display: flex; gap: 8px; }
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -2335,7 +2363,11 @@ function openTxModal(idx) {
     ? '<span class="tx-status-badge failed">❌ Failed</span>'
     : '<span class="tx-status-badge success">✅ Confirmed</span>';
   const explorerUrl = `https://testnet.monadexplorer.com/tx/${tx.hash}`;
-  const displayTo = contactName ? `${contactName}<br><span style="color:var(--muted);font-size:10px">${tx.to}</span>` : (tx.to || "—");
+  const peerForModal = isSend ? tx.to : tx.from;
+  const peerLabelModal = contactName || (peerForModal && peerForModal !== "unknown" ? peerForModal.slice(0,10)+"..."+peerForModal.slice(-4) : "Unknown");
+  const displayTo = contactName
+    ? `${contactName}<br><span style="color:var(--muted);font-size:10px">${peerForModal || ""}</span>`
+    : (peerForModal || "—");
   const fee = tx.fee || "~0.0001 MON";
   const timeStr = tx.time ? new Date(tx.time).toLocaleString() : "—";
 
@@ -2504,9 +2536,13 @@ async function startReceiveWatcher() {
           // Record receive
           addTx("receive", wallet.address, fromAddr || "unknown", amount, txHash || null, false, null);
 
-          // Chat notification
-          const senderContact = fromAddr ? contacts.find(c => c.address.toLowerCase() === fromAddr.toLowerCase()) : null;
-          const senderName = senderContact ? senderContact.name : (fromAddr ? fromAddr.slice(0,10)+"..."+fromAddr.slice(-4) : "someone");
+          // Chat notification — use contact name if saved
+          const senderContact = fromAddr ? contacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase()) : null;
+          const senderName = senderContact
+            ? senderContact.name
+            : (fromAddr && fromAddr !== "unknown"
+                ? fromAddr.slice(0,10)+"..."+fromAddr.slice(-4)
+                : "someone");
           addMsg("ai", `📥 You just received ${amount} MON from ${senderName}!\n${txHash ? "TX: " + txHash.slice(0,20)+"..." : ""}\n\nTap Activity to see details. 🎉`);
 
           // Update display
@@ -2637,19 +2673,7 @@ function switchToWallet(idx) {
 
 
 function renameWalletInline(i) {
-  const el = document.getElementById("wname_" + i);
-  if (!el) return;
-  const current = wallets[i].name || "Wallet " + (i+1);
-  const newName = prompt("Rename wallet:", current);
-  if (newName && newName.trim()) {
-    wallets[i].name = newName.trim();
-    saveWalletsToStorage();
-    if (i === activeWalletIndex) {
-      document.getElementById("activeWalletName").textContent = newName.trim();
-    }
-    renderWalletList();
-    showToast("Renamed to \"" + newName.trim() + "\"");
-  }
+  openRenameModal(i);
 }
 
 function renderWalletList() {
@@ -2824,6 +2848,42 @@ function setLanguageFromSettings(lang) {
 
 
 
+
+// ─── RENAME WALLET MODAL ─────────────────────────
+let renamingWalletIndex = -1;
+
+function openRenameModal(i) {
+  renamingWalletIndex = i;
+  const current = wallets[i]?.name || "Wallet " + (i+1);
+  document.getElementById("renameWalletInput").value = current;
+  document.getElementById("renameWalletSub").textContent = 
+    "Wallet: " + wallets[i].address.slice(0,10) + "..." + wallets[i].address.slice(-6);
+  document.getElementById("renameWalletModal").classList.remove("hidden");
+  setTimeout(() => {
+    const inp = document.getElementById("renameWalletInput");
+    inp.focus(); inp.select();
+  }, 100);
+}
+
+function closeRenameModal() {
+  document.getElementById("renameWalletModal").classList.add("hidden");
+  renamingWalletIndex = -1;
+}
+
+function confirmRename() {
+  const name = document.getElementById("renameWalletInput").value.trim();
+  if (!name) return;
+  const i = renamingWalletIndex;
+  wallets[i].name = name;
+  saveWalletsToStorage();
+  if (i === activeWalletIndex) {
+    document.getElementById("activeWalletName").textContent = name;
+  }
+  renderWalletList();
+  closeRenameModal();
+  showToast("Renamed to \"" + name + "\"");
+}
+
 // ─── TOAST ───────────────────────────────────────
 let toastTimer = null;
 function showToast(msg, type="success") {
@@ -2938,10 +2998,17 @@ function saveTxHistory() {
 }
 
 function addTx(type, to, from, amount, hash, failed=false, fee=null) {
+  // Resolve contact name for both send and receive
+  let contactName = null;
+  if (type === "send" && to) {
+    contactName = contacts.find(c => c.address.toLowerCase() === to.toLowerCase())?.name || null;
+  } else if (type === "receive" && from && from !== "unknown") {
+    contactName = contacts.find(c => c.address.toLowerCase() === from.toLowerCase())?.name || null;
+  }
   const tx = {
     type, to, from, amount, hash, failed, fee,
     time: new Date().toISOString(),
-    contact: type === "send" ? (contacts.find(c => c.address.toLowerCase() === to.toLowerCase())?.name || null) : null
+    contact: contactName
   };
   txHistory.unshift(tx);
   saveTxHistory();
@@ -2959,7 +3026,13 @@ function renderActivity() {
   if (noMsg) noMsg.style.display = "none";
   list.innerHTML = txHistory.map((tx, i) => {
     const isSend = tx.type === "send";
-    const displayTo = tx.contact ? tx.contact : (tx.to ? tx.to.slice(0,10)+"..."+tx.to.slice(-4) : "");
+    const peerAddr = isSend ? tx.to : tx.from;
+    const peerLabel = tx.contact
+      ? tx.contact
+      : (peerAddr && peerAddr !== "unknown"
+          ? peerAddr.slice(0,10)+"..."+peerAddr.slice(-4)
+          : "Unknown");
+    const displayTo = peerLabel;
     const timeAgo = getTimeAgo(tx.time);
     const failedBadge = tx.failed ? `<span style="font-size:9px;color:var(--red);font-weight:700;margin-left:4px">FAILED</span>` : "";
     return `<div class="activity-item" onclick="openTxModal(${i})" style="cursor:pointer">
@@ -3236,5 +3309,20 @@ loadMode();
 </div>
 
 <div class="toast" id="toastMsg"><span class="toast-icon" id="toastIcon">✅</span><span id="toastText">Saved!</span></div>
+
+<!-- RENAME WALLET MODAL -->
+<div class="rename-modal-overlay hidden" id="renameWalletModal">
+  <div class="rename-modal">
+    <div class="rename-modal-title">✏️ Rename Wallet</div>
+    <div class="rename-modal-sub" id="renameWalletSub">Enter a new name for this wallet</div>
+    <input type="text" id="renameWalletInput" placeholder="e.g. Main Wallet, Savings..."
+      onkeydown="if(event.key==='Enter')confirmRename()"/>
+    <div class="rename-modal-btns">
+      <button class="btn btn-primary" style="flex:1" onclick="confirmRename()">Save Name</button>
+      <button class="btn" style="flex:1" onclick="closeRenameModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
