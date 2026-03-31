@@ -2500,23 +2500,29 @@ async function startReceiveWatcher() {
     lastKnownBalance = bal;
   } catch(e) { return; }
 
+  let isProcessing = false; // prevent duplicate processing
+
   receivePolling = setInterval(async () => {
-    if (!wallet || !provider) return;
+    if (!wallet || !provider || isProcessing) return;
     try {
       const newBal = await provider.getBalance(wallet.address);
       if (lastKnownBalance !== null && newBal > lastKnownBalance) {
         const diff = newBal - lastKnownBalance;
         const amount = parseFloat(ethers.formatEther(diff)).toFixed(4);
+
+        // Update balance IMMEDIATELY so next poll doesn't re-trigger
+        lastKnownBalance = newBal;
+
         if (parseFloat(amount) > 0.00001) {
+          isProcessing = true;
           let fromAddr = null;
           let txHash = null;
           let feeStr = null;
 
           try {
             const blockNum = await provider.getBlockNumber();
-            // Scan last 20 blocks using hash-then-fetch approach
             scanLoop:
-            for (let b = blockNum; b >= Math.max(0, blockNum - 20); b--) {
+            for (let b = blockNum; b >= Math.max(0, blockNum - 30); b--) {
               let block;
               try { block = await provider.getBlock(b); } catch(e2) { continue; }
               if (!block || !block.transactions || !block.transactions.length) continue;
@@ -2524,16 +2530,14 @@ async function startReceiveWatcher() {
               for (const hashItem of block.transactions) {
                 const hash = typeof hashItem === "string" ? hashItem : hashItem?.hash;
                 if (!hash) continue;
+                // Skip already recorded
                 if (txHistory.some(t => t.hash === hash)) continue;
-
                 let fullTx;
                 try { fullTx = await provider.getTransaction(hash); } catch(e3) { continue; }
                 if (!fullTx || !fullTx.to) continue;
                 if (fullTx.to.toLowerCase() !== wallet.address.toLowerCase()) continue;
-
                 fromAddr = fullTx.from;
                 txHash = hash;
-
                 try {
                   const receipt = await provider.getTransactionReceipt(hash);
                   if (receipt && receipt.gasUsed) {
@@ -2545,29 +2549,40 @@ async function startReceiveWatcher() {
                 break scanLoop;
               }
             }
-          } catch(e) { console.log("Receive scan error:", e.message); }
+          } catch(e) { console.log("Scan error:", e.message); }
 
-          // Resolve contact name
+          // Check if this exact TX was already recorded (double-safety)
+          if (txHash && txHistory.some(t => t.hash === txHash)) {
+            isProcessing = false;
+            return;
+          }
+
+          // Resolve contact
           const senderContact = fromAddr
             ? contacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase())
             : null;
           const senderDisplay = senderContact
             ? senderContact.name
-            : (fromAddr ? fromAddr : "Unknown");
+            : (fromAddr ? fromAddr : "Unknown sender");
 
-          // Record in history
+          // Record
           addTx("receive", wallet.address, fromAddr || null, amount, txHash || null, false, feeStr);
 
-          // Chat notification
+          // Notify
           const txLine = txHash ? "\nTX: " + txHash.slice(0,22)+"..." : "";
           addMsg("ai", `📥 Received ${amount} MON!\nFrom: ${senderDisplay}${txLine}\n\nTap Activity to view details. 🎉`);
 
           document.getElementById("balAmt").textContent = parseFloat(ethers.formatEther(newBal)).toFixed(4);
           updateDropdownBalance();
+          isProcessing = false;
         }
+      } else {
+        lastKnownBalance = newBal;
       }
-      lastKnownBalance = newBal;
-    } catch(e) { console.log("Watcher poll error:", e.message); }
+    } catch(e) {
+      console.log("Watcher error:", e.message);
+      isProcessing = false;
+    }
   }, 5000);
 }
 
