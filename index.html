@@ -1353,6 +1353,26 @@ body.light-mode .quick-chips .chip { background: #fff; color: #5a5470; }
 }
 .dropdown-danger:hover { background: var(--red-soft); }
 
+
+/* TOAST NOTIFICATION */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 12px 20px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  z-index: 9999; opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: rgba(34,212,124,0.3); }
+.toast.success .toast-icon { color: var(--green); }
+.toast.error { border-color: rgba(255,87,87,0.3); }
+.toast.error .toast-icon { color: var(--red); }
+.toast-icon { font-size: 16px; }
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -2023,8 +2043,9 @@ async function refreshBalance() {
 function copyAddress() {
   if (!wallet) return;
   navigator.clipboard.writeText(wallet.address);
+  showToast("Address copied to clipboard!");
   const btn = document.getElementById("btn_copy");
-  if (btn) { btn.textContent = "✓ Copied!"; setTimeout(() => btn.textContent = t("copy"), 2000); }
+  if (btn) { btn.textContent = "✓"; setTimeout(() => btn.textContent = t("copy"), 1500); }
 }
 
 // ─── PANELS ──────────────────────────────────────
@@ -2127,6 +2148,7 @@ function saveContact() {
   document.getElementById("newName").value = "";
   document.getElementById("newAddr").value = "";
   document.getElementById("addContactBox").classList.remove("visible");
+  showToast("Contact \"" + name + "\" saved!");
 }
 
 function deleteContact(i) {
@@ -2413,71 +2435,97 @@ function loadChatHistory() {
 // (Handled by AI system prompt — updated below)
 
 
-// ─── RECEIVE DETECTION ───────────────────────────
-let lastCheckedBlock = null;
+// ─── RECEIVE DETECTION (balance-diff approach) ───
+let lastKnownBalance = null;
 let receivePolling = null;
 
 async function startReceiveWatcher() {
   if (!wallet || !provider) return;
   stopReceiveWatcher();
 
+  // Get starting balance
   try {
-    lastCheckedBlock = await provider.getBlockNumber();
+    const bal = await provider.getBalance(wallet.address);
+    lastKnownBalance = bal;
   } catch(e) { return; }
 
-  // Poll every 8 seconds for new blocks
+  // Poll every 6 seconds — compare balance
   receivePolling = setInterval(async () => {
+    if (!wallet || !provider) return;
     try {
-      const currentBlock = await provider.getBlockNumber();
-      if (currentBlock <= lastCheckedBlock) return;
-
-      // Check recent blocks for incoming txs
-      for (let b = lastCheckedBlock + 1; b <= Math.min(currentBlock, lastCheckedBlock + 5); b++) {
-        const block = await provider.getBlock(b, true);
-        if (!block || !block.transactions) continue;
-
-        for (const tx of block.transactions) {
-          if (!tx || typeof tx === 'string') continue;
-          // Check if this tx is sending TO our wallet
-          if (tx.to && tx.to.toLowerCase() === wallet.address.toLowerCase()) {
-            // Make sure we haven't recorded this tx already
-            const alreadyRecorded = txHistory.some(t => t.hash === tx.hash);
-            if (!alreadyRecorded) {
-              const amount = parseFloat(ethers.formatEther(tx.value || 0n)).toFixed(4);
-              if (parseFloat(amount) > 0) {
-                // Record as received tx
-                addTx("receive", wallet.address, tx.from, amount, tx.hash, false, null);
-                // Notify in chat
-                const senderContact = contacts.find(c => c.address.toLowerCase() === tx.from.toLowerCase());
-                const senderName = senderContact ? senderContact.name : tx.from.slice(0,10)+"..."+tx.from.slice(-4);
-                addMsg("ai", `📥 You received ${amount} MON from ${senderName}!\nTX: ${tx.hash.slice(0,20)}...\n\nTap Activity to see details.`);
-                refreshBalance();
+      const newBal = await provider.getBalance(wallet.address);
+      if (lastKnownBalance !== null && newBal > lastKnownBalance) {
+        const diff = newBal - lastKnownBalance;
+        const amount = parseFloat(ethers.formatEther(diff)).toFixed(4);
+        if (parseFloat(amount) > 0.00001) {
+          // Find the incoming tx by checking latest blocks
+          let fromAddr = null;
+          let txHash = null;
+          try {
+            const block = await provider.getBlock("latest", true);
+            if (block && block.transactions) {
+              for (const tx of block.transactions) {
+                if (typeof tx === "object" && tx.to &&
+                    tx.to.toLowerCase() === wallet.address.toLowerCase()) {
+                  const alreadyRecorded = txHistory.some(t => t.hash === tx.hash);
+                  if (!alreadyRecorded) {
+                    fromAddr = tx.from;
+                    txHash = tx.hash;
+                    break;
+                  }
+                }
               }
             }
+          } catch(e) {}
+
+          // Also check previous block in case we missed it
+          if (!txHash) {
+            try {
+              const blockNum = await provider.getBlockNumber();
+              for (let b = blockNum; b >= Math.max(0, blockNum - 3); b--) {
+                const block = await provider.getBlock(b, true);
+                if (!block || !block.transactions) continue;
+                for (const tx of block.transactions) {
+                  if (typeof tx === "object" && tx.to &&
+                      tx.to.toLowerCase() === wallet.address.toLowerCase()) {
+                    const alreadyRecorded = txHistory.some(t => t.hash === tx.hash);
+                    if (!alreadyRecorded) {
+                      fromAddr = tx.from;
+                      txHash = tx.hash;
+                      break;
+                    }
+                  }
+                }
+                if (txHash) break;
+              }
+            } catch(e) {}
           }
+
+          // Record receive
+          addTx("receive", wallet.address, fromAddr || "unknown", amount, txHash || null, false, null);
+
+          // Chat notification
+          const senderContact = fromAddr ? contacts.find(c => c.address.toLowerCase() === fromAddr.toLowerCase()) : null;
+          const senderName = senderContact ? senderContact.name : (fromAddr ? fromAddr.slice(0,10)+"..."+fromAddr.slice(-4) : "someone");
+          addMsg("ai", `📥 You just received ${amount} MON from ${senderName}!\n${txHash ? "TX: " + txHash.slice(0,20)+"..." : ""}\n\nTap Activity to see details. 🎉`);
+
+          // Update display
+          document.getElementById("balAmt").textContent = parseFloat(ethers.formatEther(newBal)).toFixed(4);
+          updateDropdownBalance();
         }
       }
-      lastCheckedBlock = currentBlock;
+      lastKnownBalance = newBal;
     } catch(e) {}
-  }, 8000);
+  }, 6000);
 }
 
 function stopReceiveWatcher() {
   if (receivePolling) { clearInterval(receivePolling); receivePolling = null; }
+  lastKnownBalance = null;
 }
 
 async function scanPastReceives() {
-  if (!wallet || !provider) return;
-  try {
-    const currentBlock = await provider.getBlockNumber();
-    const fromBlock = Math.max(0, currentBlock - 500); // last ~500 blocks
-    // Get balance history isn't possible without indexer, so we just
-    // check if txHistory has any receives — if not, show a note
-    const hasReceives = txHistory.some(t => t.type === "receive");
-    if (!hasReceives && txHistory.length > 0) {
-      // silently ok — sends exist but no receives tracked yet
-    }
-  } catch(e) {}
+  // Placeholder — future: use indexer API
 }
 
 // ─── AUTOCOMPLETE ────────────────────────────────
@@ -2600,6 +2648,7 @@ function renameWalletInline(i) {
       document.getElementById("activeWalletName").textContent = newName.trim();
     }
     renderWalletList();
+    showToast("Renamed to \"" + newName.trim() + "\"");
   }
 }
 
@@ -2695,6 +2744,7 @@ function saveWalletName() {
   saveWalletsToStorage();
   document.getElementById("activeWalletName").textContent = name;
   renderWalletList();
+  showToast("Wallet renamed to \"" + name + "\"");
 }
 
 function disconnectWallet() {
@@ -2772,6 +2822,24 @@ function setLanguageFromSettings(lang) {
 
 // ─── UPDATE SHOW WALLET UI to save wallet ────────
 
+
+
+// ─── TOAST ───────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type="success") {
+  const toast = document.getElementById("toastMsg");
+  const icon = document.getElementById("toastIcon");
+  const text = document.getElementById("toastText");
+  if (!toast) return;
+  icon.textContent = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
+  text.textContent = msg;
+  toast.className = "toast " + type;
+  // Force reflow
+  void toast.offsetWidth;
+  toast.classList.add("show");
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2500);
+}
 
 // ─── WALLET DROPDOWN ─────────────────────────────
 function toggleWalletDropdown() {
@@ -2942,6 +3010,7 @@ function saveEditContact() {
   saveContacts();
   renderContacts();
   closeEditModal();
+  showToast("Contact updated!");
 }
 
 function deleteEditContact() {
@@ -3166,5 +3235,6 @@ loadMode();
   </div>
 </div>
 
+<div class="toast" id="toastMsg"><span class="toast-icon" id="toastIcon">✅</span><span id="toastText">Saved!</span></div>
 </body>
 </html>
