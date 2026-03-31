@@ -3016,6 +3016,7 @@ function loadTheme() {
 
 // ─── ACTIVITY ────────────────────────────────────
 let txHistory = [];
+let showAllActivity = false;
 
 function loadTxHistory() {
   if (!wallet) return;
@@ -3055,7 +3056,10 @@ function renderActivity() {
     return;
   }
   if (noMsg) noMsg.style.display = "none";
-  list.innerHTML = txHistory.map((tx, i) => {
+  const LIMIT = 5;
+  const displayTx = showAllActivity ? txHistory : txHistory.slice(0, LIMIT);
+  const hasMore = txHistory.length > LIMIT;
+  list.innerHTML = displayTx.map((tx, i) => {
     const isSend = tx.type === "send";
     const peerAddr = isSend ? tx.to : tx.from;
     const peerLabel = tx.contact
@@ -3086,6 +3090,21 @@ function renderActivity() {
       </div>
     </div>`;
   }).join("");
+
+  // Show more / less button
+  if (hasMore || showAllActivity) {
+    const btn = document.createElement("div");
+    btn.style.cssText = "text-align:center;padding:10px 0";
+    btn.innerHTML = `<button onclick="toggleActivityExpand()" style="font-family:var(--sans);font-size:12px;font-weight:700;padding:8px 20px;border:1px solid var(--border2);border-radius:20px;background:var(--card2);color:var(--muted2);cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--purple)';this.style.color='var(--purple2)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted2)'">
+      ${showAllActivity ? "▲ Show Less" : "▼ Show " + (txHistory.length - LIMIT) + " More"}
+    </button>`;
+    list.appendChild(btn);
+  }
+}
+
+function toggleActivityExpand() {
+  showAllActivity = !showAllActivity;
+  renderActivity();
 }
 
 function getTimeAgo(iso) {
