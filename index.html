@@ -2941,7 +2941,6 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
     </div>
     <div class="hero-wallet-name">
       <span id="heroWalletName">Wallet 1</span>
-      <span id="heroWalletBal" style="font-size:13px;font-weight:600;color:var(--muted2);margin-left:6px">— MON</span>
     </div>
     <div class="balance-display">
       <div>
@@ -3125,7 +3124,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
     <div class="chat-avatar">🤖</div>
     <div>
       <div class="chat-title" id="lbl_chat_title">APEX AI Agent</div>
-      <div class="chat-sub" id="lbl_chat_sub">Type what you want. Your wallet does the rest.</div>
+      <div class="chat-sub" id="lbl_chat_sub">Tell it. Send it. Done — all through chat.</div>
     </div>
   </div>
 
@@ -3133,7 +3132,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
     <div class="msg ai" id="welcomeMsg">Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 "How much MON do I have?"<br>• 📤 "Send 0.1 MON to Mama"<br>• 📥 "How do I receive MON?"<br>• 👥 "Save Kuya's wallet address"<br>• 📋 "Show my recent transactions"<br><br>I'm here to help — even if this is your first time using crypto! 🌟</div>
   </div>
   <div class="chat-input-row">
-    <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <input type="text" class="chat-input" id="chatInput" placeholder="Type here..." onkeydown="if(event.key==='Enter')sendChat()"/>
     <button class="chat-send" onclick="sendChat()" id="chatSendBtn">→</button>
   </div>
 </div>
@@ -3166,7 +3165,7 @@ const T = {
     contacts_title: "Contacts", add_contact: "Add Contact",
     contact_name: "Name", contact_addr_lbl: "Wallet Address", save: "Save",
     faucet_desc: "Clicking a faucet automatically copies your wallet address. Paste it on the faucet site to claim free testnet MON.",
-    chat_title: "APEX AI Agent", chat_sub: "Type what you want. Your wallet does the rest.",
+    chat_title: "APEX AI Agent", chat_sub: "Tell it. Send it. Done — all through chat.",
     no_contacts: "No contacts yet",
     tab_seed: "Seed Phrase", tab_pk: "Private Key",
   },
@@ -3186,7 +3185,7 @@ const T = {
     contacts_title: "Mga Contact", add_contact: "Magdagdag ng Contact",
     contact_name: "Pangalan", contact_addr_lbl: "Wallet Address", save: "I-save",
     faucet_desc: "Ang pag-click sa faucet ay awtomatikong nagkokopya ng iyong address. I-paste ito sa faucet site para makakuha ng libreng testnet MON.",
-    chat_title: "APEX AI Agent", chat_sub: "I-type lang ang gusto mo. Hawak ng wallet ang lahat.",
+    chat_title: "APEX AI Agent", chat_sub: "Sabihin mo lang. Ipapadala. Tapos na — lahat sa chat.",
     no_contacts: "Wala pang contacts",
     tab_seed: "Seed Phrase", tab_pk: "Private Key",
   },
@@ -3206,7 +3205,7 @@ const T = {
     contacts_title: "Kontak", add_contact: "Tambah Kontak",
     contact_name: "Nama", contact_addr_lbl: "Alamat Dompet", save: "Simpan",
     faucet_desc: "Mengklik faucet akan otomatis menyalin alamat dompet Anda. Tempelkan di situs faucet untuk mendapatkan testnet MON gratis.",
-    chat_title: "APEX AI Agent", chat_sub: "Ketik apa yang kamu mau. Dompetmu yang urus.",
+    chat_title: "APEX AI Agent", chat_sub: "Katakan saja. Kirim. Selesai — semua lewat chat.",
     no_contacts: "Belum ada kontak",
     tab_seed: "Seed Phrase", tab_pk: "Kunci Privat",
   },
@@ -3225,7 +3224,7 @@ const T = {
     contacts_title: "รายชื่อ", add_contact: "เพิ่มผู้ติดต่อ",
     contact_name: "ชื่อ", contact_addr_lbl: "ที่อยู่กระเป๋าเงิน", save: "บันทึก",
     faucet_desc: "การคลิกก๊อกน้ำจะคัดลอกที่อยู่กระเป๋าเงินของคุณโดยอัตโนมัติ วางลงในเว็บก๊อกน้ำเพื่อรับ testnet MON ฟรี",
-    chat_title: "APEX AI Agent", chat_sub: "พิมพ์สิ่งที่ต้องการ กระเป๋าเงินจัดการให้เอง",
+    chat_title: "APEX AI Agent", chat_sub: "บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท",
     no_contacts: "ยังไม่มีรายชื่อ",
     tab_seed: "Seed Phrase", tab_pk: "คีย์ส่วนตัว",
   },
@@ -3244,7 +3243,7 @@ const T = {
     contacts_title: "Danh bạ", add_contact: "Thêm liên hệ",
     contact_name: "Tên", contact_addr_lbl: "Địa chỉ ví", save: "Lưu",
     faucet_desc: "Nhấp vào vòi sẽ tự động sao chép địa chỉ ví của bạn. Dán vào trang web vòi để nhận testnet MON miễn phí.",
-    chat_title: "APEX AI Agent", chat_sub: "Gõ điều bạn muốn. Ví của bạn lo phần còn lại.",
+    chat_title: "APEX AI Agent", chat_sub: "Nói là xong. Gửi ngay. Tất cả qua chat.",
     no_contacts: "Chưa có liên hệ",
     tab_seed: "Seed Phrase", tab_pk: "Khóa riêng tư",
   },
@@ -3263,7 +3262,7 @@ const T = {
     contacts_title: "Kenalan", add_contact: "Tambah Kenalan",
     contact_name: "Nama", contact_addr_lbl: "Alamat Dompet", save: "Simpan",
     faucet_desc: "Mengklik paip akan menyalin alamat dompet anda secara automatik. Tampalkan di laman web paip untuk mendapatkan testnet MON percuma.",
-    chat_title: "APEX AI Agent", chat_sub: "Taip apa yang anda mahu. Dompet urus selebihnya.",
+    chat_title: "APEX AI Agent", chat_sub: "Beritahu saja. Hantar. Selesai — semua melalui chat.",
     no_contacts: "Tiada kenalan lagi",
     tab_seed: "Seed Phrase", tab_pk: "Kunci Peribadi",
   }  ,
@@ -3282,7 +3281,7 @@ const T = {
     contacts_title: "연락처", add_contact: "연락처 추가",
     contact_name: "이름", contact_addr_lbl: "지갑 주소", save: "저장",
     faucet_desc: "파우셋을 클릭하면 지갑 주소가 자동으로 복사됩니다. 파우셋 사이트에 붙여넣어 무료 테스트넷 MON을 받으세요.",
-    chat_title: "APEX AI 에이전트", chat_sub: "원하는 걸 입력하면 지갑이 다 해결해요.",
+    chat_title: "APEX AI 에이전트", chat_sub: "말만 하세요. 보내세요. 끝 — 모두 채팅으로.",
     no_contacts: "연락처가 없습니다",
     tab_seed: "시드 문구", tab_pk: "개인 키",
   },
@@ -3301,7 +3300,7 @@ const T = {
     contacts_title: "联系人", add_contact: "添加联系人",
     contact_name: "名称", contact_addr_lbl: "钱包地址", save: "保存",
     faucet_desc: "点击水龙头会自动复制您的钱包地址。粘贴到水龙头网站即可领取免费测试网 MON。",
-    chat_title: "APEX AI 助手", chat_sub: "输入您想要的，钱包帮您搞定一切。",
+    chat_title: "APEX AI 助手", chat_sub: "说出来。发送。完成 — 全部通过聊天。",
     no_contacts: "暂无联系人",
     tab_seed: "助记词", tab_pk: "私钥",
   }
@@ -3792,8 +3791,7 @@ async function sendChat() {
   thinkingMsg.classList.add("thinking");
 
   const lastContact = contacts.length > 0 ? contacts[contacts.length-1] : null;
-  const systemPrompt = `You are APEX — a friendly AI wallet assistant for everyday people in Southeast Asia.
-You help users send/receive MON tokens on Monad Testnet. Talk like a helpful friend, not a robot.
+  const systemPrompt = `You are APEX — a warm, natural AI wallet friend for everyday people in Southeast Asia. Talk like a real human friend — casual, genuine, never robotic.
 
 WALLET INFO:
 - Address: ${addressInfo}
@@ -3803,19 +3801,39 @@ WALLET INFO:
 - Saved contacts: ${contactList || "none"}
 - Most recently added contact: ${lastContact ? lastContact.name + " = " + lastContact.address : "none"}
 
-CRITICAL RULES — follow exactly:
-1. LANGUAGE: Reply in ${currentLang}. Filipino = casual Tagalog. Korean = 한국어. Never switch languages.
-2. NEVER fake a transaction. NEVER say "confirmed" or show a TX hash yourself. ONLY output SEND_INTENT and let the app handle it.
-3. SEND FORMAT: SEND_INTENT:to=<contact_name_or_0xaddress>,amount=<number>
-   - "that wallet" / "yung pinaka-huli" / "the one I just added" = use last contact: ${lastContact ? lastContact.name : "unknown"}
-   - Always use the exact contact name or address — never guess
-4. ADD CONTACT FORMAT: ADD_CONTACT:name=<name>,address=<0x...>
-5. BALANCE: Always use the real balance above: ${balanceInfo}. NEVER calculate or guess balance after a transaction.
-6. SHORT: 1-2 sentences max. No long explanations.
-7. CONFIRM/CANCEL: When user says "oo"/"yes"/"confirm"/"sige" or "no"/"hindi"/"cancel" — the app intercepts these and handles them automatically via the confirm card. You will NOT receive these messages. If you do receive them somehow, just say "Sige, pinoproseso na!" and nothing else.
-8. NEVER say "Sent na!" or "Transaction confirmed!" yourself. The app shows the real confirmation. Just wait.
-9. RECEIVE: If asked how to receive — share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143). Wrong network = lost tokens.
-10. AFTER SEND: If the app already confirmed a send (user sees TX hash in chat), just say a short congrats. Do NOT repeat the SEND_INTENT.`;
+RULES — follow all, no exceptions:
+
+1. LANGUAGE: Always reply in the user's language (${currentLang}). Filipino = casual Tagalog. Korean = 한국어. Never switch.
+
+2. SENDING:
+   - Output SEND_INTENT:to=<name_or_address>,amount=<number> then STOP. That is all you do.
+   - "that wallet"/"yung pinaka-huli"/"the one I just added" = last contact: ${lastContact ? lastContact.name : "unknown"}
+
+3. NEVER FAKE A TRANSACTION — absolute rule:
+   - NEVER say "processing", "pinoproseso na", "I'm sending", "sending now", "submitted", "sent!", "confirmed!", "done!" or ANYTHING implying the tx is happening or done.
+   - NEVER show a TX hash yourself. You CANNOT execute transactions — only the app can after the user taps the confirmation card.
+   - If you feel like saying "processing" — STOP. Just output SEND_INTENT and say nothing else about tx status.
+
+4. IF CONFIRMATION CARD DIDN'T APPEAR or user says nothing happened:
+   - Be a calm helpful friend. Acknowledge and suggest trying again.
+   - Filipino: "Ay, mukhang hindi lumabas yung confirmation! Subukan ulit — sabihin mo 'Send X MON kay [name]'." 
+   - English: "Hmm, looks like the confirmation didn't show up! Try again — just say 'Send X MON to [name]'." 
+   - Adjust naturally for their language.
+
+5. AFFIRMATIONS (app intercepts these automatically when confirm card is showing — you will NOT receive them):
+   Confirm: yes, yep, ok, sure, confirm, go, right, that's right, thats right, correct, exactly, tama, tama na, tama yan, oo, opo, sige, sige na, push, tuloy, ayos, ya, iya, oke, lanjut, ใช่, ตกลง, có, được, đồng ý, boleh, 네, 확인, 好, 对, 是
+   Cancel: no, cancel, stop, hindi, wag, huwag, ayaw, tidak, batal, ไม่, không, tak, 아니, 取消
+   If you somehow get one of these when a confirm card exists, just say a short "Got it!" equivalent in their language.
+
+6. ADD CONTACT FORMAT: ADD_CONTACT:name=<n>,address=<0x...>
+
+7. BALANCE: Use real balance: ${balanceInfo}. NEVER guess after a tx.
+
+8. TONE: Warm, casual, human — like texting a close friend. 1-3 sentences max. No bullet points in replies.
+
+9. RECEIVE: Share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143).
+
+10. AFTER a REAL confirmed send (TX hash already visible in chat): Say short warm congrats in their language. Do NOT output SEND_INTENT again.`;
 
   try {
     const response = await fetch("/api/chat", {
@@ -4949,9 +4967,9 @@ const LANG_NAMES = {
 
 // Also add vi/ms/th translations to app T() system
 const T_EXTRA = {
-  vi: { setup_title:"Chào mừng đến APEX", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"Trợ lý AI APEX", chat_sub:"Gõ điều bạn muốn. Ví của bạn lo phần còn lại.", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
-  ms: { setup_title:"Selamat Datang ke APEX", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"Ejen AI APEX", chat_sub:"Taip apa yang anda mahu. Dompet urus selebihnya.", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
-  th: { setup_title:"ยินดีต้อนรับสู่ APEX", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"AI Agent APEX", chat_sub:"พิมพ์สิ่งที่ต้องการ กระเป๋าเงินจัดการให้เอง", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
+  vi: { setup_title:"Chào mừng đến APEX", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"Trợ lý AI APEX", chat_sub:"Nói là xong. Gửi ngay. Tất cả qua chat.", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
+  ms: { setup_title:"Selamat Datang ke APEX", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"Ejen AI APEX", chat_sub:"Beritahu saja. Hantar. Selesai — semua melalui chat.", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
+  th: { setup_title:"ยินดีต้อนรับสู่ APEX", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"AI Agent APEX", chat_sub:"บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
 };
 
 function openSettings(page) {
@@ -5460,6 +5478,72 @@ const OB_LANGS = {
     tip: "✏️ 把12个词写在纸上。不要截图保存。不要与任何人分享 — 包括 APEX 工作人员。",
     next: ["开始 →", "下一步 →", "下一步 →", "下一步 →", "创建钱包"],
     skip: "跳过"
+  },
+
+  // ─── ภาษาไทย ────────────────────────────────────
+  th: {
+    tags: ["ยินดีต้อนรับ", "กระเป๋าเงินของคุณ", "⚠️ สำคัญ", "ขับเคลื่อนด้วย AI", "พร้อมแล้ว!"],
+    titles: [
+      "ทำให้คริปโตง่ายสำหรับทุกคน",
+      "เหมือนกระเป๋าเงินดิจิทัล",
+      "วลีกู้คืนลับของคุณ",
+      "แค่คุยกับกระเป๋าเงินของคุณ",
+      "คุณพร้อมแล้ว!"
+    ],
+    descs: [
+      "APEX Wallet ให้คุณ<strong>ส่งและรับเงินได้ทันที</strong> — ไม่ต้องมีบัญชีธนาคาร ง่ายเหมือนส่งข้อความ",
+      "ลองนึกถึง APEX Wallet ว่าเป็น<strong>กระเป๋าเงินดิจิทัลในโทรศัพท์</strong> เก็บ ส่ง และรับ MON token ได้ทุกที่ทุกเวลา",
+      "เมื่อสร้างกระเป๋าเงิน คุณจะได้รับ<strong>12 คำลับ</strong> นี่คือวิธีเดียวที่จะกู้คืนกระเป๋าเงินหากโทรศัพท์หาย",
+      "ไม่ต้องเรียนรู้ปุ่มที่ซับซ้อน แค่<strong>พิมพ์สิ่งที่ต้องการ</strong>เป็นภาษาของคุณ แล้ว APEX จะจัดการให้",
+      "สร้างกระเป๋าเงินใหม่หรือนำเข้าที่มีอยู่ การเดินทางคริปโตของคุณเริ่มต้นแล้ว — <strong>ง่าย ปลอดภัย ในภาษาของคุณ</strong>"
+    ],
+    tip: "✏️ จดคำ 12 คำลงในกระดาษ ห้ามถ่ายภาพหน้าจอ ห้ามแชร์กับใคร — รวมถึงทีม APEX",
+    next: ["เริ่มต้น →", "ถัดไป →", "ถัดไป →", "ถัดไป →", "สร้างกระเป๋าเงิน"],
+    skip: "ข้าม"
+  },
+
+  // ─── Bahasa Melayu ───────────────────────────────
+  ms: {
+    tags: ["Selamat Datang", "Dompet Anda", "⚠️ Penting", "Dikuasai AI", "Dah Bersedia!"],
+    titles: [
+      "Menjadikan kripto mudah untuk semua",
+      "Seperti dompet digital",
+      "Frasa pemulihan rahsia anda",
+      "Cakap saja dengan dompet anda",
+      "Anda sudah bersedia!"
+    ],
+    descs: [
+      "APEX Wallet membolehkan anda <strong>menghantar dan menerima wang</strong> dengan segera — tanpa akaun bank. Semudah menghantar mesej.",
+      "Bayangkan APEX Wallet sebagai <strong>dompet digital dalam telefon anda</strong>. Simpan, hantar, dan terima token MON — di mana saja, bila-bila masa.",
+      "Apabila anda mencipta dompet, anda akan mendapat <strong>12 perkataan rahsia</strong>. Inilah satu-satunya cara memulihkan dompet jika telefon anda hilang.",
+      "Tidak perlu belajar butang yang rumit. Hanya <strong>taip apa yang anda mahu</strong> dalam bahasa anda, dan APEX akan menguruskannya.",
+      "Cipta dompet baru atau import yang sedia ada. Perjalanan kripto anda bermula sekarang — <strong>mudah, selamat, dalam bahasa anda</strong>."
+    ],
+    tip: "✏️ Tulis 12 perkataan di atas kertas. Jangan tangkap skrin. Jangan kongsi dengan sesiapa — termasuk pasukan APEX.",
+    next: ["Mula →", "Seterusnya →", "Seterusnya →", "Seterusnya →", "Cipta Dompet"],
+    skip: "Langkau"
+  },
+
+  // ─── Tiếng Việt ──────────────────────────────────
+  vi: {
+    tags: ["Chào Mừng", "Ví Của Bạn", "⚠️ Quan Trọng", "Hỗ Trợ AI", "Sẵn Sàng!"],
+    titles: [
+      "Giúp crypto trở nên dễ dàng cho mọi người",
+      "Như ví tiền kỹ thuật số",
+      "Cụm từ khôi phục bí mật",
+      "Chỉ cần nói chuyện với ví của bạn",
+      "Bạn đã sẵn sàng!"
+    ],
+    descs: [
+      "APEX Wallet cho phép bạn <strong>gửi và nhận tiền ngay lập tức</strong> — không cần tài khoản ngân hàng. Dễ như nhắn tin.",
+      "Hãy nghĩ APEX Wallet như <strong>ví kỹ thuật số trong điện thoại</strong>. Lưu trữ, gửi và nhận token MON — mọi lúc mọi nơi.",
+      "Khi tạo ví, bạn sẽ nhận được <strong>12 từ bí mật</strong>. Đây là cách duy nhất để khôi phục ví nếu mất điện thoại.",
+      "Không cần học các nút phức tạp. Chỉ cần <strong>gõ những gì bạn muốn</strong> bằng ngôn ngữ của bạn, APEX sẽ làm cho bạn.",
+      "Tạo ví mới hoặc nhập ví hiện có. Hành trình crypto của bạn bắt đầu ngay bây giờ — <strong>đơn giản, an toàn, bằng ngôn ngữ của bạn</strong>."
+    ],
+    tip: "✏️ Viết 12 từ lên giấy. Không chụp màn hình. Không chia sẻ với bất kỳ ai — kể cả nhóm APEX.",
+    next: ["Bắt Đầu →", "Tiếp Theo →", "Tiếp Theo →", "Tiếp Theo →", "Tạo Ví"],
+    skip: "Bỏ Qua"
   }
 };
 
