@@ -2939,7 +2939,10 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 <!-- HERO BALANCE SECTION -->
 <div class="hidden" id="balanceCard" style="width:100%;max-width:480px">
   <div class="hero-section">
-    <div class="hero-greeting" id="lbl_balance">Total Balance</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+      <div class="hero-greeting" id="lbl_balance">Total Balance</div>
+      <button onclick="refreshBalance()" style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted2);padding:2px 6px;border-radius:6px;transition:all 0.15s" title="Refresh balance" id="refreshBtn">↻</button>
+    </div>
     <div class="hero-wallet-name" onclick="toggleWalletDropdown()">
       <span id="activeWalletName">Wallet 1</span>
       <span class="chevron">▼</span>
@@ -3530,14 +3533,16 @@ function showWalletUI() {
 async function refreshBalance() {
   if (!wallet || !provider) return;
   document.getElementById("balAmt").textContent = "…";
+  const btn = document.getElementById("refreshBtn");
+  if (btn) { btn.style.animation = "spin 0.6s linear infinite"; btn.style.display = "inline"; }
   try {
     const bal = await provider.getBalance(wallet.address);
     const formatted = parseFloat(ethers.formatEther(bal)).toFixed(4);
     document.getElementById("balAmt").textContent = formatted;
     updateDropdownBalance();
-    // Update hero balance display
     const heroRefresh = document.getElementById("activeWalletBal");
     if (heroRefresh) heroRefresh.textContent = formatted + " MON";
+    if (btn) btn.style.animation = "";
   } catch { document.getElementById("balAmt").textContent = "—"; }
 }
 
@@ -3591,7 +3596,9 @@ async function executeSend(to, amount) {
     status.textContent = `✅ Sent! TX: ${tx.hash.slice(0,22)}...`;
     addTx("send", to, wallet.address, amount, tx.hash, false, feeStr);
     refreshBalance();
-    addMsg("ai", `✅ Transaction confirmed!\n• Sent: ${amount} MON\n• Fee: ${feeStr}\n• TX: ${tx.hash.slice(0,20)}...\n\nTap Activity to see details.`);
+    const newBal = await provider.getBalance(wallet.address);
+    const newBalStr = parseFloat(ethers.formatEther(newBal)).toFixed(4);
+    addMsg("ai", `✅ Sent ${amount} MON successfully! 🎉\nFee: ${feeStr}\nNew balance: ${newBalStr} MON\nTX: ${tx.hash.slice(0,20)}...\n\nTap Activity to see the full details.`);
     saveChatHistory();
     // ── Self-send: if recipient is one of our own wallets, record receive on that wallet ──
     const recipientWalletIdx = wallets.findIndex(w => w.address.toLowerCase() === to.toLowerCase());
@@ -3769,25 +3776,30 @@ async function sendChat() {
   const thinkingMsg = addMsg("ai", "thinking...", true); // skip save — temp msg
   thinkingMsg.classList.add("thinking");
 
-  const systemPrompt = `You are APEX, an AI wallet agent for Monad Testnet built for Southeast Asian users.
-Current wallet: ${addressInfo}
-Current balance: ${balanceInfo}
-Network: Monad Testnet (chainId: 10143)
-User language: ${currentLang}
-Saved contacts:\n${contactList}
+  const lastContact = contacts.length > 0 ? contacts[contacts.length-1] : null;
+  const systemPrompt = `You are APEX — a friendly AI wallet assistant for everyday people in Southeast Asia.
+You help users send/receive MON tokens on Monad Testnet. Talk like a helpful friend, not a robot.
 
-RULES:
-- Respond in the user's language (${currentLang}). If Filipino/Tagalog, mix naturally.
-- Keep responses short: 1-3 sentences max.
-- If user wants to SEND: extract recipient and amount. Format: "SEND_INTENT:to=<name_or_address>,amount=<number>"
-- If user wants to ADD CONTACT: extract name and address. Format: "ADD_CONTACT:name=<n>,address=<0x...>"
-- If asked balance, reply with current balance.
-- If asked contacts, list them.
-- Be warm, simple, friendly — for everyday people, not crypto experts.
-- If user asks how to RECEIVE tokens or asks for their address: Explain step by step: "To receive MON, share your address: ${addressInfo}. The sender must: 1) Use a wallet like MetaMask or Backpack, 2) Add Monad Testnet network: Network Name: Monad Testnet, RPC URL: https://testnet-rpc.monad.xyz, Chain ID: 10143, Currency Symbol: MON, Explorer: https://testnet.monadexplorer.com, 3) Then send to your address on MONAD TESTNET only. Sending on wrong network = tokens lost!"
-- If user asks about network, RPC, or chain ID: Give full details: Network: Monad Testnet, Chain ID: 10143, RPC: https://testnet-rpc.monad.xyz, Symbol: MON, Explorer: https://testnet.monadexplorer.com. Explain it clearly for non-technical users.
-- If user asks how to add Monad testnet to MetaMask or any wallet: Give step by step instructions on how to add the network manually using the details above.
-- Always end helpful responses with a follow-up suggestion like "Would you like me to help you with anything else?" in their language.`;
+WALLET INFO:
+- Address: ${addressInfo}
+- Balance: ${balanceInfo}
+- Network: Monad Testnet (Chain ID: 10143)
+- Language: ${currentLang}
+- Saved contacts: ${contactList || "none"}
+- Most recently added contact: ${lastContact ? lastContact.name + " = " + lastContact.address : "none"}
+
+CRITICAL RULES — follow exactly:
+1. LANGUAGE: Reply in ${currentLang}. Filipino = casual Tagalog. Korean = 한국어. Never switch languages.
+2. NEVER fake a transaction. NEVER say "confirmed" or show a TX hash yourself. ONLY output SEND_INTENT and let the app handle it.
+3. SEND FORMAT: SEND_INTENT:to=<contact_name_or_0xaddress>,amount=<number>
+   - "that wallet" / "yung pinaka-huli" / "the one I just added" = use last contact: ${lastContact ? lastContact.name : "unknown"}
+   - Always use the exact contact name or address — never guess
+4. ADD CONTACT FORMAT: ADD_CONTACT:name=<name>,address=<0x...>
+5. BALANCE: Always use the real balance above: ${balanceInfo}. NEVER calculate or guess balance after a transaction.
+6. SHORT: 1-2 sentences max. No long explanations.
+7. CONFIRM ONLY: When user says "oo", "yes", "confirm", "ok", "sige" AFTER seeing a send confirmation — do NOT output SEND_INTENT again. The app already handled it.
+8. RECEIVE: If asked how to receive — share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143). Wrong network = lost tokens.
+9. AFTER SEND: If the app already confirmed a send (user sees TX hash in chat), just say a short congrats. Do NOT repeat the SEND_INTENT.`;
 
   try {
     const response = await fetch("/api/chat", {
