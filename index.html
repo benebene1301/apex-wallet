@@ -2631,6 +2631,21 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 #btn_import:hover { border-color: var(--purple-border) !important; background: var(--purple-soft) !important; }
 #btn_import:hover > div > div:last-child { color: var(--purple2) !important; }
 
+
+/* FLAG ORBIT ANIMATIONS */
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes counterSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+@keyframes counterSpinReverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* HIDDEN */
 .hidden { display: none !important; }
 
@@ -2667,22 +2682,46 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
       <!-- SLIDE 0: Welcome + Language -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
-        <!-- Welcome illustration with flag orbit -->
-        <div style="height:230px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;width:100%">
-          <!-- Orbit rings (no overflow hidden) -->
-          <div style="position:absolute;width:170px;height:170px;border-radius:50%;border:1.5px dashed rgba(108,92,231,0.3)"></div>
-          <div style="position:absolute;width:230px;height:230px;border-radius:50%;border:1.5px dashed rgba(0,206,201,0.2)"></div>
-          <!-- Center logo -->
-          <div style="width:90px;height:90px;border-radius:26px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 8px 32px rgba(108,92,231,0.5);animation:float 3s ease-in-out infinite;position:relative;z-index:2">⬡</div>
-          <!-- Flags fixed around the circle — no clipping -->
-          <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:26px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇵🇭</div>
-          <div style="position:absolute;top:18px;right:60px;font-size:22px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇰🇷</div>
-          <div style="position:absolute;top:18px;left:60px;font-size:22px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇮🇩</div>
-          <div style="position:absolute;bottom:10px;right:55px;font-size:20px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇨🇳</div>
-          <div style="position:absolute;bottom:10px;left:55px;font-size:20px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇻🇳</div>
-          <div style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:18px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇲🇾</div>
-          <div style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:18px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇹🇭</div>
-          <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:18px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇺🇸</div>
+        <!-- Welcome illustration with orbiting flags using canvas-free CSS -->
+        <div id="obFlagOrbit" style="height:260px;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:8px;position:relative">
+          <!-- Center APEX logo -->
+          <div style="width:88px;height:88px;border-radius:26px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 0 40px rgba(108,92,231,0.6),0 0 80px rgba(108,92,231,0.2);animation:float 3s ease-in-out infinite;position:relative;z-index:5">⬡</div>
+
+          <!-- Inner orbit ring + 4 flags rotating -->
+          <div style="position:absolute;width:160px;height:160px;border-radius:50%;border:1px dashed rgba(108,92,231,0.35);animation:orbitSpin 8s linear infinite">
+            <!-- Flag at top of ring -->
+            <div style="position:absolute;top:-16px;left:50%;margin-left:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
+              <img src="https://flagcdn.com/w40/ph.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇵🇭</span>'"/>
+            </div>
+            <!-- Flag at right -->
+            <div style="position:absolute;top:50%;right:-16px;margin-top:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
+              <img src="https://flagcdn.com/w40/kr.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇰🇷</span>'"/>
+            </div>
+            <!-- Flag at bottom -->
+            <div style="position:absolute;bottom:-16px;left:50%;margin-left:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
+              <img src="https://flagcdn.com/w40/id.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇮🇩</span>'"/>
+            </div>
+            <!-- Flag at left -->
+            <div style="position:absolute;top:50%;left:-16px;margin-top:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
+              <img src="https://flagcdn.com/w40/vn.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇻🇳</span>'"/>
+            </div>
+          </div>
+
+          <!-- Outer orbit ring + 4 flags rotating opposite -->
+          <div style="position:absolute;width:228px;height:228px;border-radius:50%;border:1px dashed rgba(0,206,201,0.25);animation:orbitSpin 14s linear infinite reverse">
+            <div style="position:absolute;top:-14px;left:50%;margin-left:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
+              <img src="https://flagcdn.com/w40/cn.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇨🇳</span>'"/>
+            </div>
+            <div style="position:absolute;top:50%;right:-14px;margin-top:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
+              <img src="https://flagcdn.com/w40/my.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇲🇾</span>'"/>
+            </div>
+            <div style="position:absolute;bottom:-14px;left:50%;margin-left:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
+              <img src="https://flagcdn.com/w40/us.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇺🇸</span>'"/>
+            </div>
+            <div style="position:absolute;top:50%;left:-14px;margin-top:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
+              <img src="https://flagcdn.com/w40/th.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇹🇭</span>'"/>
+            </div>
+          </div>
         </div>
         <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
         <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to APEX! 👋</div>
