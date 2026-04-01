@@ -1899,7 +1899,54 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 .chat-send { font-size: 18px; width: 46px; height: 46px; border: none; border-radius: var(--radius-sm); background: var(--purple); color: white; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(108,92,231,0.3); }
 .chat-send:hover { background: #5a4dd4; transform: scale(1.05); }
 
-.quick-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+/* ─── CHAT MAXIMIZE ───────────────────────────── */
+.chat-maximize-btn {
+  margin-left: auto;
+  width: 32px; height: 32px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 15px; color: var(--muted2);
+  transition: all 0.15s; flex-shrink: 0;
+}
+.chat-maximize-btn:hover { border-color: var(--purple); color: var(--purple2); background: var(--purple-soft); }
+
+.chat-fullscreen {
+  display: none; position: fixed; inset: 0;
+  background: var(--bg); z-index: 700;
+  flex-direction: column;
+}
+.chat-fullscreen.visible { display: flex; }
+
+.chat-fullscreen-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card); flex-shrink: 0;
+}
+
+.chat-fullscreen-minimize {
+  margin-left: auto;
+  width: 32px; height: 32px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 15px; color: var(--muted2);
+  transition: all 0.15s; flex-shrink: 0;
+}
+.chat-fullscreen-minimize:hover { border-color: var(--purple); color: var(--purple2); background: var(--purple-soft); }
+
+.chat-fullscreen-box {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px; background: var(--card);
+}
+
+.chat-fullscreen-input-row {
+  display: flex; gap: 8px;
+  background: var(--card); border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+} { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .chip { font-size: 11px; font-weight: 700; padding: 6px 12px; background: var(--card); border: 1px solid var(--border2); border-radius: 20px; color: var(--muted2); cursor: pointer; transition: all 0.15s; }
 .chip:hover { border-color: var(--purple-border); color: var(--purple2); background: var(--purple-soft); }
 
@@ -2799,10 +2846,10 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <div class="dropdown-accounts" id="dropdownAccountsList"></div>
         <!-- Actions -->
         <div class="dropdown-divider"></div>
-        <div class="dropdown-action" onclick="addNewWallet();closeWalletDropdown()">
+        <div class="dropdown-action" onclick="addNewWallet(true);closeWalletDropdown()">
           <span class="dropdown-action-icon">➕</span> Add New Wallet
         </div>
-        <div class="dropdown-action" onclick="importAnotherWallet();closeWalletDropdown()">
+        <div class="dropdown-action" onclick="importAnotherWallet(true);closeWalletDropdown()">
           <span class="dropdown-action-icon">📥</span> Import Wallet
         </div>
         <!-- Footer -->
@@ -3126,6 +3173,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
       <div class="chat-title" id="lbl_chat_title">APEX AI Agent</div>
       <div class="chat-sub" id="lbl_chat_sub">Tell it. Send it. Done — all through chat.</div>
     </div>
+    <div class="chat-maximize-btn" onclick="openChatFullscreen()" title="Expand chat">⛶</div>
   </div>
 
   <div class="chat-box" id="chatBox">
@@ -3134,6 +3182,23 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <div class="chat-input-row">
     <input type="text" class="chat-input" id="chatInput" placeholder="Type here..." onkeydown="if(event.key==='Enter')sendChat()"/>
     <button class="chat-send" onclick="sendChat()" id="chatSendBtn">→</button>
+  </div>
+</div>
+
+<!-- CHAT FULLSCREEN OVERLAY -->
+<div class="chat-fullscreen" id="chatFullscreen">
+  <div class="chat-fullscreen-header">
+    <div class="chat-avatar">🤖</div>
+    <div>
+      <div class="chat-title">APEX AI Agent</div>
+      <div class="chat-sub">Tell it. Send it. Done — all through chat.</div>
+    </div>
+    <div class="chat-fullscreen-minimize" onclick="closeChatFullscreen()" title="Minimize">⊡</div>
+  </div>
+  <div class="chat-fullscreen-box" id="chatBoxFS"></div>
+  <div class="chat-fullscreen-input-row">
+    <input type="text" class="chat-input" id="chatInputFS" placeholder="Type here..." onkeydown="if(event.key==='Enter')sendChatFS()"/>
+    <button class="chat-send" onclick="sendChatFS()">→</button>
   </div>
 </div>
 
@@ -3733,6 +3798,81 @@ function addConfirmMsg(text, onConfirm) {
   div.appendChild(btns);
   box.appendChild(div);
   box.scrollTop = box.scrollHeight;
+}
+
+// ─── CHAT FULLSCREEN ─────────────────────────────
+function openChatFullscreen() {
+  const fs = document.getElementById("chatFullscreen");
+  const fsBox = document.getElementById("chatBoxFS");
+  const mainBox = document.getElementById("chatBox");
+  // Mirror messages from main chat into fullscreen
+  fsBox.innerHTML = mainBox.innerHTML;
+  fsBox.scrollTop = fsBox.scrollHeight;
+  fs.classList.add("visible");
+  setTimeout(() => document.getElementById("chatInputFS")?.focus(), 200);
+}
+
+function closeChatFullscreen() {
+  // Sync any new messages back to main chat
+  const fsBox = document.getElementById("chatBoxFS");
+  const mainBox = document.getElementById("chatBox");
+  mainBox.innerHTML = fsBox.innerHTML;
+  mainBox.scrollTop = mainBox.scrollHeight;
+  document.getElementById("chatFullscreen").classList.remove("visible");
+}
+
+async function sendChatFS() {
+  const input = document.getElementById("chatInputFS");
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = "";
+
+  // Mirror user message immediately into both boxes
+  const mainBox = document.getElementById("chatBox");
+  const fsBox = document.getElementById("chatBoxFS");
+  function mirrorMsg(role, msgText, cls) {
+    [mainBox, fsBox].forEach(box => {
+      const d = document.createElement("div");
+      d.className = "msg " + role + (cls ? " " + cls : "");
+      d.textContent = msgText;
+      box.appendChild(d);
+      box.scrollTop = box.scrollHeight;
+    });
+  }
+
+  // Check confirm/cancel intercept same as sendChat
+  const confirmWords = ["yes","yep","yeah","yup","ok","okay","sure","go","confirm","proceed","send","do it","go ahead","confirmed","let's go","lets go","alright","fine","of course","absolutely","definitely","right","that's right","thats right","correct","exactly","perfect","sounds good","looks good","great","tama","tama na","tama yan","oo","opo","sige","sige na","go na","tuloy","tuloy na","ayos","ayos na","push","push na","ya","iya","oke","lanjut","ใช่","ตกลง","ได้","ได้เลย","ยืนยัน","có","được","đồng ý","ừ","được rồi","xác nhận","boleh","hantar","teruskan","baik","setuju","네","응","ㅇㅇ","확인","보내","그래","알겠어","좋아","맞아","是","好","确认","发送","好的","对","行","可以","没问题"];
+  const cancelWords = ["no","nope","cancel","stop","back","don't","dont","nevermind","never mind","abort","hindi","wag","huwag","ayaw","ayoko","hindi na","wag na","tidak","nggak","gak","batal","batalkan","jangan","ไม่","ยกเลิก","หยุด","không","huỷ","hủy","dừng","thôi","tidak","tak","batal","tak nak","아니","아니요","취소","안돼","그만","不","取消","停止","算了","不要"];
+  const lowerText = text.toLowerCase().trim();
+  const hasConfirmCard = mainBox.querySelector(".msg.confirm") !== null;
+
+  if (hasConfirmCard) {
+    if (confirmWords.includes(lowerText) || confirmWords.some(w => lowerText.startsWith(w + " "))) {
+      mirrorMsg("user", text);
+      const confirmBtn = mainBox.querySelector(".confirm-yes");
+      if (confirmBtn) {
+        confirmBtn.click();
+        setTimeout(() => { fsBox.innerHTML = mainBox.innerHTML; fsBox.scrollTop = fsBox.scrollHeight; }, 400);
+      }
+      return;
+    }
+    if (cancelWords.includes(lowerText) || cancelWords.some(w => lowerText.startsWith(w + " "))) {
+      mirrorMsg("user", text);
+      const cancelBtn = mainBox.querySelector(".confirm-no");
+      if (cancelBtn) {
+        cancelBtn.click();
+        setTimeout(() => { fsBox.innerHTML = mainBox.innerHTML; fsBox.scrollTop = fsBox.scrollHeight; }, 400);
+      }
+      return;
+    }
+  }
+
+  // Delegate to main sendChat — set chatInput value and call it
+  document.getElementById("chatInput").value = text;
+  await sendChat();
+  // Sync result back to fullscreen box
+  fsBox.innerHTML = mainBox.innerHTML;
+  fsBox.scrollTop = fsBox.scrollHeight;
 }
 
 function quickAsk(text) {
@@ -4893,7 +5033,8 @@ function renderWalletList() {
   `).join("");
 }
 
-function addNewWallet() {
+function addNewWallet(fromDropdown) {
+  if (fromDropdown) settingsOrigin = "walletSwitch";
   document.getElementById("addWalletTitle").textContent = "Create New Wallet";
   const w = ethers.Wallet.createRandom();
   const words = w.mnemonic.phrase.split(" ");
@@ -4916,7 +5057,8 @@ function addNewWallet() {
   openSettings("addWallet");
 }
 
-function importAnotherWallet() {
+function importAnotherWallet(fromDropdown) {
+  if (fromDropdown) settingsOrigin = "walletSwitch";
   document.getElementById("addWalletTitle").textContent = "Import Wallet";
   document.getElementById("addWalletContent").innerHTML = `
     <div class="field">
@@ -6124,7 +6266,7 @@ updatePinToggleUI();
   <!-- ADD/IMPORT WALLET PAGE -->
   <div id="settingsAddWallet" class="hidden">
     <div class="settings-header">
-      <div class="back-btn" onclick="openSettings('wallets')">←</div>
+      <div class="back-btn" onclick="settingsOrigin==='menu' ? openSettings('wallets') : closeSettings()">←</div>
       <div class="settings-title" id="addWalletTitle">Add Wallet</div>
     </div>
     <div class="sub-settings">
