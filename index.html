@@ -3447,6 +3447,11 @@ async function executeSend(to, amount) {
     refreshBalance();
     addMsg("ai", `✅ Transaction confirmed!\n• Sent: ${amount} MON\n• Fee: ${feeStr}\n• TX: ${tx.hash.slice(0,20)}...\n\nTap Activity to see details.`);
     saveChatHistory();
+    // ── Self-send: if recipient is one of our own wallets, record receive on that wallet ──
+    const recipientWalletIdx = wallets.findIndex(w => w.address.toLowerCase() === to.toLowerCase());
+    if (recipientWalletIdx >= 0 && recipientWalletIdx !== activeWalletIndex) {
+      recordSelfReceive(to, wallet.address, amount, tx.hash, feeStr);
+    }
   } catch(e) {
     status.className = "status-msg error";
     status.textContent = "❌ " + (e.message || "Transaction failed");
@@ -4102,6 +4107,65 @@ function closeQrScanner() {
   document.getElementById("qrScannerOverlay").classList.add("hidden");
 }
 
+
+// ─── SELF-RECEIVE RECORDING ───────────────────────
+// When sending to your own wallet in the same app, record it as received
+function recordSelfReceive(toAddr, fromAddr, amount, txHash, fee) {
+  // Save current wallet context
+  const savedIdx = activeWalletIndex;
+  const savedWallet = wallet;
+
+  // Find the target wallet
+  const targetIdx = wallets.findIndex(w => w.address.toLowerCase() === toAddr.toLowerCase());
+  if (targetIdx < 0) return;
+
+  const targetW = wallets[targetIdx];
+
+  // Load that wallet's tx history and contacts
+  const targetKey = "apex_tx_" + toAddr;
+  let targetHistory = [];
+  try { targetHistory = JSON.parse(localStorage.getItem(targetKey) || "[]"); } catch(e) {}
+
+  // Check not already recorded
+  if (txHash && targetHistory.some(t => t.hash === txHash)) return;
+
+  // Resolve contact name from sender's perspective
+  const targetContacts = [];
+  try {
+    const savedContacts = localStorage.getItem("apex_contacts_" + toAddr);
+    if (savedContacts) targetContacts.push(...JSON.parse(savedContacts));
+  } catch(e) {}
+
+  const senderContact = targetContacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase());
+  const senderName = senderContact?.name || null;
+
+  // Build the receive TX
+  const receiveTx = {
+    type: "receive",
+    to: toAddr,
+    from: fromAddr,
+    amount,
+    hash: txHash,
+    failed: false,
+    fee: fee || null,
+    time: new Date().toISOString(),
+    contact: senderName
+  };
+
+  targetHistory.unshift(receiveTx);
+  localStorage.setItem(targetKey, JSON.stringify(targetHistory.slice(0, 50)));
+
+  // If that wallet is currently active (user switches), it will load updated history
+  // Also update wallet balance cache
+  if (provider) {
+    provider.getBalance(toAddr).then(bal => {
+      walletBalCache[toAddr] = parseFloat(ethers.formatEther(bal)).toFixed(4);
+    }).catch(() => {});
+  }
+
+  console.log("Self-receive recorded for wallet:", targetW.name || "Wallet "+(targetIdx+1));
+}
+
 // ─── MOBILE NAVIGATION ───────────────────────────
 const PANEL_MAP = {
   send: { panel: "sendPanel", action: "abtn_send" },
@@ -4711,6 +4775,8 @@ function toggleWalletDropdown() {
   if (!isOpen) {
     renderDropdownAccounts();
     wrap.classList.add("open");
+    // Fetch all balances in background
+    fetchAllWalletBalances();
     // Close on outside click
     setTimeout(() => document.addEventListener("click", closeDropdownOutside), 10);
   } else {
@@ -4731,6 +4797,21 @@ function closeWalletDropdown() {
   document.removeEventListener("click", closeDropdownOutside);
 }
 
+// Cache for wallet balances
+const walletBalCache = {};
+
+async function fetchAllWalletBalances() {
+  if (!provider) return;
+  for (const w of wallets) {
+    try {
+      const bal = await provider.getBalance(w.address);
+      walletBalCache[w.address] = parseFloat(ethers.formatEther(bal)).toFixed(4);
+    } catch(e) {}
+  }
+  // Re-render with fetched balances
+  renderDropdownAccounts();
+}
+
 function renderDropdownAccounts(filter) {
   const list = document.getElementById("dropdownAccountsList");
   const currentBal = document.getElementById("balAmt")?.textContent || "—";
@@ -4745,6 +4826,10 @@ function renderDropdownAccounts(filter) {
   list.innerHTML = filtered.map((w, i) => {
     const realIdx = wallets.indexOf(w);
     const isActive = realIdx === activeWalletIndex;
+    // Use cached balance or current balance for active wallet
+    const bal = isActive
+      ? (currentBal !== "…" ? currentBal : (walletBalCache[w.address] || "—"))
+      : (walletBalCache[w.address] || "—");
     return `<div class="dropdown-account ${isActive ? 'active-account' : ''}" onclick="switchToWallet(${realIdx});closeWalletDropdown()">
       <div class="dropdown-account-avatar">
         ${['👛','💼','🏦','💰','🔑'][realIdx % 5]}
@@ -4754,7 +4839,9 @@ function renderDropdownAccounts(filter) {
         <div class="dropdown-account-name">${w.name || "Wallet "+(realIdx+1)}</div>
         <div class="dropdown-account-addr">${w.address.slice(0,10)}...${w.address.slice(-6)}</div>
       </div>
-      <div class="dropdown-account-bal">${isActive ? currentBal : "—"} MON</div>
+      <div class="dropdown-account-bal" style="font-family:var(--mono);font-size:11px;font-weight:700;color:${isActive ? 'var(--green)' : 'var(--text)'}">
+        ${bal} <span style="font-size:9px;color:var(--muted)">MON</span>
+      </div>
     </div>`;
   }).join("") || '<div style="padding:16px;text-align:center;color:var(--muted);font-size:12px">No wallets found</div>';
 }
