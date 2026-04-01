@@ -4933,7 +4933,7 @@ function deleteEditContact() {
 // ═══════════════════════════════════════
 // ONBOARDING SYSTEM
 // ═══════════════════════════════════════
-const OB_KEY = "apex_onboarded";
+const OB_KEY = "apex_onboarded_v2"; // v2 = forces re-show for all existing users
 let obCurrent = 0;
 const OB_TOTAL = 5;
 
@@ -5103,6 +5103,7 @@ function finishOnboarding() {
 
 function resetOnboarding() {
   localStorage.removeItem(OB_KEY);
+  localStorage.removeItem("apex_onboarded"); // also clear old key
   location.reload();
 }
 
@@ -5586,6 +5587,16 @@ updatePinToggleUI();
 </div><!-- /onboarding-overlay -->
 
 <script>
+// Show onboarding as soon as possible
+(function() {
+  const key = "apex_onboarded_v2";
+  if (!localStorage.getItem(key)) {
+    // Pre-show overlay immediately before full JS loads
+    const ov = document.getElementById("onboardingOverlay");
+    if (ov) ov.style.display = "flex";
+  }
+})();
+
 document.addEventListener("DOMContentLoaded", function() {
   checkOnboarding();
 });
