@@ -3720,7 +3720,7 @@ function addConfirmMsg(text, onConfirm) {
   const btns = document.createElement("div");
   btns.className = "confirm-btns";
   const yes = document.createElement("button");
-  yes.className = "confirm-yes";
+  yes.className = "confirm-yes btn btn-primary btn-sm";
   yes.textContent = "✅ Confirm";
   yes.onclick = () => {
     div.remove();
@@ -3733,7 +3733,7 @@ function addConfirmMsg(text, onConfirm) {
     onConfirm();
   };
   const no = document.createElement("button");
-  no.className = "confirm-no";
+  no.className = "confirm-no btn btn-sm";
   no.textContent = "✕ Cancel";
   no.onclick = () => {
     div.remove();
@@ -3755,10 +3755,39 @@ function quickAsk(text) {
   sendChat();
 }
 
+// Track if a confirm card is currently showing
+let pendingConfirmAction = null;
+
 async function sendChat() {
   const input = document.getElementById("chatInput");
   const text = input.value.trim();
   if (!text) return;
+
+  // ─── INTERCEPT: if user types confirm/cancel words and a confirm card exists ─
+  const confirmWords = ["oo","yes","yep","confirm","sige","go","sure","ok","okay","yup","opo","ya","да"];
+  const cancelWords = ["no","hindi","cancel","wag","nope","ayaw","huwag","stop","back"];
+  const lowerText = text.toLowerCase().trim();
+  const hasConfirmCard = document.querySelector(".msg.confirm") !== null;
+
+  if (hasConfirmCard) {
+    if (confirmWords.includes(lowerText) || confirmWords.some(w => lowerText.startsWith(w + " "))) {
+      // User confirmed via chat — click the confirm button
+      addMsg("user", text);
+      input.value = "";
+      const confirmBtn = document.querySelector(".confirm-yes");
+      if (confirmBtn) { confirmBtn.click(); }
+      return;
+    }
+    if (cancelWords.includes(lowerText) || cancelWords.some(w => lowerText.startsWith(w + " "))) {
+      // User cancelled via chat
+      addMsg("user", text);
+      input.value = "";
+      const cancelBtn = document.querySelector(".confirm-no");
+      if (cancelBtn) { cancelBtn.click(); }
+      return;
+    }
+  }
+
   addMsg("user", text);
   input.value = "";
 
@@ -3797,9 +3826,10 @@ CRITICAL RULES — follow exactly:
 4. ADD CONTACT FORMAT: ADD_CONTACT:name=<name>,address=<0x...>
 5. BALANCE: Always use the real balance above: ${balanceInfo}. NEVER calculate or guess balance after a transaction.
 6. SHORT: 1-2 sentences max. No long explanations.
-7. CONFIRM ONLY: When user says "oo", "yes", "confirm", "ok", "sige" AFTER seeing a send confirmation — do NOT output SEND_INTENT again. The app already handled it.
-8. RECEIVE: If asked how to receive — share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143). Wrong network = lost tokens.
-9. AFTER SEND: If the app already confirmed a send (user sees TX hash in chat), just say a short congrats. Do NOT repeat the SEND_INTENT.`;
+7. CONFIRM/CANCEL: When user says "oo"/"yes"/"confirm"/"sige" or "no"/"hindi"/"cancel" — the app intercepts these and handles them automatically via the confirm card. You will NOT receive these messages. If you do receive them somehow, just say "Sige, pinoproseso na!" and nothing else.
+8. NEVER say "Sent na!" or "Transaction confirmed!" yourself. The app shows the real confirmation. Just wait.
+9. RECEIVE: If asked how to receive — share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143). Wrong network = lost tokens.
+10. AFTER SEND: If the app already confirmed a send (user sees TX hash in chat), just say a short congrats. Do NOT repeat the SEND_INTENT.`;
 
   try {
     const response = await fetch("/api/chat", {
