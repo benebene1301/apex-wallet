@@ -2682,14 +2682,8 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
         <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Making crypto easy for everyone</div>
         <div id="obDesc0" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:20px">APEX Wallet lets you <strong style="color:#eeedf5">send and receive money</strong> instantly — no bank needed. As easy as texting.</div>
-        <!-- Language picker -->
-        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
-          <div class="ob-lang-btn selected" onclick="setObLang('en',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid #6c5ce7;font-size:12px;font-weight:700;cursor:pointer;color:#a29bfe">🇺🇸 English</div>
-          <div class="ob-lang-btn" onclick="setObLang('fil',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇵🇭 Filipino</div>
-          <div class="ob-lang-btn" onclick="setObLang('ko',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇰🇷 한국어</div>
-          <div class="ob-lang-btn" onclick="setObLang('id',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇮🇩 Bahasa</div>
-          <div class="ob-lang-btn" onclick="setObLang('zh',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇨🇳 中文</div>
-        </div>
+        <!-- Language picker — rendered by JS so selection state works -->
+        <div id="obLangPicker" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:4px"></div>
       </div>
 
       <!-- SLIDE 1: What is a wallet -->
@@ -5335,6 +5329,7 @@ function showOnboarding() {
   obCurrent = 0;
   const ov = document.getElementById("onboardingOverlay");
   if (ov) { ov.style.display = "flex"; ov.style.opacity = "1"; }
+  renderObLangPicker();
   renderObSlide(0);
 }
 
@@ -5342,6 +5337,8 @@ function renderObSlide(idx) {
   obCurrent = idx;
   const lang = OB_LANGS[currentLang];
   const slide = OB_SLIDES[idx];
+  // Re-render lang picker on slide 0 to reflect current selection
+  if (idx === 0) renderObLangPicker();
 
   // Progress dots
   for (let i = 0; i < OB_TOTAL; i++) {
@@ -5404,12 +5401,44 @@ function obBack() {
   if (obCurrent > 0) renderObSlide(obCurrent - 1);
 }
 
-function setObLang(lang, el) {
+const OB_LANG_OPTIONS = [
+  { code: "en",  flag: "🇺🇸", label: "English"  },
+  { code: "fil", flag: "🇵🇭", label: "Filipino" },
+  { code: "ko",  flag: "🇰🇷", label: "한국어"    },
+  { code: "id",  flag: "🇮🇩", label: "Bahasa"   },
+  { code: "zh",  flag: "🇨🇳", label: "中文"      },
+];
+
+function renderObLangPicker() {
+  const picker = document.getElementById("obLangPicker");
+  if (!picker) return;
+  picker.innerHTML = OB_LANG_OPTIONS.map(opt => {
+    const isActive = currentLang === opt.code;
+    return `<div onclick="setObLang('${opt.code}')"
+      style="
+        padding: 8px 16px;
+        border-radius: 24px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        ${isActive
+          ? "background:#6c5ce7;border:1.5px solid #6c5ce7;color:white;box-shadow:0 4px 14px rgba(108,92,231,0.4);"
+          : "background:#1a1b26;border:1.5px solid rgba(255,255,255,0.12);color:#8886a0;"
+        }
+      ">${opt.flag} ${opt.label}</div>`;
+  }).join("");
+}
+
+function setObLang(lang) {
   currentLang = lang;
-  document.getElementById("langSelect").value = lang;
-  document.querySelectorAll(".ob-lang-btn").forEach(b => b.classList.remove("selected"));
-  if (el) el.classList.add("selected");
-  renderObSlide(obCurrent);
+  const sel = document.getElementById("langSelect");
+  if (sel) sel.value = lang;
+  renderObLangPicker();
+  renderObSlide(0); // re-render slide 0 with new language
 }
 
 function skipOnboarding() { finishOnboarding(); }
