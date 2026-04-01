@@ -2199,7 +2199,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px 10px;
+  padding: 10px 16px 10px;
   margin-bottom: 0;
   border-bottom: none;
   position: sticky;
@@ -2208,7 +2208,7 @@ header {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   z-index: 50;
-  gap: 8px;
+  gap: 6px;
   overflow: visible;
 }
 
@@ -2216,25 +2216,25 @@ header {
 .logo-text { font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
 .header-right {
-  display: flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 6px;
   flex: 1; justify-content: flex-end;
   min-width: 0; overflow: visible;
 }
 
-/* Wallet dropdown trigger — compact */
+/* Wallet dropdown trigger — show active wallet name clearly */
 .wallet-dropdown-trigger {
-  min-width: unset; max-width: 140px;
-  padding: 5px 8px 5px 7px;
+  min-width: unset; max-width: 160px;
+  padding: 5px 10px 5px 8px;
   overflow: hidden;
 }
 .wallet-trigger-name {
-  font-size: 11px; font-weight: 700;
+  font-size: 12px; font-weight: 700;
   overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; max-width: 80px;
+  white-space: nowrap; max-width: 100px;
 }
 .wallet-trigger-bal { display: none; }
 
-/* Hide theme dots on mobile — in settings */
+/* Hide theme dots and lang on mobile */
 @media (max-width: 600px) {
   .theme-picker { display: none !important; }
   .lang-select { display: none !important; }
@@ -2805,9 +2805,6 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <div class="dropdown-action" onclick="importAnotherWallet();closeWalletDropdown()">
           <span class="dropdown-action-icon">📥</span> Import Wallet
         </div>
-        <div class="dropdown-action" onclick="openSettings('main');closeWalletDropdown()">
-          <span class="dropdown-action-icon">⚙️</span> Settings
-        </div>
         <!-- Footer -->
         <div class="dropdown-footer">
           <div class="dropdown-danger" onclick="disconnectWallet();closeWalletDropdown()">
@@ -2943,7 +2940,8 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
       <button onclick="refreshBalance()" style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted2);padding:2px 6px;border-radius:6px;transition:all 0.15s" title="Refresh balance" id="refreshBtn">↻</button>
     </div>
     <div class="hero-wallet-name">
-      <span id="activeWalletName">Wallet 1</span>
+      <span id="heroWalletName">Wallet 1</span>
+      <span id="heroWalletBal" style="font-size:13px;font-weight:600;color:var(--muted2);margin-left:6px">— MON</span>
     </div>
     <div class="balance-display">
       <div>
@@ -2951,14 +2949,6 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <span class="balance-big balance-unit-big"> MON</span>
       </div>
       <div class="balance-sub-label" id="lbl_network">Monad Testnet</div>
-    </div>
-    <div class="hero-actions">
-      <button class="hero-btn hero-btn-send" onclick="mobileNav('send', document.getElementById('nav_send'))">
-        ↗ <span id="lbl_send_hero">Send</span>
-      </button>
-      <button class="hero-btn hero-btn-receive" onclick="mobileNav('receive', document.getElementById('nav_receive'))">
-        ↙ <span id="lbl_receive_hero">Receive</span>
-      </button>
     </div>
   </div>
   <div style="height:1px;background:var(--border);margin:16px 20px 0"></div>
@@ -3511,8 +3501,12 @@ function showWalletUI() {
   mobileNav("send", document.getElementById("nav_send"));
   const wName = wallets[activeWalletIndex]?.name || "Wallet 1";
   document.getElementById("activeWalletName").textContent = wName;
+  const heroNameEl = document.getElementById("heroWalletName");
+  if (heroNameEl) heroNameEl.textContent = wName;
   const balEl = document.getElementById("activeWalletBal");
   if (balEl) balEl.textContent = "— MON";
+  const heroBal = document.getElementById("heroWalletBal");
+  if (heroBal) heroBal.textContent = "— MON";
   loadChatHistory();
   startReceiveWatcher();
   scanPastReceives();
@@ -3532,6 +3526,8 @@ async function refreshBalance() {
     updateDropdownBalance();
     const heroRefresh = document.getElementById("activeWalletBal");
     if (heroRefresh) heroRefresh.textContent = formatted + " MON";
+    const heroBalEl = document.getElementById("heroWalletBal");
+    if (heroBalEl) heroBalEl.textContent = formatted + " MON";
     if (btn) btn.style.animation = "";
   } catch { document.getElementById("balAmt").textContent = "—"; }
 }
@@ -4810,7 +4806,11 @@ function switchToWallet(idx) {
     document.getElementById("receiveAddr").textContent = wallet.address;
     const name = w.name || "Wallet " + (idx+1);
     document.getElementById("activeWalletName").textContent = name;
+    const heroN = document.getElementById("heroWalletName");
+    if (heroN) heroN.textContent = name;
     document.getElementById("activeWalletBal").textContent = "— MON";
+    const heroB = document.getElementById("heroWalletBal");
+    if (heroB) heroB.textContent = "— MON";
     loadContacts();
     loadTxHistory();
     renderContacts();
@@ -4918,6 +4918,8 @@ function saveWalletName() {
   saveWalletsToStorage();
   // Update ALL places showing wallet name
   document.getElementById("activeWalletName").textContent = name;
+  const heroN2 = document.getElementById("heroWalletName");
+  if (heroN2) heroN2.textContent = name;
   renderWalletList();
   renderDropdownAccounts();
   showToast("Wallet renamed to \"" + name + "\"");
@@ -5037,6 +5039,8 @@ function confirmRename() {
   saveWalletsToStorage();
   if (i === activeWalletIndex) {
     document.getElementById("activeWalletName").textContent = name;
+    const heroN3 = document.getElementById("heroWalletName");
+    if (heroN3) heroN3.textContent = name;
   }
   renderWalletList();
   renderDropdownAccounts();
