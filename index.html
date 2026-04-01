@@ -2668,20 +2668,21 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
       <!-- SLIDE 0: Welcome + Language -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
         <!-- Welcome illustration with flag orbit -->
-        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative">
+        <div style="height:230px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;width:100%">
+          <!-- Orbit rings (no overflow hidden) -->
+          <div style="position:absolute;width:170px;height:170px;border-radius:50%;border:1.5px dashed rgba(108,92,231,0.3)"></div>
+          <div style="position:absolute;width:230px;height:230px;border-radius:50%;border:1.5px dashed rgba(0,206,201,0.2)"></div>
           <!-- Center logo -->
-          <div style="width:110px;height:110px;border-radius:32px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:52px;box-shadow:0 8px 32px rgba(108,92,231,0.5);animation:float 3s ease-in-out infinite;position:relative;z-index:2">⬡</div>
-          <!-- Orbiting flags -->
-          <div style="position:absolute;width:220px;height:220px;border-radius:50%;border:1.5px dashed rgba(108,92,231,0.2);animation:spin 10s linear infinite">
-            <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:24px;background:#0d0e14;padding:2px 4px;border-radius:8px">🇵🇭</div>
-          </div>
-          <div style="position:absolute;width:290px;height:290px;border-radius:50%;border:1.5px dashed rgba(0,206,201,0.15);animation:spin 15s linear infinite reverse">
-            <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:22px;background:#0d0e14;padding:2px 4px;border-radius:8px">🇮🇩</div>
-            <div style="position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:22px;background:#0d0e14;padding:2px 4px;border-radius:8px">🇰🇷</div>
-          </div>
-          <!-- Static flags on sides -->
-          <div style="position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:22px;opacity:0.7">🇻🇳</div>
-          <div style="position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:22px;opacity:0.7">🇨🇳</div>
+          <div style="width:90px;height:90px;border-radius:26px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 8px 32px rgba(108,92,231,0.5);animation:float 3s ease-in-out infinite;position:relative;z-index:2">⬡</div>
+          <!-- Flags fixed around the circle — no clipping -->
+          <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:26px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇵🇭</div>
+          <div style="position:absolute;top:18px;right:60px;font-size:22px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇰🇷</div>
+          <div style="position:absolute;top:18px;left:60px;font-size:22px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇮🇩</div>
+          <div style="position:absolute;bottom:10px;right:55px;font-size:20px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇨🇳</div>
+          <div style="position:absolute;bottom:10px;left:55px;font-size:20px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇻🇳</div>
+          <div style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:18px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇲🇾</div>
+          <div style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:18px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇹🇭</div>
+          <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:18px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))">🇺🇸</div>
         </div>
         <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
         <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to APEX! 👋</div>
@@ -3789,7 +3790,7 @@ RULES:
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         system: systemPrompt,
-        messages: [{ role: "user", content: text }]
+        messages: getChatHistory(text)
       })
     });
 
@@ -3836,6 +3837,26 @@ RULES:
 
 
 
+
+
+// ─── GET CHAT HISTORY FOR AI CONTEXT ─────────────
+function getChatHistory(currentText) {
+  const box = document.getElementById("chatBox");
+  const msgs = [];
+  if (box) {
+    const allMsgs = box.querySelectorAll(".msg:not(.thinking):not(.confirm)");
+    allMsgs.forEach(m => {
+      const text = m.textContent?.trim();
+      if (!text || text === "thinking..." || text.includes("─── chat history")) return;
+      const isUser = m.classList.contains("user") || m.classList.contains("user-confirm");
+      msgs.push({ role: isUser ? "user" : "assistant", content: text });
+    });
+  }
+  // Keep last 8 messages for context + add current
+  const recent = msgs.slice(-8);
+  recent.push({ role: "user", content: currentText });
+  return recent;
+}
 
 // ─── TX DETAIL MODAL ─────────────────────────────
 function openTxModal(idx) {
