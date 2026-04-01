@@ -2682,46 +2682,10 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
       <!-- SLIDE 0: Welcome + Language -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
-        <!-- Welcome illustration with orbiting flags using canvas-free CSS -->
-        <div id="obFlagOrbit" style="height:260px;width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:8px;position:relative">
-          <!-- Center APEX logo -->
+        <!-- Canvas orbit animation -->
+        <div style="height:260px;width:100%;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+          <canvas id="flagOrbitCanvas" width="300" height="260" style="position:absolute;top:0;left:50%;transform:translateX(-50%)"></canvas>
           <div style="width:88px;height:88px;border-radius:26px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 0 40px rgba(108,92,231,0.6),0 0 80px rgba(108,92,231,0.2);animation:float 3s ease-in-out infinite;position:relative;z-index:5">⬡</div>
-
-          <!-- Inner orbit ring + 4 flags rotating -->
-          <div style="position:absolute;width:160px;height:160px;border-radius:50%;border:1px dashed rgba(108,92,231,0.35);animation:orbitSpin 8s linear infinite">
-            <!-- Flag at top of ring -->
-            <div style="position:absolute;top:-16px;left:50%;margin-left:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
-              <img src="https://flagcdn.com/w40/ph.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇵🇭</span>'"/>
-            </div>
-            <!-- Flag at right -->
-            <div style="position:absolute;top:50%;right:-16px;margin-top:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
-              <img src="https://flagcdn.com/w40/kr.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇰🇷</span>'"/>
-            </div>
-            <!-- Flag at bottom -->
-            <div style="position:absolute;bottom:-16px;left:50%;margin-left:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
-              <img src="https://flagcdn.com/w40/id.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇮🇩</span>'"/>
-            </div>
-            <!-- Flag at left -->
-            <div style="position:absolute;top:50%;left:-16px;margin-top:-16px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;animation:counterSpin 8s linear infinite">
-              <img src="https://flagcdn.com/w40/vn.png" style="width:28px;height:20px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:22px>🇻🇳</span>'"/>
-            </div>
-          </div>
-
-          <!-- Outer orbit ring + 4 flags rotating opposite -->
-          <div style="position:absolute;width:228px;height:228px;border-radius:50%;border:1px dashed rgba(0,206,201,0.25);animation:orbitSpin 14s linear infinite reverse">
-            <div style="position:absolute;top:-14px;left:50%;margin-left:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
-              <img src="https://flagcdn.com/w40/cn.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇨🇳</span>'"/>
-            </div>
-            <div style="position:absolute;top:50%;right:-14px;margin-top:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
-              <img src="https://flagcdn.com/w40/my.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇲🇾</span>'"/>
-            </div>
-            <div style="position:absolute;bottom:-14px;left:50%;margin-left:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
-              <img src="https://flagcdn.com/w40/us.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇺🇸</span>'"/>
-            </div>
-            <div style="position:absolute;top:50%;left:-14px;margin-top:-14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;animation:counterSpinReverse 14s linear infinite">
-              <img src="https://flagcdn.com/w40/th.png" style="width:26px;height:18px;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.6)" onerror="this.outerHTML='<span style=font-size:20px>🇹🇭</span>'"/>
-            </div>
-          </div>
         </div>
         <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
         <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to APEX! 👋</div>
@@ -2862,9 +2826,11 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
       <option value="id">🇮🇩 Bahasa</option>
       <option value="th">🇹🇭 Thai</option>
       <option value="vi">🇻🇳 Việt</option>
-      <option value="ms">🇲🇾 Malay</option>
+      <option value="ms">🇲🇾 Melayu</option>
       <option value="ko">🇰🇷 한국어</option>
       <option value="zh">🇨🇳 中文</option>
+      <option value="vi">🇻🇳 Tiếng Việt</option>
+      <option value="th">🇹🇭 ภาษาไทย</option>
     </select>
     <div class="theme-picker">
     <div class="theme-dot active" style="background:#7c5cfc" onclick="setTheme('purple',this)" title="Purple"></div>
@@ -3358,7 +3324,7 @@ const T = {
   }
 };
 
-function t(k) { return (T[currentLang]?.[k]) || T.en[k] || k; }
+function t(k) { return (T[currentLang]?.[k]) || (T_EXTRA[currentLang]?.[k]) || T.en[k] || k; }
 
 function changeLanguage(lang) {
   currentLang = lang;
@@ -4947,6 +4913,13 @@ const LANG_NAMES = {
   ko:"한국어", zh:"中文"
 };
 
+// Also add vi/ms/th translations to app T() system
+const T_EXTRA = {
+  vi: { setup_title:"Chào mừng đến APEX", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"Trợ lý AI APEX", chat_sub:"Nói chuyện tự nhiên với ví của bạn", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
+  ms: { setup_title:"Selamat Datang ke APEX", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"Ejen AI APEX", chat_sub:"Bercakap dengan dompet anda secara semula jadi", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
+  th: { setup_title:"ยินดีต้อนรับสู่ APEX", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"AI Agent APEX", chat_sub:"คุยกับกระเป๋าเงินได้เลย", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
+};
+
 function openSettings(page) {
   document.getElementById("settingsOverlay").classList.add("visible");
   ["Main","Wallets","Profile","Language","AddWallet"].forEach(p => {
@@ -5469,12 +5442,206 @@ function checkOnboarding() {
   }
 }
 
+
+// ─── FLAG ORBIT CANVAS ───────────────────────────
+const ALL_LANGS = [
+  { code:"fil", flag:"ph", label:"Filipino",         name:"🇵🇭" },
+  { code:"id",  flag:"id", label:"Bahasa",           name:"🇮🇩" },
+  { code:"ko",  flag:"kr", label:"한국어",            name:"🇰🇷" },
+  { code:"zh",  flag:"cn", label:"中文",              name:"🇨🇳" },
+  { code:"vi",  flag:"vn", label:"Tiếng Việt",       name:"🇻🇳" },
+  { code:"ms",  flag:"my", label:"Melayu",           name:"🇲🇾" },
+  { code:"th",  flag:"th", label:"ภาษาไทย",          name:"🇹🇭" },
+  { code:"en",  flag:"us", label:"English",          name:"🇺🇸" },
+];
+
+// Update OB_LANG_OPTIONS to match ALL_LANGS
+const OB_LANG_OPTIONS = ALL_LANGS;
+
+let orbitAngle = 0;
+let orbitRAF = null;
+const flagImgCache = {};
+let orbitCanvas = null;
+let orbitCtx = null;
+
+function initFlagOrbit() {
+  orbitCanvas = document.getElementById("flagOrbitCanvas");
+  if (!orbitCanvas) return;
+  orbitCtx = orbitCanvas.getContext("2d");
+
+  // Preload all flag images
+  let loaded = 0;
+  ALL_LANGS.forEach(lang => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = "https://flagcdn.com/w40/" + lang.flag + ".png";
+    img.onload = () => {
+      flagImgCache[lang.code] = img;
+      loaded++;
+    };
+    img.onerror = () => { loaded++; }; // skip if fails
+  });
+
+  // Start animation regardless
+  requestAnimationFrame(drawOrbit);
+}
+
+function drawOrbit() {
+  if (!orbitCtx || !orbitCanvas) return;
+  const W = orbitCanvas.width;
+  const H = orbitCanvas.height;
+  const cx = W / 2;
+  const cy = H / 2;
+
+  orbitCtx.clearRect(0, 0, W, H);
+
+  const total = ALL_LANGS.length;
+  const r1 = 90;  // inner orbit radius
+  const r2 = 128; // outer orbit radius
+
+  // Draw orbit rings
+  orbitCtx.beginPath();
+  orbitCtx.arc(cx, cy, r1, 0, Math.PI * 2);
+  orbitCtx.strokeStyle = "rgba(108,92,231,0.25)";
+  orbitCtx.setLineDash([4, 4]);
+  orbitCtx.lineWidth = 1;
+  orbitCtx.stroke();
+
+  orbitCtx.beginPath();
+  orbitCtx.arc(cx, cy, r2, 0, Math.PI * 2);
+  orbitCtx.strokeStyle = "rgba(0,206,201,0.2)";
+  orbitCtx.stroke();
+  orbitCtx.setLineDash([]);
+
+  // Distribute: 4 on inner, 4 on outer
+  const inner = ALL_LANGS.slice(0, 4);
+  const outer = ALL_LANGS.slice(4);
+
+  function drawFlag(lang, x, y, isSelected) {
+    const img = flagImgCache[lang.code];
+    const fw = isSelected ? 34 : 26;
+    const fh = isSelected ? 24 : 18;
+
+    // Glow for selected
+    if (isSelected) {
+      orbitCtx.save();
+      orbitCtx.shadowColor = "#6c5ce7";
+      orbitCtx.shadowBlur = 18;
+      orbitCtx.fillStyle = "rgba(108,92,231,0.3)";
+      orbitCtx.beginPath();
+      orbitCtx.ellipse(x, y, fw/2+6, fh/2+6, 0, 0, Math.PI*2);
+      orbitCtx.fill();
+      orbitCtx.restore();
+    }
+
+    // Shadow behind flag
+    orbitCtx.save();
+    orbitCtx.shadowColor = "rgba(0,0,0,0.6)";
+    orbitCtx.shadowBlur = 8;
+
+    if (img && img.complete && img.naturalWidth > 0) {
+      // Draw rounded rect clip
+      const rx = x - fw/2, ry = y - fh/2;
+      orbitCtx.beginPath();
+      const rad = 3;
+      orbitCtx.moveTo(rx+rad, ry);
+      orbitCtx.lineTo(rx+fw-rad, ry);
+      orbitCtx.quadraticCurveTo(rx+fw, ry, rx+fw, ry+rad);
+      orbitCtx.lineTo(rx+fw, ry+fh-rad);
+      orbitCtx.quadraticCurveTo(rx+fw, ry+fh, rx+fw-rad, ry+fh);
+      orbitCtx.lineTo(rx+rad, ry+fh);
+      orbitCtx.quadraticCurveTo(rx, ry+fh, rx, ry+fh-rad);
+      orbitCtx.lineTo(rx, ry+rad);
+      orbitCtx.quadraticCurveTo(rx, ry, rx+rad, ry);
+      orbitCtx.closePath();
+      orbitCtx.clip();
+      orbitCtx.drawImage(img, rx, ry, fw, fh);
+    } else {
+      // Fallback: colored circle with initials
+      orbitCtx.fillStyle = "#1a1b26";
+      orbitCtx.beginPath();
+      orbitCtx.arc(x, y, fw/2, 0, Math.PI*2);
+      orbitCtx.fill();
+      orbitCtx.fillStyle = "#a29bfe";
+      orbitCtx.font = "bold " + (isSelected ? 12 : 10) + "px sans-serif";
+      orbitCtx.textAlign = "center";
+      orbitCtx.textBaseline = "middle";
+      orbitCtx.fillText(lang.flag.toUpperCase(), x, y);
+    }
+
+    // Selected ring
+    if (isSelected) {
+      orbitCtx.beginPath();
+      orbitCtx.arc(x, y, fw/2+4, 0, Math.PI*2);
+      orbitCtx.strokeStyle = "#a29bfe";
+      orbitCtx.lineWidth = 2;
+      orbitCtx.stroke();
+    }
+
+    orbitCtx.restore();
+  }
+
+  // Draw inner ring flags
+  inner.forEach((lang, i) => {
+    const angle = orbitAngle + (i / inner.length) * Math.PI * 2;
+    const x = cx + r1 * Math.cos(angle);
+    const y = cy + r1 * Math.sin(angle);
+    drawFlag(lang, x, y, currentLang === lang.code);
+  });
+
+  // Draw outer ring flags (reverse direction)
+  outer.forEach((lang, i) => {
+    const angle = -orbitAngle * 0.6 + (i / outer.length) * Math.PI * 2;
+    const x = cx + r2 * Math.cos(angle);
+    const y = cy + r2 * Math.sin(angle);
+    drawFlag(lang, x, y, currentLang === lang.code);
+  });
+
+  orbitAngle += 0.008;
+  requestAnimationFrame(drawOrbit);
+}
+
+// Click on canvas to select language
+function setupCanvasClick() {
+  const canvas = document.getElementById("flagOrbitCanvas");
+  if (!canvas) return;
+  canvas.addEventListener("click", function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const r1 = 90, r2 = 128;
+    const inner = ALL_LANGS.slice(0, 4);
+    const outer = ALL_LANGS.slice(4);
+
+    // Check inner ring
+    inner.forEach((lang, i) => {
+      const angle = orbitAngle + (i / inner.length) * Math.PI * 2;
+      const fx = cx + r1 * Math.cos(angle);
+      const fy = cy + r1 * Math.sin(angle);
+      const dist = Math.sqrt((mx-fx)**2 + (my-fy)**2);
+      if (dist < 22) setObLang(lang.code);
+    });
+
+    // Check outer ring
+    outer.forEach((lang, i) => {
+      const angle = -orbitAngle * 0.6 + (i / outer.length) * Math.PI * 2;
+      const fx = cx + r2 * Math.cos(angle);
+      const fy = cy + r2 * Math.sin(angle);
+      const dist = Math.sqrt((mx-fx)**2 + (my-fy)**2);
+      if (dist < 22) setObLang(lang.code);
+    });
+  });
+}
+
 function showOnboarding() {
   obCurrent = 0;
   const ov = document.getElementById("onboardingOverlay");
   if (ov) { ov.style.display = "flex"; ov.style.opacity = "1"; }
   renderObLangPicker();
   renderObSlide(0);
+  setTimeout(() => { initFlagOrbit(); setupCanvasClick(); }, 100);
 }
 
 function renderObSlide(idx) {
@@ -5545,13 +5712,7 @@ function obBack() {
   if (obCurrent > 0) renderObSlide(obCurrent - 1);
 }
 
-const OB_LANG_OPTIONS = [
-  { code: "en",  flag: "🇺🇸", label: "English"  },
-  { code: "fil", flag: "🇵🇭", label: "Filipino" },
-  { code: "ko",  flag: "🇰🇷", label: "한국어"    },
-  { code: "id",  flag: "🇮🇩", label: "Bahasa"   },
-  { code: "zh",  flag: "🇨🇳", label: "中文"      },
-];
+// OB_LANG_OPTIONS defined above in FLAG ORBIT section
 
 function renderObLangPicker() {
   const picker = document.getElementById("obLangPicker");
