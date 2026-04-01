@@ -2667,23 +2667,28 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
       <!-- SLIDE 0: Welcome + Language -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
-        <!-- Animated logo -->
-        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative">
-          <div style="width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(108,92,231,0.3),rgba(0,206,201,0.1));border:1.5px solid rgba(108,92,231,0.2);display:flex;align-items:center;justify-content:center;animation:float 3s ease-in-out infinite;position:relative">
-            <div style="position:absolute;width:250px;height:250px;border-radius:50%;border:1px dashed rgba(108,92,231,0.25);animation:spin 8s linear infinite">
-              <div style="width:10px;height:10px;border-radius:50%;background:#a29bfe;position:absolute;top:-5px;left:50%;transform:translateX(-50%);box-shadow:0 0 8px #a29bfe"></div>
-            </div>
-            <div style="position:absolute;width:290px;height:290px;border-radius:50%;border:1px dashed rgba(0,206,201,0.15);animation:spin 14s linear infinite reverse">
-              <div style="width:8px;height:8px;border-radius:50%;background:#00cec9;position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);box-shadow:0 0 8px #00cec9"></div>
-            </div>
-            <div style="font-size:72px">⬡</div>
+        <!-- Welcome illustration with flag orbit -->
+        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;position:relative">
+          <!-- Center logo -->
+          <div style="width:110px;height:110px;border-radius:32px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:52px;box-shadow:0 8px 32px rgba(108,92,231,0.5);animation:float 3s ease-in-out infinite;position:relative;z-index:2">⬡</div>
+          <!-- Orbiting flags -->
+          <div style="position:absolute;width:220px;height:220px;border-radius:50%;border:1.5px dashed rgba(108,92,231,0.2);animation:spin 10s linear infinite">
+            <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:24px;background:#0d0e14;padding:2px 4px;border-radius:8px">🇵🇭</div>
           </div>
+          <div style="position:absolute;width:290px;height:290px;border-radius:50%;border:1.5px dashed rgba(0,206,201,0.15);animation:spin 15s linear infinite reverse">
+            <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:22px;background:#0d0e14;padding:2px 4px;border-radius:8px">🇮🇩</div>
+            <div style="position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:22px;background:#0d0e14;padding:2px 4px;border-radius:8px">🇰🇷</div>
+          </div>
+          <!-- Static flags on sides -->
+          <div style="position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:22px;opacity:0.7">🇻🇳</div>
+          <div style="position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:22px;opacity:0.7">🇨🇳</div>
         </div>
         <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
-        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Making crypto easy for everyone</div>
-        <div id="obDesc0" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:20px">APEX Wallet lets you <strong style="color:#eeedf5">send and receive money</strong> instantly — no bank needed. As easy as texting.</div>
+        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to APEX! 👋</div>
+        <div id="obDesc0" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:16px">The crypto wallet made for <strong style="color:#eeedf5">Southeast Asia</strong>. Send money home in seconds — no bank, no fees, no stress.</div>
         <!-- Language picker — rendered by JS so selection state works -->
-        <div id="obLangPicker" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:4px"></div>
+        <div style="font-size:11px;font-weight:700;color:#5a5870;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Choose your language</div>
+        <div id="obLangPicker" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
       </div>
 
       <!-- SLIDE 1: What is a wallet -->
@@ -3096,10 +3101,25 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
 <!-- ACTIVITY PANEL -->
 <div class="panel" id="activityPanel">
-  <div class="card-label" id="lbl_activity_title">Transaction History</div>
+  <!-- Header with toggle -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div style="font-size:15px;font-weight:800" id="lbl_activity_title">Activity</div>
+    <div style="display:flex;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px" id="activityToggle">
+      <div id="actTab_this" onclick="setActivityView('this')"
+        style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--purple);color:white">
+        This Wallet
+      </div>
+      <div id="actTab_all" onclick="setActivityView('all')"
+        style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--muted2)">
+        All Wallets
+      </div>
+    </div>
+  </div>
   <div id="activityList" style="display:flex;flex-direction:column;gap:8px">
-    <div style="text-align:center;padding:24px;color:var(--muted);font-size:13px" id="noActivityMsg">
-      <div style="font-size:32px;margin-bottom:8px">📋</div>No transactions yet
+    <div style="text-align:center;padding:32px 16px;color:var(--muted)" id="noActivityMsg">
+      <div style="font-size:40px;margin-bottom:12px">📋</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:6px">No transactions yet</div>
+      <div style="font-size:12px;color:var(--muted2);line-height:1.5">Your transaction history will appear here after your first send or receive.</div>
     </div>
   </div>
 </div>
@@ -3898,6 +3918,16 @@ function closeTxModal(e) {
   }
 }
 
+function openTxModalDirect(idx) {
+  const tx = window._combinedTx ? window._combinedTx[idx] : txHistory[idx];
+  if (!tx) return;
+  // Temporarily swap txHistory context for the modal
+  const realHistory = txHistory;
+  txHistory = window._combinedTx || txHistory;
+  openTxModal(idx);
+  txHistory = realHistory;
+}
+
 // ─── CHAT HISTORY PER WALLET ──────────────────────
 function saveChatHistory() {
   if (!wallet) return;
@@ -4583,6 +4613,42 @@ function shareAddress() {
   }
 }
 
+
+// ─── ACTIVITY VIEW ───────────────────────────────
+let activityView = "this"; // "this" or "all"
+
+function setActivityView(view) {
+  activityView = view;
+  // Update tab styles
+  const tabThis = document.getElementById("actTab_this");
+  const tabAll = document.getElementById("actTab_all");
+  if (tabThis && tabAll) {
+    if (view === "this") {
+      tabThis.style.cssText = "font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--purple);color:white";
+      tabAll.style.cssText = "font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--muted2)";
+    } else {
+      tabAll.style.cssText = "font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--purple);color:white";
+      tabThis.style.cssText = "font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--muted2)";
+    }
+  }
+  showAllActivity = false; // reset expand state
+  renderActivity();
+}
+
+function getAllWalletsTx() {
+  // Combine tx from all wallets, sorted by time
+  const combined = [];
+  wallets.forEach((w, wi) => {
+    try {
+      const history = JSON.parse(localStorage.getItem("apex_tx_" + w.address) || "[]");
+      history.forEach(tx => {
+        combined.push({ ...tx, _walletName: w.name || "Wallet "+(wi+1), _walletAddr: w.address });
+      });
+    } catch(e) {}
+  });
+  return combined.sort((a, b) => new Date(b.time) - new Date(a.time));
+}
+
 // ─── AUTOCOMPLETE ────────────────────────────────
 function showSuggestions(val) {
   const list = document.getElementById("suggestionList");
@@ -5076,15 +5142,29 @@ function addTx(type, to, from, amount, hash, failed=false, fee=null) {
 function renderActivity() {
   const list = document.getElementById("activityList");
   const noMsg = document.getElementById("noActivityMsg");
-  if (!txHistory.length) {
+
+  // Get correct tx list based on view
+  const sourceTx = activityView === "all" ? getAllWalletsTx() : txHistory;
+
+  if (!sourceTx.length) {
     if (noMsg) noMsg.style.display = "block";
     return;
   }
   if (noMsg) noMsg.style.display = "none";
+
   const LIMIT = 5;
-  const displayTx = showAllActivity ? txHistory : txHistory.slice(0, LIMIT);
-  const hasMore = txHistory.length > LIMIT;
+  const displayTx = showAllActivity ? sourceTx : sourceTx.slice(0, LIMIT);
+  const hasMore = sourceTx.length > LIMIT;
+
   list.innerHTML = displayTx.map((tx, i) => {
+    // For all-wallets view, find real index in txHistory for modal
+    const realIdx = activityView === "all"
+      ? (() => {
+          // Temporarily use the combined data for modal
+          window._combinedTx = window._combinedTx || sourceTx;
+          return sourceTx.indexOf(tx);
+        })()
+      : i;
     const isSend = tx.type === "send";
     const peerAddr = isSend ? tx.to : tx.from;
     const peerLabel = tx.contact
@@ -5103,11 +5183,15 @@ function renderActivity() {
       ? displayTo + (cleanPeer ? " · " + peerShort : "")
       : peerShort;
     const txSnippet = tx.hash ? " · " + tx.hash.slice(0,10)+"..." : "";
-    return `<div class="activity-item" onclick="openTxModal(${i})" style="cursor:pointer">
+    const modalIdx = activityView === "all" ? -1 : i; // -1 = use tx directly
+    // Store combined tx for modal access
+    if (activityView === "all") { window._combinedTx = sourceTx; }
+    return `<div class="activity-item" onclick="${activityView === "all" ? "openTxModalDirect(" + i + ")" : "openTxModal(" + i + ")"}" style="cursor:pointer">
       <div class="activity-icon ${tx.failed ? 'failed' : tx.type}">${tx.failed ? '❌' : isSend ? "↗" : "↙"}</div>
       <div class="activity-info">
         <div class="activity-type">${isSend ? "Sent" : "Received"} ${tx.amount} MON${failedBadge}</div>
         <div class="activity-addr">${isSend ? "To: " : "From: "}${peerLine}${txSnippet}</div>
+        ${activityView === "all" && tx._walletName ? `<div style="font-size:9px;color:var(--purple2);margin-top:2px;font-weight:700">📍 ${tx._walletName}</div>` : ""}
       </div>
       <div class="activity-right">
         <div class="activity-amount ${tx.failed ? 'failed' : tx.type}" style="${tx.failed ? 'color:var(--red)' : ''}">${isSend ? "-" : "+"}${tx.amount}</div>
