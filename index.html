@@ -2388,14 +2388,15 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 .ob-slides {
   flex: 1; width: 100%; max-width: 480px;
   overflow: hidden; position: relative;
+  display: flex; flex-wrap: nowrap;
 }
 
 .ob-slide {
   min-width: 100%; width: 100%; flex-shrink: 0;
-  padding: 24px 28px 0;
+  padding: 20px 28px 0;
   display: flex; flex-direction: column;
   align-items: center; text-align: center;
-  overflow-y: auto;
+  overflow-y: auto; box-sizing: border-box;
 }
 
 /* ILLUSTRATION AREA */
@@ -4936,136 +4937,134 @@ const OB_KEY = "apex_onboarded";
 let obCurrent = 0;
 const OB_TOTAL = 5;
 
-// Translations for onboarding slides
-const OB_CONTENT = {
-  en: {
-    skip: "Skip",
-    next: ["Get Started →", "Next →", "Next →", "Next →", "Create Wallet"],
-    tags: ["Welcome","Your Wallet","⚠️ Important","AI Powered","Let's Go!"],
-    titles: [
-      "Making crypto easy for everyone",
-      "Like a digital pocket",
-      "Your secret recovery phrase",
-      "Just talk to your wallet",
-      "You're ready to start"
-    ],
-    descs: [
-      "APEX Wallet lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.",
-      "Think of APEX Wallet like a <strong>digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.",
-      "When you create a wallet, you'll get <strong>12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.",
-      "No buttons to learn. Just <strong>type what you want</strong> — in your own language — and APEX does it for you.",
-      "Create a new wallet or import an existing one. Your journey starts now — <strong>simple, safe, and in your language</strong>."
-    ],
+const OB_SLIDES = [
+  {
+    tag: "Welcome", 
+    title: "Making crypto easy for everyone",
+    desc: "APEX Wallet lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.",
+    tip: null
+  },
+  {
+    tag: "Your Wallet",
+    title: "Like a digital pocket",
+    desc: "Think of APEX Wallet like a <strong>digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.",
+    tip: null
+  },
+  {
+    tag: "⚠️ Important",
+    title: "Your secret recovery phrase",
+    desc: "When you create a wallet, you'll get <strong>12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.",
     tip: "✏️ Write it on paper. Never screenshot it. Never share with anyone — not even APEX support."
   },
+  {
+    tag: "AI Powered",
+    title: "Just talk to your wallet",
+    desc: "No buttons to learn. Just <strong>type what you want</strong> — in your own language — and APEX does it for you.",
+    tip: null
+  },
+  {
+    tag: "Let's Go!",
+    title: "You're ready to start",
+    desc: "Create a new wallet or import an existing one. Your journey starts now — <strong>simple, safe, and in your language</strong>.",
+    tip: null
+  }
+];
+
+const OB_LANGS = {
   fil: {
-    skip: "Preskip",
-    next: ["Magsimula →", "Susunod →", "Susunod →", "Susunod →", "Gumawa ng Wallet"],
     tags: ["Maligayang Pagdating","Ang Wallet Mo","⚠️ Mahalaga","Pinapatakbo ng AI","Handa Na!"],
-    titles: [
-      "Ginagawang madali ang crypto para sa lahat",
-      "Parang digital na pitaka",
-      "Ang iyong lihim na recovery phrase",
-      "Kausapin lang ang iyong wallet",
-      "Handa ka na!"
-    ],
+    titles: ["Ginagawang madali ang crypto para sa lahat","Parang digital na pitaka","Ang iyong lihim na recovery phrase","Kausapin lang ang iyong wallet","Handa ka na!"],
     descs: [
-      "Ang APEX Wallet ay nagbibigay-daan sa iyo na <strong>magpadala at tumanggap ng pera</strong> agad — walang kailangang bangko. Kasing dali ng pagtext.",
-      "Isipin ang APEX Wallet bilang <strong>digital na pitaka sa iyong telepono</strong>. Mag-ipon, magpadala, at tumanggap ng MON — kahit saan, kahit kailan.",
-      "Kapag gumawa ka ng wallet, makakakuha ka ng <strong>12 lihim na salita</strong>. Ito lang ang paraan para mabawi ang iyong wallet kung mawala ang iyong telepono.",
-      "Walang kailangang matutunang mga button. <strong>I-type lang ang gusto mo</strong> — sa iyong sariling wika — at gagawin ito ng APEX para sa iyo.",
-      "Gumawa ng bagong wallet o mag-import ng dati. Ang iyong paglalakbay ay nagsisimula na — <strong>simple, ligtas, at sa iyong wika</strong>."
+      "Ang APEX Wallet ay nagbibigay-daan sa iyo na <strong>magpadala at tumanggap ng pera</strong> agad — walang kailangang bangko.",
+      "Isipin ang APEX Wallet bilang <strong>digital na pitaka sa iyong telepono</strong>. Mag-ipon, magpadala, at tumanggap ng MON — kahit saan.",
+      "Kapag gumawa ka ng wallet, makakakuha ka ng <strong>12 lihim na salita</strong>. Ito lang ang paraan para mabawi ang iyong wallet.",
+      "Walang kailangang matutunang mga button. <strong>I-type lang ang gusto mo</strong> — sa iyong sariling wika.",
+      "Gumawa ng bagong wallet o mag-import ng dati. <strong>Simple, ligtas, at sa iyong wika</strong>."
     ],
-    tip: "✏️ Isulat ito sa papel. Huwag mag-screenshot. Huwag ibahagi sa kahit sino — kahit sa APEX support."
+    tip: "✏️ Isulat ito sa papel. Huwag mag-screenshot. Huwag ibahagi sa kahit sino.",
+    next: ["Magsimula →","Susunod →","Susunod →","Susunod →","Gumawa ng Wallet"],
+    skip: "Laktawan"
   },
   ko: {
-    skip: "건너뛰기",
-    next: ["시작하기 →", "다음 →", "다음 →", "다음 →", "지갑 만들기"],
-    tags: ["환영합니다","내 지갑","⚠️ 중요","AI 기반","시작할 준비 완료!"],
-    titles: [
-      "모두를 위한 쉬운 크립토",
-      "디지털 지갑처럼",
-      "비밀 복구 구문",
-      "지갑에게 말을 걸어보세요",
-      "시작할 준비가 됐어요"
-    ],
+    tags: ["환영합니다","내 지갑","⚠️ 중요","AI 기반","준비 완료!"],
+    titles: ["모두를 위한 쉬운 크립토","디지털 지갑처럼","비밀 복구 구문","지갑에게 말을 걸어보세요","시작할 준비가 됐어요"],
     descs: [
-      "APEX Wallet으로 <strong>즉시 송금하고 받을 수 있어요</strong> — 은행 없이도. 문자 보내는 것처럼 쉬워요.",
-      "APEX Wallet을 <strong>휴대폰 속 디지털 지갑</strong>이라고 생각하세요. 언제 어디서나 MON을 저장, 송금, 수신할 수 있어요.",
+      "APEX Wallet으로 <strong>즉시 송금하고 받을 수 있어요</strong> — 은행 없이도.",
+      "APEX Wallet을 <strong>휴대폰 속 디지털 지갑</strong>이라고 생각하세요.",
       "지갑을 만들면 <strong>12개의 비밀 단어</strong>를 받게 돼요. 이게 유일한 복구 방법이에요.",
       "버튼을 배울 필요 없어요. <strong>원하는 걸 입력하기만</strong> 하면 APEX가 해드려요.",
-      "새 지갑을 만들거나 기존 지갑을 가져오세요. <strong>간단하고 안전하게</strong> 시작해봐요."
+      "<strong>간단하고 안전하게</strong> 시작해봐요."
     ],
-    tip: "✏️ 종이에 적어두세요. 스크린샷 금지. 누구와도 공유하지 마세요 — APEX 지원팀 포함."
+    tip: "✏️ 종이에 적어두세요. 스크린샷 금지. 누구와도 공유하지 마세요.",
+    next: ["시작하기 →","다음 →","다음 →","다음 →","지갑 만들기"],
+    skip: "건너뛰기"
   }
 };
 
-function getObContent() {
-  const lang = currentLang;
-  return OB_CONTENT[lang] || OB_CONTENT.en;
+function checkOnboarding() {
+  if (!localStorage.getItem(OB_KEY)) {
+    showOnboarding();
+  }
 }
 
-function checkOnboarding() {
-  const done = localStorage.getItem(OB_KEY);
-  const overlay = document.getElementById("onboardingOverlay");
-  if (!done) {
-    overlay.style.display = "flex";
-    overlay.style.opacity = "1";
-    // Small delay to ensure DOM is ready
-    setTimeout(() => renderObSlide(0), 50);
-  } else {
-    overlay.style.display = "none";
-  }
+function showOnboarding() {
+  obCurrent = 0;
+  const ov = document.getElementById("onboardingOverlay");
+  if (ov) { ov.style.display = "flex"; ov.style.opacity = "1"; }
+  renderObSlide(0);
 }
 
 function renderObSlide(idx) {
-  const content = getObContent();
   obCurrent = idx;
+  const lang = OB_LANGS[currentLang];
+  const slide = OB_SLIDES[idx];
 
-  // Update progress dots
+  // Progress dots
   for (let i = 0; i < OB_TOTAL; i++) {
-    const dot = document.getElementById("obDot" + i);
-    if (!dot) continue;
-    dot.classList.remove("active","done");
-    if (i < idx) dot.classList.add("done");
-    else if (i === idx) dot.classList.add("active");
+    const d = document.getElementById("obDot" + i);
+    if (!d) continue;
+    d.style.background = i < idx ? "#a29bfe" : i === idx ? "#6c5ce7" : "rgba(255,255,255,0.12)";
   }
 
-  // Slide transition — translate the flex container
+  // Translate content
+  const tag = lang ? lang.tags[idx] : slide.tag;
+  const title = lang ? lang.titles[idx] : slide.title;
+  const desc = lang ? lang.descs[idx] : slide.desc;
+  const tip = lang ? lang.tip : slide.tip;
+
+  // Update DOM
+  const tagEl = document.getElementById("obTag" + idx);
+  const titleEl = document.getElementById("obTitle" + idx);
+  const descEl = document.getElementById("obDesc" + idx);
+  const tipEl = document.getElementById("obTip2");
+
+  if (tagEl) tagEl.textContent = tag;
+  if (titleEl) titleEl.textContent = title;
+  if (descEl) descEl.innerHTML = desc;
+  if (idx === 2 && tipEl) tipEl.textContent = tip || slide.tip;
+
+  // Slide the container
   const slides = document.getElementById("obSlides");
-  if (slides) {
-    slides.style.transform = `translateX(-${idx * 100}%)`;
-    slides.style.transition = "transform 0.4s cubic-bezier(0.4,0,0.2,1)";
-  }
+  if (slides) slides.style.transform = "translateX(-" + (idx * 100) + "%)";
 
-  // Update text content
-  const tag = document.getElementById("obTag" + idx);
-  const title = document.getElementById("obTitle" + idx);
-  const desc = document.getElementById("obDesc" + idx);
-  const tip = document.getElementById("obTip2");
+  // Buttons
+  const nextLabels = lang ? lang.next : ["Get Started →","Next →","Next →","Next →","Create Wallet"];
+  const skipLabel = lang ? lang.skip : "Skip";
 
-  if (tag && content.tags[idx]) tag.textContent = content.tags[idx];
-  if (title && content.titles[idx]) title.textContent = content.titles[idx];
-  if (desc && content.descs[idx]) desc.innerHTML = content.descs[idx];
-  if (idx === 2 && tip && content.tip) tip.textContent = content.tip;
-
-  // Update buttons
   const nextBtn = document.getElementById("obNextBtn");
   const backBtn = document.getElementById("obBackBtn");
   const skipBtn = document.getElementById("obSkipBtn");
 
-  if (nextBtn) nextBtn.textContent = content.next[idx] || "Next →";
-  if (backBtn) backBtn.classList.toggle("hidden", idx === 0);
-  if (skipBtn) {
-    skipBtn.textContent = content.skip || "Skip";
-    skipBtn.style.display = idx === OB_TOTAL - 1 ? "none" : "block";
-  }
-
-  // Last slide — change button style
   if (nextBtn) {
+    nextBtn.textContent = nextLabels[idx];
     nextBtn.style.background = idx === OB_TOTAL - 1
-      ? "linear-gradient(135deg, var(--purple), var(--green))"
-      : "var(--purple)";
+      ? "linear-gradient(135deg,#6c5ce7,#00cec9)"
+      : "#6c5ce7";
+  }
+  if (backBtn) backBtn.style.display = idx === 0 ? "none" : "block";
+  if (skipBtn) {
+    skipBtn.textContent = skipLabel;
+    skipBtn.style.display = idx === OB_TOTAL - 1 ? "none" : "block";
   }
 }
 
@@ -5073,7 +5072,6 @@ function obNext() {
   if (obCurrent < OB_TOTAL - 1) {
     renderObSlide(obCurrent + 1);
   } else {
-    // Done — hide onboarding, show setup
     finishOnboarding();
   }
 }
@@ -5085,30 +5083,24 @@ function obBack() {
 function setObLang(lang, el) {
   currentLang = lang;
   document.getElementById("langSelect").value = lang;
-  // Update selected state
   document.querySelectorAll(".ob-lang-btn").forEach(b => b.classList.remove("selected"));
-  el.classList.add("selected");
-  // Re-render current slide with new language
+  if (el) el.classList.add("selected");
   renderObSlide(obCurrent);
 }
 
-function skipOnboarding() {
-  finishOnboarding();
-}
+function skipOnboarding() { finishOnboarding(); }
 
 function finishOnboarding() {
   localStorage.setItem(OB_KEY, "true");
-  const overlay = document.getElementById("onboardingOverlay");
-  overlay.style.opacity = "0";
-  overlay.style.transition = "opacity 0.4s ease";
-  setTimeout(() => {
-    overlay.style.display = "none";
-    // Apply selected language
-    applyT();
-  }, 400);
+  const ov = document.getElementById("onboardingOverlay");
+  if (ov) {
+    ov.style.transition = "opacity 0.3s ease";
+    ov.style.opacity = "0";
+    setTimeout(() => { ov.style.display = "none"; }, 300);
+  }
+  applyT();
 }
 
-// Reset onboarding (for testing via console: resetOnboarding())
 function resetOnboarding() {
   localStorage.removeItem(OB_KEY);
   location.reload();
@@ -5121,7 +5113,7 @@ renderContacts();
 loadTheme();
 loadMode();
 updatePinToggleUI();
-checkOnboarding();
+// checkOnboarding runs after DOM is fully ready (see DOMContentLoaded below)
 </script>
 
 <!-- EDIT CONTACT MODAL -->
@@ -5467,147 +5459,136 @@ checkOnboarding();
 </div>
 
 
-<!-- ═══════════════════════════════════════
-     ONBOARDING OVERLAY
-     ═══════════════════════════════════════ -->
-<div class="onboarding-overlay" id="onboardingOverlay" style="display:none">
+<!-- ONBOARDING OVERLAY -->
+<div id="onboardingOverlay" style="display:none;position:fixed;inset:0;background:#0d0e14;z-index:8500;flex-direction:column;align-items:center;overflow:hidden">
 
-  <!-- Progress -->
-  <div class="ob-progress-bar" id="obProgressBar">
-    <div class="ob-progress-dot active" id="obDot0"></div>
-    <div class="ob-progress-dot" id="obDot1"></div>
-    <div class="ob-progress-dot" id="obDot2"></div>
-    <div class="ob-progress-dot" id="obDot3"></div>
-    <div class="ob-progress-dot" id="obDot4"></div>
+  <!-- Progress dots -->
+  <div style="width:100%;max-width:480px;padding:16px 24px 0;display:flex;gap:6px">
+    <div id="obDot0" style="height:4px;border-radius:2px;flex:1;background:#6c5ce7;transition:background 0.3s"></div>
+    <div id="obDot1" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
+    <div id="obDot2" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
+    <div id="obDot3" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
+    <div id="obDot4" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
   </div>
 
   <!-- Skip -->
-  <div class="ob-skip" id="obSkipBtn" onclick="skipOnboarding()">Skip</div>
+  <div id="obSkipBtn" onclick="skipOnboarding()" style="position:absolute;top:14px;right:16px;font-size:13px;font-weight:700;color:#8886a0;cursor:pointer;padding:6px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;background:#1a1b26">Skip</div>
 
-  <!-- Slides -->
-  <div class="ob-slides" id="obSlides" style="display:flex;transform:translateX(0);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);width:100%;overflow:hidden">
+  <!-- Slides container -->
+  <div style="flex:1;width:100%;max-width:480px;overflow:hidden;position:relative">
+    <div id="obSlides" style="display:flex;width:100%;height:100%;transform:translateX(0);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)">
 
-    <!-- SLIDE 0: Language Selection + Welcome -->
-    <div class="ob-slide" id="obSlide0">
-      <div class="ob-illustration">
-        <div class="ob-welcome-ring" style="background:radial-gradient(circle at 30% 30%,rgba(108,92,231,0.3),rgba(0,206,201,0.1));border:1.5px solid rgba(108,92,231,0.2)">
-          <div class="ob-orbit ob-orbit-1"><div class="ob-orbit-dot" style="background:#a29bfe;box-shadow:0 0 8px #a29bfe"></div></div>
-          <div class="ob-orbit ob-orbit-2"><div class="ob-orbit-dot ob-orbit-dot-2" style="background:#00cec9;box-shadow:0 0 8px #00cec9;top:auto;bottom:-5px"></div></div>
-          <div class="ob-welcome-icon">⬡</div>
-        </div>
-      </div>
-      <div class="ob-content">
-        <div class="ob-tag" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:14px">Welcome</div>
-        <div class="ob-title" id="obTitle0">Making crypto easy for everyone</div>
-        <div class="ob-desc" id="obDesc0">
-          APEX Wallet lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.
-        </div>
-        <div class="ob-lang-row" id="obLangRow">
-          <div class="ob-lang-btn selected" onclick="setObLang('en',this)">🇺🇸 English</div>
-          <div class="ob-lang-btn" onclick="setObLang('fil',this)">🇵🇭 Filipino</div>
-          <div class="ob-lang-btn" onclick="setObLang('id',this)">🇮🇩 Bahasa</div>
-          <div class="ob-lang-btn" onclick="setObLang('ko',this)">🇰🇷 한국어</div>
-          <div class="ob-lang-btn" onclick="setObLang('zh',this)">🇨🇳 中文</div>
-          <div class="ob-lang-btn" onclick="setObLang('vi',this)">🇻🇳 Tiếng Việt</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 1: What is a crypto wallet -->
-    <div class="ob-slide" id="obSlide1">
-      <div class="ob-illustration">
-        <div class="ob-wallet-card" style="background:#13141c;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
-          <div class="ob-wallet-balance" style="font-size:28px;font-weight:800;background:linear-gradient(135deg,#fff,#a29bfe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px">12.50 MON</div>
-          <div class="ob-wallet-label" style="font-size:11px;color:#8886a0;margin-bottom:16px;font-family:monospace">Your Balance • Monad Testnet</div>
-          <div class="ob-wallet-addr-bar" style="background:#1a1b26;border-radius:8px;padding:8px 10px;font-family:monospace;font-size:9px;color:#8886a0;margin-bottom:12px">0xeCe0...3BAf</div>
-          <div class="ob-wallet-btns">
-            <div class="ob-wallet-btn send" style="background:#6c5ce7;color:white;padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↗ Send</div>
-            <div class="ob-wallet-btn recv" style="background:#1f2030;color:#eeedf5;border:1px solid rgba(255,255,255,0.1);padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↙ Receive</div>
+      <!-- SLIDE 0: Welcome + Language -->
+      <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
+        <!-- Animated logo -->
+        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative">
+          <div style="width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(108,92,231,0.3),rgba(0,206,201,0.1));border:1.5px solid rgba(108,92,231,0.2);display:flex;align-items:center;justify-content:center;animation:float 3s ease-in-out infinite;position:relative">
+            <div style="position:absolute;width:250px;height:250px;border-radius:50%;border:1px dashed rgba(108,92,231,0.25);animation:spin 8s linear infinite">
+              <div style="width:10px;height:10px;border-radius:50%;background:#a29bfe;position:absolute;top:-5px;left:50%;transform:translateX(-50%);box-shadow:0 0 8px #a29bfe"></div>
+            </div>
+            <div style="position:absolute;width:290px;height:290px;border-radius:50%;border:1px dashed rgba(0,206,201,0.15);animation:spin 14s linear infinite reverse">
+              <div style="width:8px;height:8px;border-radius:50%;background:#00cec9;position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);box-shadow:0 0 8px #00cec9"></div>
+            </div>
+            <div style="font-size:72px">⬡</div>
           </div>
         </div>
-      </div>
-      <div class="ob-content">
-        <div class="ob-tag" id="obTag1" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:14px">Your Wallet</div>
-        <div class="ob-title" id="obTitle1">Like a digital pocket</div>
-        <div class="ob-desc" id="obDesc1">
-          Think of APEX Wallet like a <strong>digital wallet in your phone</strong>. You can store, send, and receive MON tokens — anytime, anywhere. No bank account needed.
+        <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
+        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Making crypto easy for everyone</div>
+        <div id="obDesc0" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:20px">APEX Wallet lets you <strong style="color:#eeedf5">send and receive money</strong> instantly — no bank needed. As easy as texting.</div>
+        <!-- Language picker -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
+          <div class="ob-lang-btn selected" onclick="setObLang('en',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid #6c5ce7;font-size:12px;font-weight:700;cursor:pointer;color:#a29bfe">🇺🇸 English</div>
+          <div class="ob-lang-btn" onclick="setObLang('fil',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇵🇭 Filipino</div>
+          <div class="ob-lang-btn" onclick="setObLang('ko',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇰🇷 한국어</div>
+          <div class="ob-lang-btn" onclick="setObLang('id',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇮🇩 Bahasa</div>
+          <div class="ob-lang-btn" onclick="setObLang('zh',this)" style="padding:7px 14px;border-radius:20px;background:#1a1b26;border:1.5px solid rgba(255,255,255,0.1);font-size:12px;font-weight:700;cursor:pointer;color:#8886a0">🇨🇳 中文</div>
         </div>
       </div>
-    </div>
 
-    <!-- SLIDE 2: Seed phrase — most important -->
-    <div class="ob-slide" id="obSlide2">
-      <div class="ob-illustration" style="flex-direction:column;gap:12px">
-        <div class="ob-lock-icon" style="font-size:36px;margin-bottom:8px">🔑</div>
-        <div class="ob-seed-grid">
-          <div class="ob-seed-word highlight" style="background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.3);border-radius:8px;padding:8px 6px;text-align:center"><span class="ob-seed-num" style="font-size:8px;color:#6b6880;display:block;margin-bottom:2px">1</span><span class="ob-seed-val" style="font-size:11px;font-weight:600;color:#a29bfe;font-family:monospace">apple</span></div>
-          <div class="ob-seed-word highlight" style="background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.3);border-radius:8px;padding:8px 6px;text-align:center"><span class="ob-seed-num" style="font-size:8px;color:#6b6880;display:block;margin-bottom:2px">2</span><span class="ob-seed-val" style="font-size:11px;font-weight:600;color:#a29bfe;font-family:monospace">river</span></div>
-          <div class="ob-seed-word highlight" style="background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.3);border-radius:8px;padding:8px 6px;text-align:center"><span class="ob-seed-num" style="font-size:8px;color:#6b6880;display:block;margin-bottom:2px">3</span><span class="ob-seed-val" style="font-size:11px;font-weight:600;color:#a29bfe;font-family:monospace">stone</span></div>
-          <div class="ob-seed-word" style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span class="ob-seed-num" style="font-size:8px;color:#6b6880;display:block;margin-bottom:2px">4</span><span class="ob-seed-val" style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">cloud</span></div>
-          <div class="ob-seed-word" style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span class="ob-seed-num" style="font-size:8px;color:#6b6880;display:block;margin-bottom:2px">5</span><span class="ob-seed-val" style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">music</span></div>
-          <div class="ob-seed-word" style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span class="ob-seed-num" style="font-size:8px;color:#6b6880;display:block;margin-bottom:2px">6</span><span class="ob-seed-val" style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">flame</span></div>
-        </div>
-      </div>
-      <div class="ob-content">
-        <div class="ob-tag" id="obTag2" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:14px">⚠️ Important</div>
-        <div class="ob-title" id="obTitle2">Your secret recovery phrase</div>
-        <div class="ob-desc" id="obDesc2">
-          When you create a wallet, you'll get <strong>12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.
-        </div>
-        <div class="ob-tip" id="obTip2" style="margin-top:16px;padding:12px 16px;background:rgba(253,203,110,0.1);border:1px solid rgba(253,203,110,0.2);border-radius:12px;font-size:13px;color:#fdcb6e;line-height:1.5;text-align:left">
-          ✏️ Write it on paper. Never take a screenshot. Never share it with anyone — not even APEX support.
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDE 3: AI Chat feature -->
-    <div class="ob-slide" id="obSlide3">
-      <div class="ob-illustration">
-        <div class="ob-chat-demo" style="background:#13141c;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;width:100%;max-width:280px">
-          <div class="ob-chat-header" style="padding:12px 14px;background:#1a1b26;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px">
-            <div class="ob-chat-avatar" style="width:28px;height:28px;background:#6c5ce7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div>
-            <div class="ob-chat-name" style="font-size:12px;font-weight:700;color:#eeedf5">APEX AI Agent</div>
-          </div>
-          <div class="ob-chat-messages" style="padding:12px;display:flex;flex-direction:column;gap:8px">
-            <div class="ob-chat-msg user" style="background:#6c5ce7;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:11px;align-self:flex-end;max-width:85%">Send 1 MON to Mama</div>
-            <div class="ob-chat-msg ai" style="background:#1a1b26;color:#eeedf5;padding:8px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:10px;align-self:flex-start;max-width:85%;font-family:monospace">Got it! Sending 1 MON to Mama. Confirm? ✓</div>
-            <div class="ob-chat-msg user" style="background:#6c5ce7;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:11px;align-self:flex-end;max-width:85%">What's my balance?</div>
-            <div class="ob-chat-msg ai" style="background:#1a1b26;color:#eeedf5;padding:8px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:10px;align-self:flex-start;max-width:85%;font-family:monospace">You have 12.50 MON 💰</div>
+      <!-- SLIDE 1: What is a wallet -->
+      <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
+        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px">
+          <div style="width:230px;background:#13141c;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:float 3s ease-in-out infinite">
+            <div style="font-size:26px;font-weight:800;background:linear-gradient(135deg,#fff,#a29bfe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3px">12.50 MON</div>
+            <div style="font-size:10px;color:#8886a0;font-family:monospace;margin-bottom:14px">Your Balance • Monad Testnet</div>
+            <div style="background:#1a1b26;border-radius:7px;padding:7px 10px;font-family:monospace;font-size:9px;color:#8886a0;margin-bottom:11px;text-align:left">0xeCe0ed0A...Ea3BAf</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+              <div style="background:#6c5ce7;color:white;padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↗ Send</div>
+              <div style="background:#1f2030;color:#eeedf5;border:1px solid rgba(255,255,255,0.1);padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↙ Receive</div>
+            </div>
           </div>
         </div>
+        <div id="obTag1" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Your Wallet</div>
+        <div id="obTitle1" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Like a digital pocket</div>
+        <div id="obDesc1" style="font-size:14px;color:#8886a0;line-height:1.7">Think of APEX Wallet like a <strong style="color:#eeedf5">digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.</div>
       </div>
-      <div class="ob-content">
-        <div class="ob-tag" id="obTag3" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:14px">AI Powered</div>
-        <div class="ob-title" id="obTitle3">Just talk to your wallet</div>
-        <div class="ob-desc" id="obDesc3">
-          No buttons to learn. No complicated steps. Just <strong>type what you want</strong> — in your own language — and APEX does it for you.
+
+      <!-- SLIDE 2: Seed phrase -->
+      <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
+        <div style="height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-bottom:24px">
+          <div style="font-size:40px;animation:pulse-scale 2s ease-in-out infinite">🔑</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:260px">
+            <div style="background:rgba(108,92,231,0.15);border:1px solid rgba(108,92,231,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">1</span><span style="font-size:11px;font-weight:700;color:#a29bfe;font-family:monospace">apple</span></div>
+            <div style="background:rgba(108,92,231,0.15);border:1px solid rgba(108,92,231,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">2</span><span style="font-size:11px;font-weight:700;color:#a29bfe;font-family:monospace">river</span></div>
+            <div style="background:rgba(108,92,231,0.15);border:1px solid rgba(108,92,231,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">3</span><span style="font-size:11px;font-weight:700;color:#a29bfe;font-family:monospace">stone</span></div>
+            <div style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">4</span><span style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">cloud</span></div>
+            <div style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">5</span><span style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">music</span></div>
+            <div style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">6</span><span style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">flame</span></div>
+          </div>
         </div>
+        <div id="obTag2" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">⚠️ Important</div>
+        <div id="obTitle2" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Your secret recovery phrase</div>
+        <div id="obDesc2" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:12px">When you create a wallet, you'll get <strong style="color:#eeedf5">12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.</div>
+        <div id="obTip2" style="padding:12px 16px;background:rgba(253,203,110,0.1);border:1px solid rgba(253,203,110,0.2);border-radius:12px;font-size:13px;color:#fdcb6e;line-height:1.5;text-align:left;width:100%">✏️ Write it on paper. Never screenshot it. Never share with anyone — not even APEX support.</div>
       </div>
-    </div>
 
-    <!-- SLIDE 4: Ready -->
-    <div class="ob-slide" id="obSlide4">
-      <div class="ob-illustration">
-        <div class="ob-ready-circle" style="width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#00cec9);display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 0 60px rgba(108,92,231,0.4),0 0 30px rgba(0,206,201,0.2)">🚀</div>
-      </div>
-      <div class="ob-content">
-        <div class="ob-tag" id="obTag4" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:14px">Let's Go!</div>
-        <div class="ob-title" id="obTitle4">You're ready to start</div>
-        <div class="ob-desc" id="obDesc4">
-          Create a new wallet or import an existing one. Your journey into crypto starts now — <strong>simple, safe, and in your language</strong>.
+      <!-- SLIDE 3: AI Chat -->
+      <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
+        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;width:100%">
+          <div style="width:100%;max-width:270px;background:#13141c;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden">
+            <div style="padding:12px 14px;background:#1a1b26;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px">
+              <div style="width:28px;height:28px;background:#6c5ce7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div>
+              <div style="font-size:12px;font-weight:700;color:#eeedf5">APEX AI Agent</div>
+              <div style="margin-left:auto;width:6px;height:6px;background:#00cec9;border-radius:50%"></div>
+            </div>
+            <div style="padding:12px;display:flex;flex-direction:column;gap:7px">
+              <div style="background:#6c5ce7;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12px;align-self:flex-end;max-width:85%">Send 1 MON to Mama</div>
+              <div style="background:#1a1b26;color:#eeedf5;padding:8px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:11px;align-self:flex-start;max-width:90%;font-family:monospace">Got it! Sending 1 MON to Mama. Confirm? ✅</div>
+              <div style="background:#6c5ce7;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12px;align-self:flex-end;max-width:85%">What's my balance?</div>
+              <div style="background:#1a1b26;color:#eeedf5;padding:8px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:11px;align-self:flex-start;max-width:85%;font-family:monospace">You have 12.50 MON 💰</div>
+            </div>
+          </div>
         </div>
+        <div id="obTag3" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">AI Powered</div>
+        <div id="obTitle3" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Just talk to your wallet</div>
+        <div id="obDesc3" style="font-size:14px;color:#8886a0;line-height:1.7">No buttons to learn. Just <strong style="color:#eeedf5">type what you want</strong> — in your own language — and APEX does it for you.</div>
       </div>
+
+      <!-- SLIDE 4: Ready -->
+      <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
+        <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px">
+          <div style="width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#00cec9);display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 0 60px rgba(108,92,231,0.5),0 0 30px rgba(0,206,201,0.3);animation:float 3s ease-in-out infinite">🚀</div>
+        </div>
+        <div id="obTag4" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Let's Go!</div>
+        <div id="obTitle4" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">You're ready to start</div>
+        <div id="obDesc4" style="font-size:14px;color:#8886a0;line-height:1.7">Create a new wallet or import an existing one. Your journey starts now — <strong style="color:#eeedf5">simple, safe, and in your language</strong>.</div>
+      </div>
+
     </div>
+  </div>
 
-  </div><!-- /ob-slides -->
-
-  <!-- Actions -->
-  <div class="ob-actions" id="obActions">
-    <button class="ob-btn-primary" id="obNextBtn" onclick="obNext()">Get Started →</button>
-    <button class="ob-btn-secondary hidden" id="obBackBtn" onclick="obBack()">← Back</button>
+  <!-- Bottom buttons -->
+  <div style="width:100%;max-width:480px;padding:20px 24px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px">
+    <button id="obNextBtn" onclick="obNext()" style="width:100%;padding:16px;border-radius:14px;background:#6c5ce7;color:white;border:none;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(108,92,231,0.4);letter-spacing:0.02em">Get Started →</button>
+    <button id="obBackBtn" onclick="obBack()" style="display:none;width:100%;padding:14px;border-radius:14px;background:transparent;color:#8886a0;border:1.5px solid rgba(255,255,255,0.1);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">← Back</button>
   </div>
 
 </div><!-- /onboarding-overlay -->
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  checkOnboarding();
+});
+</script>
 </body>
 </html>
