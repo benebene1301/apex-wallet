@@ -886,6 +886,69 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 
 .chip:hover { border-color: var(--purple-border); color: var(--purple2); background: var(--purple-soft); }
 
+/* CHAT MAXIMIZE BUTTON */
+.chat-maximize-btn {
+  margin-left: auto;
+  width: 30px; height: 30px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--muted2);
+  transition: all 0.15s; flex-shrink: 0;
+}
+.chat-maximize-btn:hover { border-color: var(--purple); color: var(--purple2); background: var(--purple-soft); }
+
+/* CHAT FULLSCREEN OVERLAY */
+.chat-fullscreen {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 600;
+  flex-direction: column;
+}
+.chat-fullscreen.visible { display: flex; }
+
+.chat-fullscreen-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  flex-shrink: 0;
+}
+
+.chat-fullscreen-minimize {
+  margin-left: auto;
+  width: 30px; height: 30px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--muted2);
+  transition: all 0.15s; flex-shrink: 0;
+}
+.chat-fullscreen-minimize:hover { border-color: var(--purple); color: var(--purple2); background: var(--purple-soft); }
+
+.chat-fullscreen-box {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--card);
+}
+
+.chat-fullscreen-input-row {
+  display: flex;
+  gap: 8px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+}
+
 
 /* THEMES */
 body.theme-purple { --purple:#7c5cfc; --purple2:#9d82ff; }
@@ -3116,7 +3179,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
     <div style="display:flex;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px" id="activityToggle">
       <div id="actTab_this" onclick="setActivityView('this')"
         style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;background:var(--purple);color:white">
-        This Wallet
+        <span id="actTabThisLabel">This Wallet</span>
       </div>
       <div id="actTab_all" onclick="setActivityView('all')"
         style="font-size:11px;font-weight:700;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all 0.15s;color:var(--muted2)">
@@ -3141,6 +3204,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
       <div class="chat-title" id="lbl_chat_title">APEX AI Agent</div>
       <div class="chat-sub" id="lbl_chat_sub">Talk to your wallet naturally</div>
     </div>
+    <div class="chat-maximize-btn" onclick="openChatFullscreen()" title="Expand chat">⛶</div>
   </div>
 
   <div class="quick-chips" id="quickChips">
@@ -3155,6 +3219,23 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <div class="chat-input-row">
     <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChat()"/>
     <button class="chat-send" onclick="sendChat()" id="chatSendBtn">→</button>
+  </div>
+</div>
+
+<!-- CHAT FULLSCREEN OVERLAY -->
+<div class="chat-fullscreen" id="chatFullscreen">
+  <div class="chat-fullscreen-header">
+    <div class="chat-avatar">🤖</div>
+    <div>
+      <div class="chat-title" id="lbl_chat_title_fs">APEX AI Agent</div>
+      <div class="chat-sub" id="lbl_chat_sub_fs">Talk to your wallet naturally</div>
+    </div>
+    <div class="chat-fullscreen-minimize" onclick="closeChatFullscreen()" title="Minimize chat">⊡</div>
+  </div>
+  <div class="chat-fullscreen-box" id="chatBoxFS"></div>
+  <div class="chat-fullscreen-input-row">
+    <input type="text" class="chat-input" id="chatInputFS" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter')sendChatFS()"/>
+    <button class="chat-send" onclick="sendChatFS()" id="chatSendBtnFS">→</button>
   </div>
 </div>
 
@@ -3527,6 +3608,7 @@ function showWalletUI() {
   startReceiveWatcher();
   scanPastReceives();
   updatePinToggleUI();
+  updateActivityTabLabel();
   checkPinOnLoad();
 }
 
@@ -3764,8 +3846,42 @@ async function sendChat() {
   if (!text) return;
 
   // ─── INTERCEPT: if user types confirm/cancel words and a confirm card exists ─
-  const confirmWords = ["oo","yes","yep","confirm","sige","go","sure","ok","okay","yup","opo","ya","да"];
-  const cancelWords = ["no","hindi","cancel","wag","nope","ayaw","huwag","stop","back"];
+  const confirmWords = [
+    // English
+    "yes","yep","yeah","yup","ok","okay","sure","go","confirm","proceed","send","do it","go ahead","confirmed","let's go","lets go","alright","alright then","fine","of course","absolutely","definitely",
+    // Filipino / Tagalog
+    "oo","opo","sige","sige na","go na","tuloy","tuloy na","gawin","ipadala","ayos","ayos na","oo naman","sige naman","oo po","syempre","go go","push","push na","oo na","sige po","tara","tara na","ok na","ok po","yep po",
+    // Bahasa Indonesia
+    "ya","iya","oke","ok","lanjut","lanjutkan","kirim","setuju","boleh","baik","siap","yap","gas","gas bro","lanjut aja","iya dong","ya dong","oke deh","oke siap",
+    // Thai
+    "ใช่","ตกลง","โอเค","ส่ง","ได้","ได้เลย","เอาเลย","ยืนยัน","โอเคเลย","ใช่เลย",
+    // Vietnamese
+    "có","được","ok rồi","gửi đi","đồng ý","ừ","ừ nhỉ","được rồi","ok được","cho gửi","gửi luôn","xác nhận",
+    // Bahasa Melayu
+    "ya","boleh","hantar","teruskan","ok la","ok lah","baik","setuju","sahkan","ya la","boleh lah","ok boleh","hantar la",
+    // Korean
+    "네","응","어","ㅇㅇ","확인","보내","보낼게","보내줘","그래","알겠어","알겠습니다","ㅇㅋ","오케","오케이","좋아","진행","진행해","맞아","예","예스",
+    // Chinese
+    "是","好","确认","发送","好的","对","行","可以","没问题","嗯","好吧","就这样","发","好啊","同意"
+  ];
+  const cancelWords = [
+    // English
+    "no","nope","cancel","stop","back","don't","dont","nevermind","never mind","abort","refuse","reject","not now","wait","hold on",
+    // Filipino / Tagalog
+    "hindi","wag","huwag","ayaw","ayoko","hindi na","wag na","huwag na","ayaw ko","kanselahin","bawiin","bawi","back","atras",
+    // Bahasa Indonesia
+    "tidak","nggak","gak","batal","batalkan","jangan","stop","ga jadi","ga usah","enggak","ndak",
+    // Thai
+    "ไม่","ยกเลิก","หยุด","ไม่เอา","ไม่ใช่","ไม่ต้องการ",
+    // Vietnamese
+    "không","huỷ","hủy","dừng","thôi","không gửi","thôi đừng","bỏ qua",
+    // Bahasa Melayu
+    "tidak","tak","batal","jangan","henti","tak nak","tak mahu","tak boleh",
+    // Korean
+    "아니","아니요","취소","안돼","안 돼","하지마","그만","안할게","안 할게","싫어","됐어","됩니다","ㄴㄴ",
+    // Chinese
+    "不","取消","停止","算了","不要","不发","不行","不好","没有","再说","不确认"
+  ];
   const lowerText = text.toLowerCase().trim();
   const hasConfirmCard = document.querySelector(".msg.confirm") !== null;
 
@@ -4824,6 +4940,7 @@ function switchToWallet(idx) {
     loadContacts();
     loadTxHistory();
     renderContacts();
+    updateActivityTabLabel();
     renderActivity();
     loadChatHistory();
     startReceiveWatcher();
@@ -5286,9 +5403,116 @@ function renderActivity() {
   }
 }
 
-function toggleActivityExpand() {
-  showAllActivity = !showAllActivity;
-  renderActivity();
+function updateActivityTabLabel() {
+  const lbl = document.getElementById("actTabThisLabel");
+  if (!lbl) return;
+  const name = wallets[activeWalletIndex]?.name || ("Wallet " + (activeWalletIndex + 1));
+  lbl.textContent = name;
+}
+
+// ─── CHAT FULLSCREEN ─────────────────────────────
+function openChatFullscreen() {
+  const fs = document.getElementById("chatFullscreen");
+  const fsBox = document.getElementById("chatBoxFS");
+  const mainBox = document.getElementById("chatBox");
+  // Mirror all messages from main chat box into fullscreen box
+  fsBox.innerHTML = mainBox.innerHTML;
+  fsBox.scrollTop = fsBox.scrollHeight;
+  // Sync title/sub labels
+  const titleFS = document.getElementById("lbl_chat_title_fs");
+  const subFS = document.getElementById("lbl_chat_sub_fs");
+  const title = document.getElementById("lbl_chat_title");
+  const sub = document.getElementById("lbl_chat_sub");
+  if (titleFS && title) titleFS.textContent = title.textContent;
+  if (subFS && sub) subFS.textContent = sub.textContent;
+  fs.classList.add("visible");
+  setTimeout(() => document.getElementById("chatInputFS")?.focus(), 200);
+}
+
+function closeChatFullscreen() {
+  const fs = document.getElementById("chatFullscreen");
+  // Sync any new messages back to main chat box
+  const fsBox = document.getElementById("chatBoxFS");
+  const mainBox = document.getElementById("chatBox");
+  mainBox.innerHTML = fsBox.innerHTML;
+  mainBox.scrollTop = mainBox.scrollHeight;
+  fs.classList.remove("visible");
+}
+
+async function sendChatFS() {
+  const input = document.getElementById("chatInputFS");
+  const text = input.value.trim();
+  if (!text) return;
+  // Put the text into the main chatInput and call sendChat,
+  // but render output into fullscreen box
+  document.getElementById("chatInput").value = text;
+  input.value = "";
+
+  // Intercept confirm/cancel in fullscreen too
+  const confirmWords = [
+    "yes","yep","yeah","yup","ok","okay","sure","go","confirm","proceed","send","do it","go ahead","confirmed","let's go","lets go","alright","alright then","fine","of course","absolutely","definitely",
+    "oo","opo","sige","sige na","go na","tuloy","tuloy na","gawin","ipadala","ayos","ayos na","oo naman","sige naman","oo po","syempre","go go","push","push na","oo na","sige po","tara","tara na","ok na","ok po","yep po",
+    "ya","iya","oke","ok","lanjut","lanjutkan","kirim","setuju","boleh","baik","siap","yap","gas","gas bro","lanjut aja","iya dong","ya dong","oke deh","oke siap",
+    "ใช่","ตกลง","โอเค","ส่ง","ได้","ได้เลย","เอาเลย","ยืนยัน","โอเคเลย","ใช่เลย",
+    "có","được","ok rồi","gửi đi","đồng ý","ừ","ừ nhỉ","được rồi","ok được","cho gửi","gửi luôn","xác nhận",
+    "ya","boleh","hantar","teruskan","ok la","ok lah","baik","setuju","sahkan","ya la","boleh lah","ok boleh","hantar la",
+    "네","응","어","ㅇㅇ","확인","보내","보낼게","보내줘","그래","알겠어","알겠습니다","ㅇㅋ","오케","오케이","좋아","진행","진행해","맞아","예","예스",
+    "是","好","确认","发送","好的","对","行","可以","没问题","嗯","好吧","就这样","发","好啊","同意"
+  ];
+  const cancelWords = [
+    "no","nope","cancel","stop","back","don't","dont","nevermind","never mind","abort","refuse","reject","not now","wait","hold on",
+    "hindi","wag","huwag","ayaw","ayoko","hindi na","wag na","huwag na","ayaw ko","kanselahin","bawiin","bawi","back","atras",
+    "tidak","nggak","gak","batal","batalkan","jangan","stop","ga jadi","ga usah","enggak","ndak",
+    "ไม่","ยกเลิก","หยุด","ไม่เอา","ไม่ใช่","ไม่ต้องการ",
+    "không","huỷ","hủy","dừng","thôi","không gửi","thôi đừng","bỏ qua",
+    "tidak","tak","batal","jangan","henti","tak nak","tak mahu","tak boleh",
+    "아니","아니요","취소","안돼","안 돼","하지마","그만","안할게","안 할게","싫어","됐어","됩니다","ㄴㄴ",
+    "不","取消","停止","算了","不要","不发","不行","不好","没有","再说","不确认"
+  ];
+  const lowerText = text.toLowerCase().trim();
+  const hasConfirmCard = document.querySelector(".msg.confirm") !== null;
+
+  const fsBox = document.getElementById("chatBoxFS");
+
+  function addMsgFS(role, msgText) {
+    const mainBox = document.getElementById("chatBox");
+    // Add to main box (real data store)
+    const div = document.createElement("div");
+    div.className = "msg " + role;
+    div.textContent = msgText;
+    mainBox.appendChild(div);
+    mainBox.scrollTop = mainBox.scrollHeight;
+    // Mirror to FS box
+    const div2 = div.cloneNode(true);
+    fsBox.appendChild(div2);
+    fsBox.scrollTop = fsBox.scrollHeight;
+    if (wallet) saveChatHistory();
+    return div;
+  }
+
+  if (hasConfirmCard) {
+    if (confirmWords.includes(lowerText) || confirmWords.some(w => lowerText.startsWith(w + " "))) {
+      addMsgFS("user", text);
+      const confirmBtn = document.querySelector(".confirm-yes");
+      if (confirmBtn) { confirmBtn.click(); }
+      // Sync after click
+      setTimeout(() => { fsBox.innerHTML = document.getElementById("chatBox").innerHTML; fsBox.scrollTop = fsBox.scrollHeight; }, 300);
+      return;
+    }
+    if (cancelWords.includes(lowerText) || cancelWords.some(w => lowerText.startsWith(w + " "))) {
+      addMsgFS("user", text);
+      const cancelBtn = document.querySelector(".confirm-no");
+      if (cancelBtn) { cancelBtn.click(); }
+      setTimeout(() => { fsBox.innerHTML = document.getElementById("chatBox").innerHTML; fsBox.scrollTop = fsBox.scrollHeight; }, 300);
+      return;
+    }
+  }
+
+  // Normal send — delegate to sendChat() then sync FS box
+  await sendChat();
+  // Sync FS box after reply
+  fsBox.innerHTML = document.getElementById("chatBox").innerHTML;
+  fsBox.scrollTop = fsBox.scrollHeight;
 }
 
 function getTimeAgo(iso) {
