@@ -4294,15 +4294,38 @@ function recordSelfReceive(toAddr, fromAddr, amount, txHash, fee) {
   targetHistory.unshift(receiveTx);
   localStorage.setItem(targetKey, JSON.stringify(targetHistory.slice(0, 50)));
 
-  // If that wallet is currently active (user switches), it will load updated history
-  // Also update wallet balance cache
+  // Update balance cache
   if (provider) {
     provider.getBalance(toAddr).then(bal => {
       walletBalCache[toAddr] = parseFloat(ethers.formatEther(bal)).toFixed(4);
     }).catch(() => {});
   }
 
-  console.log("Self-receive recorded for wallet:", targetW.name || "Wallet "+(targetIdx+1));
+  // Get sender display name (from current wallet's contacts)
+  const mySenderContact = contacts.find(cx => cx.address.toLowerCase() === fromAddr.toLowerCase());
+  const mySenderName = mySenderContact?.name || wallets.find(w => w.address.toLowerCase() === fromAddr.toLowerCase())?.name || fromAddr.slice(0,10)+"..."+fromAddr.slice(-4);
+
+  const targetWalletName = targetW.name || "Wallet "+(targetIdx+1);
+
+  // Show toast immediately
+  showToast("📥 " + targetWalletName + " received " + amount + " MON!");
+
+  // If wallet2 is the currently active wallet — show in chat too
+  if (targetIdx === activeWalletIndex) {
+    addMsg("ai", "📥 Received " + amount + " MON!\nFrom: " + mySenderName + (txHash ? "\nTX: " + txHash.slice(0,22)+"..." : "") + "\n\nTap Activity to view details. 🎉");
+    if (txHash) renderActivity(); // refresh activity panel
+  } else {
+    // Wallet2 is not active — add chat message to its history in localStorage
+    const chatKey = "apex_chat_" + toAddr;
+    try {
+      const chatHistory = JSON.parse(localStorage.getItem(chatKey) || "[]");
+      chatHistory.push({
+        role: "ai",
+        text: "📥 Received " + amount + " MON!\nFrom: " + mySenderName + (txHash ? "\nTX: " + txHash.slice(0,22)+"..." : "") + "\n\nTap Activity to view details. 🎉"
+      });
+      localStorage.setItem(chatKey, JSON.stringify(chatHistory.slice(-50)));
+    } catch(e) {}
+  }
 }
 
 // ─── MOBILE NAVIGATION ───────────────────────────
@@ -5234,12 +5257,16 @@ const OB_LANGS = {
 };
 
 function checkOnboarding() {
+  // Clear any legacy keys from old versions
+  localStorage.removeItem("apex_onboarded");
+  localStorage.removeItem("apex_onboarded_v1");
+
   if (localStorage.getItem(OB_KEY)) {
-    // Already onboarded — hide overlay
+    // Already onboarded with current version — hide overlay
     const ov = document.getElementById("onboardingOverlay");
     if (ov) ov.style.display = "none";
   } else {
-    // Fresh user — show and render slides
+    // Fresh user or upgraded user — show onboarding
     showOnboarding();
   }
 }
