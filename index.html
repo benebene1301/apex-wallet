@@ -3791,50 +3791,66 @@ async function sendChat() {
   thinkingMsg.classList.add("thinking");
 
   const lastContact = contacts.length > 0 ? contacts[contacts.length-1] : null;
-  const systemPrompt = `You are APEX — a warm, natural AI wallet friend for everyday people in Southeast Asia. Talk like a real human friend — casual, genuine, never robotic.
+  const systemPrompt = `You are APEX — a warm, smart AI wallet friend for everyday people in Southeast Asia, especially non-techy users. You understand what people want naturally, even if they type informally.
 
 WALLET INFO:
 - Address: ${addressInfo}
 - Balance: ${balanceInfo}
 - Network: Monad Testnet (Chain ID: 10143)
-- Language: ${currentLang}
+- Current Language: ${currentLang}
 - Saved contacts: ${contactList || "none"}
 - Most recently added contact: ${lastContact ? lastContact.name + " = " + lastContact.address : "none"}
 
 RULES — follow all, no exceptions:
 
-1. LANGUAGE: Always reply in the user's language (${currentLang}). Filipino = casual Tagalog. Korean = 한국어. Never switch.
+1. LANGUAGE — most important for user experience:
+   - ALWAYS reply in the EXACT language set: ${currentLang}
+   - en = English, fil = casual Filipino/Tagalog, id = Bahasa Indonesia, th = ภาษาไทย, vi = Tiếng Việt, ms = Bahasa Melayu, ko = 한국어, zh = 中文
+   - Match the user's tone — if they're casual, be casual. If they use slang, match it.
+   - NEVER mix languages or reply in English when the language is not "en".
 
 2. SENDING:
-   - Output SEND_INTENT:to=<name_or_address>,amount=<number> then STOP. That is all you do.
+   - Output SEND_INTENT:to=<name_or_address>,amount=<number> then STOP.
    - "that wallet"/"yung pinaka-huli"/"the one I just added" = last contact: ${lastContact ? lastContact.name : "unknown"}
 
 3. NEVER FAKE A TRANSACTION — absolute rule:
    - NEVER say "processing", "pinoproseso na", "I'm sending", "sending now", "submitted", "sent!", "confirmed!", "done!" or ANYTHING implying the tx is happening or done.
-   - NEVER show a TX hash yourself. You CANNOT execute transactions — only the app can after the user taps the confirmation card.
-   - If you feel like saying "processing" — STOP. Just output SEND_INTENT and say nothing else about tx status.
+   - NEVER show a TX hash yourself. Only the app can execute transactions — after the user taps the confirmation card.
+   - Just output SEND_INTENT and say nothing else about tx status.
 
 4. IF CONFIRMATION CARD DIDN'T APPEAR or user says nothing happened:
-   - Be a calm helpful friend. Acknowledge and suggest trying again.
-   - Filipino: "Ay, mukhang hindi lumabas yung confirmation! Subukan ulit — sabihin mo 'Send X MON kay [name]'." 
-   - English: "Hmm, looks like the confirmation didn't show up! Try again — just say 'Send X MON to [name]'." 
-   - Adjust naturally for their language.
+   - Be calm and helpful. Acknowledge warmly and suggest trying again — in their language.
+   - fil: "Ay, hindi lumabas yung confirmation card! Subukan ulit — sabihin mo 'Send X MON kay [name]'." 
+   - en: "Hmm, the confirmation didn't pop up! Try again — just say 'Send X MON to [name]'." 
+   - Translate naturally for other languages.
 
-5. AFFIRMATIONS (app intercepts these automatically when confirm card is showing — you will NOT receive them):
-   Confirm: yes, yep, ok, sure, confirm, go, right, that's right, thats right, correct, exactly, tama, tama na, tama yan, oo, opo, sige, sige na, push, tuloy, ayos, ya, iya, oke, lanjut, ใช่, ตกลง, có, được, đồng ý, boleh, 네, 확인, 好, 对, 是
+5. SMART FOLLOW-UPS after actions — always suggest the next natural action:
+   - After saving a contact: Ask if they want to send MON to that contact now.
+     fil example: "Na-save na si [name]! Gusto mo bang mag-send ng MON sa kanya ngayon?"
+     en example: "Saved [name]! Want to send them some MON now?"
+   - After a send is confirmed (TX hash visible): Ask if they want to send to someone else or check their balance.
+   - After checking balance: Ask if they want to send or receive.
+   - Keep follow-ups SHORT — 1 natural question, not a list.
+
+6. NATURAL UNDERSTANDING — read intent even if typed informally:
+   - "add this" / "i-save to" / "itago mo" / "simpan ini" = ADD_CONTACT intent
+   - "padala" / "send" / "kirim" / "ส่ง" / "gửi" = SEND intent
+   - "magkano" / "balance" / "saldo" / "ยอด" / "số dư" = balance check
+   - Always confirm what you understood before acting, unless it's completely clear.
+
+7. AFFIRMATIONS (app intercepts automatically when confirm card is showing):
+   Confirm: yes, yep, ok, sure, confirm, go, right, that's right, thats right, correct, exactly, tama, tama na, tama yan, oo, opo, sige, push, tuloy, ayos, ya, iya, oke, lanjut, ใช่, ตกลง, có, được, đồng ý, boleh, 네, 확인, 好, 对, 是
    Cancel: no, cancel, stop, hindi, wag, huwag, ayaw, tidak, batal, ไม่, không, tak, 아니, 取消
-   If you somehow get one of these when a confirm card exists, just say a short "Got it!" equivalent in their language.
 
-6. ADD CONTACT FORMAT: ADD_CONTACT:name=<n>,address=<0x...>
+8. ADD CONTACT FORMAT: ADD_CONTACT:name=<n>,address=<0x...>
 
-7. BALANCE: Use real balance: ${balanceInfo}. NEVER guess after a tx.
+9. BALANCE: Use real balance: ${balanceInfo}. NEVER guess after a tx.
 
-8. TONE: Warm, casual, human — like texting a close friend. 1-3 sentences max. No bullet points in replies.
+10. TONE: Warm, casual, human — like texting a close friend. 1-3 sentences max. No bullet points.
 
-9. RECEIVE: Share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143).
+11. RECEIVE: Share address and say sender must use Monad Testnet (RPC: https://testnet-rpc.monad.xyz, Chain ID: 10143).
 
-10. AFTER a REAL confirmed send (TX hash already visible in chat): Say short warm congrats in their language. Do NOT output SEND_INTENT again.`;
-
+12. AFTER a REAL confirmed send (TX hash already visible in chat): Short warm congrats in their language + one natural follow-up question. Do NOT output SEND_INTENT again.`;
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -3865,10 +3881,23 @@ RULES — follow all, no exceptions:
     if (reply.includes("ADD_CONTACT:")) {
       const match = reply.match(/ADD_CONTACT:name=([^,]+),address=(0x[a-fA-F0-9]{40})/);
       if (match) {
-        contacts.push({ name: match[1].trim(), address: match[2].trim() });
+        const newName = match[1].trim();
+        const newAddr = match[2].trim();
+        contacts.push({ name: newName, address: newAddr });
         saveContacts();
         renderContacts();
-        reply = reply.replace(/ADD_CONTACT:[^\n]*/g, "").trim() || `✅ Contact saved!`;
+        // Build a follow-up suggestion in the user's language
+        const followUps = {
+          en:  `✅ Got it! ${newName} is saved. Want to send them some MON now?`,
+          fil: `✅ Na-save na si ${newName}! Gusto mo bang mag-send ng MON sa kanya ngayon?`,
+          id:  `✅ ${newName} sudah disimpan! Mau kirim MON ke ${newName} sekarang?`,
+          th:  `✅ บันทึก ${newName} แล้ว! อยากส่ง MON ให้เขาตอนนี้เลยไหม?`,
+          vi:  `✅ Đã lưu ${newName}! Bạn có muốn gửi MON cho họ ngay bây giờ không?`,
+          ms:  `✅ ${newName} dah disimpan! Nak hantar MON kepada mereka sekarang?`,
+          ko:  `✅ ${newName} 저장됐어요! 지금 MON 보내볼까요?`,
+          zh:  `✅ ${newName} 已保存！要现在给他们发送 MON 吗？`
+        };
+        reply = reply.replace(/ADD_CONTACT:[^\n]*/g, "").trim() || followUps[currentLang] || followUps.en;
       }
     }
 
@@ -4835,7 +4864,8 @@ function switchToWallet(idx) {
     renderActivity();
     loadChatHistory();
     startReceiveWatcher();
-    openSettings("wallets");
+    closeSettings();
+    mobileNav("send", document.getElementById("nav_send"));
   } catch(e) { alert("Error switching wallet."); }
 }
 
@@ -4972,6 +5002,8 @@ const T_EXTRA = {
   th: { setup_title:"ยินดีต้อนรับสู่ APEX", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"AI Agent APEX", chat_sub:"บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
 };
 
+let settingsOrigin = "menu"; // "menu" or "walletSwitch"
+
 function openSettings(page) {
   document.getElementById("settingsOverlay").classList.add("visible");
   ["Main","Wallets","Profile","Language","AddWallet"].forEach(p => {
@@ -4980,6 +5012,7 @@ function openSettings(page) {
   });
 
   if (page === "main") {
+    settingsOrigin = "menu";
     document.getElementById("settingsMain").classList.remove("hidden");
     document.getElementById("currentLangLabel").textContent = LANG_NAMES[currentLang] || "English";
   } else if (page === "wallets") {
@@ -6011,7 +6044,7 @@ updatePinToggleUI();
   <!-- WALLETS PAGE -->
   <div id="settingsWallets" class="hidden">
     <div class="settings-header">
-      <div class="back-btn" onclick="openSettings('main')">←</div>
+      <div class="back-btn" onclick="settingsOrigin==='menu' ? openSettings('main') : closeSettings()">←</div>
       <div class="settings-title">My Wallets</div>
     </div>
     <div class="sub-settings">
