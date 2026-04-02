@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#060612">
-<title>OctoPay AI</title>
+<title>APEX Wallet</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1640,7 +1640,7 @@ body { overscroll-behavior-y: contain; }
 
 
 /* ═══════════════════════════════════════
-   OctoPay AI — NATIVE APP REDESIGN V9
+   APEX Wallet — NATIVE APP REDESIGN V9
    ═══════════════════════════════════════ */
 
 /* BODY */
@@ -2730,7 +2730,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
       <!-- SLIDE 0: Welcome + Language -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
-        <!-- Canvas orbit animation + Otto mascot -->
+        <!-- Canvas orbit animation -->
         <div style="height:260px;width:100%;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
           <canvas id="flagOrbitCanvas" width="300" height="260" style="position:absolute;top:0;left:50%;transform:translateX(-50%)"></canvas>
           <div style="position:relative;z-index:5;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 28px rgba(0,201,167,0.4))">
@@ -2761,12 +2761,12 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
               <path d="M 82 125 Q 100 136 118 125" stroke="rgba(0,201,167,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
               <line x1="100" y1="33" x2="100" y2="10" stroke="rgba(0,201,167,0.6)" stroke-width="2" stroke-linecap="round"/>
               <circle cx="100" cy="8" r="5" fill="#00c9a7"><animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/></circle>
-              <text x="100" y="148" text-anchor="middle" font-size="8" fill="rgba(0,201,167,0.5)" font-family="monospace">◈ OTTO.AI ◈</text>
+              <text x="100" y="148" text-anchor="middle" font-size="8" fill="rgba(0,201,167,0.5)" font-family="monospace">◈ APEX.AI ◈</text>
             </svg>
           </div>
         </div>
         <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
-        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to OctoPay AI! 👋</div>
+        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to APEX Wallet! 👋</div>
         <div id="obDesc0" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:16px">The crypto wallet made for <strong style="color:#eeedf5">Southeast Asia</strong>. Send money home in seconds — no bank, no fees, no stress.</div>
         <!-- Language picker — rendered by JS so selection state works -->
         <div style="font-size:11px;font-weight:700;color:#5a5870;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Choose your language</div>
@@ -2788,7 +2788,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         </div>
         <div id="obTag1" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Your Wallet</div>
         <div id="obTitle1" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Like a digital pocket</div>
-        <div id="obDesc1" style="font-size:14px;color:#8886a0;line-height:1.7">Think of OctoPay AI like a <strong style="color:#eeedf5">digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.</div>
+        <div id="obDesc1" style="font-size:14px;color:#8886a0;line-height:1.7">Think of APEX Wallet like a <strong style="color:#eeedf5">digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.</div>
       </div>
 
       <!-- SLIDE 2: Seed phrase -->
@@ -2807,7 +2807,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <div id="obTag2" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">⚠️ Important</div>
         <div id="obTitle2" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Your secret recovery phrase</div>
         <div id="obDesc2" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:12px">When you create a wallet, you'll get <strong style="color:#eeedf5">12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.</div>
-        <div id="obTip2" style="padding:12px 16px;background:rgba(253,203,110,0.1);border:1px solid rgba(253,203,110,0.2);border-radius:12px;font-size:13px;color:#fdcb6e;line-height:1.5;text-align:left;width:100%">✏️ Write it on paper. Never screenshot it. Never share with anyone — not even OctoPay AI support.</div>
+        <div id="obTip2" style="padding:12px 16px;background:rgba(253,203,110,0.1);border:1px solid rgba(253,203,110,0.2);border-radius:12px;font-size:13px;color:#fdcb6e;line-height:1.5;text-align:left;width:100%">✏️ Write it on paper. Never screenshot it. Never share with anyone — not even APEX Wallet support.</div>
       </div>
 
       <!-- SLIDE 3: AI Chat -->
@@ -2816,7 +2816,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
           <div style="width:100%;max-width:270px;background:#13141c;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden">
             <div style="padding:12px 14px;background:#1a1b26;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px">
               <div style="width:28px;height:28px;background:#00a58a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div>
-              <div style="font-size:12px;font-weight:700;color:#00c9a7">Otto · OctoPay AI</div>
+              <div style="font-size:12px;font-weight:700;color:#00c9a7">APEX · APEX Wallet</div>
               <div style="margin-left:auto;width:6px;height:6px;background:#00cec9;border-radius:50%"></div>
             </div>
             <div style="padding:12px;display:flex;flex-direction:column;gap:7px">
@@ -2829,7 +2829,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         </div>
         <div id="obTag3" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">AI Powered</div>
         <div id="obTitle3" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Just talk to your wallet</div>
-        <div id="obDesc3" style="font-size:14px;color:#8886a0;line-height:1.7">No buttons to learn. Just <strong style="color:#eeedf5">type what you want</strong> — in your own language — and OctoPay AI does it for you.</div>
+        <div id="obDesc3" style="font-size:14px;color:#8886a0;line-height:1.7">No buttons to learn. Just <strong style="color:#eeedf5">type what you want</strong> — in your own language — and APEX Wallet does it for you.</div>
       </div>
 
       <!-- SLIDE 4: Ready -->
@@ -2857,7 +2857,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 <header>
   <div class="logo">
     <div class="logo-icon">🐙</div>
-    <div class="logo-text">OctoPay <span>AI</span></div>
+    <div class="logo-text">APEX <span>AI</span></div>
   </div>
   <div class="header-right" style="display:flex;align-items:center;gap:5px;flex:1;justify-content:flex-end;min-width:0">
     <div class="wallet-dropdown-wrap hidden" id="walletSwitcher">
@@ -2923,7 +2923,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <!-- LOGO HERO -->
   <div style="text-align:center;padding:32px 24px 24px">
     <div style="width:80px;height:80px;background:linear-gradient(135deg,#00c9a7,#0d1b3e);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 8px 32px rgba(0,201,167,0.3)">🐙</div>
-    <div style="font-size:26px;font-weight:800;margin-bottom:8px;letter-spacing:-0.01em" id="lbl_setup_title">Welcome to OctoPay AI</div>
+    <div style="font-size:26px;font-weight:800;margin-bottom:8px;letter-spacing:-0.01em" id="lbl_setup_title">Welcome to APEX Wallet</div>
     <div style="font-size:14px;color:var(--muted2);line-height:1.6;max-width:280px;margin:0 auto" id="lbl_setup_sub">Your AI-powered crypto wallet for Southeast Asia</div>
   </div>
 
@@ -2959,7 +2959,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <!-- SECURITY BADGE -->
   <div style="margin:0 20px 20px;padding:12px 16px;background:var(--green-soft);border:1px solid rgba(0,206,201,0.2);border-radius:12px;display:flex;align-items:center;gap:10px">
     <span style="font-size:18px">🔒</span>
-    <div style="font-size:12px;color:var(--green);line-height:1.5;font-weight:600">Self-custody wallet — only you control your funds. OctoPay AI never stores your keys.</div>
+    <div style="font-size:12px;color:var(--green);line-height:1.5;font-weight:600">Self-custody wallet — only you control your funds. APEX Wallet never stores your keys.</div>
   </div>
 
   <!-- IMPORT SECTION -->
@@ -3201,14 +3201,14 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <div class="chat-header">
     <div class="chat-avatar">🐙</div>
     <div>
-      <div class="chat-title" id="lbl_chat_title">Otto AI</div>
+      <div class="chat-title" id="lbl_chat_title">APEX AI Agent</div>
       <div class="chat-sub" id="lbl_chat_sub">Tell it. Send it. Done — all through chat.</div>
     </div>
     <div class="chat-maximize-btn" onclick="openChatFullscreen()" title="Expand chat">⛶</div>
   </div>
 
   <div class="chat-box" id="chatBox">
-    <div class="msg ai" id="welcomeMsg">Hey! 👋 I'm Otto — your OctoPay AI wallet friend! 🐙 No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 "How much MON do I have?"<br>• 📤 "Send 0.1 MON to Mama"<br>• 📥 "How do I receive MON?"<br>• 👥 "Save Kuya's wallet address"<br>• 📋 "Show my recent transactions"<br><br>I'm here to help — even if this is your first time using crypto! 🌟</div>
+    <div class="msg ai" id="welcomeMsg">Hey! 👋 Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 "How much MON do I have?"<br>• 📤 "Send 0.1 MON to Mama"<br>• 📥 "How do I receive MON?"<br>• 👥 "Save Kuya's wallet address"<br>• 📋 "Show my recent transactions"<br><br>I'm here to help — even if this is your first time using crypto! 🌟</div>
   </div>
   <div class="chat-input-row">
     <input type="text" class="chat-input" id="chatInput" placeholder="Type here..." onkeydown="if(event.key==='Enter')sendChat()"/>
@@ -3221,7 +3221,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <div class="chat-fullscreen-header">
     <div class="chat-avatar">🐙</div>
     <div>
-      <div class="chat-title">Otto AI</div>
+      <div class="chat-title">APEX AI Agent</div>
       <div class="chat-sub">Tell it. Send it. Done — all through chat.</div>
     </div>
     <div class="chat-fullscreen-minimize" onclick="closeChatFullscreen()" title="Minimize">⊡</div>
@@ -3247,7 +3247,7 @@ const MONAD_RPC = "https://testnet-rpc.monad.xyz";
 // ─── TRANSLATIONS ────────────────────────────────
 const T = {
   en: {
-    setup_title: "Welcome to OctoPay AI",
+    setup_title: "Welcome to APEX Wallet",
     setup_sub: "Your AI-powered crypto wallet for Southeast Asia. Simple as texting.",
     import_btn: "Import Wallet", create_btn: "Create New",
     or: "or import existing", paste_hint: "Have a seed phrase?",
@@ -3261,12 +3261,12 @@ const T = {
     contacts_title: "Contacts", add_contact: "Add Contact",
     contact_name: "Name", contact_addr_lbl: "Wallet Address", save: "Save",
     faucet_desc: "Clicking a faucet automatically copies your wallet address. Paste it on the faucet site to claim free testnet MON.",
-    chat_title: "Otto AI", chat_sub: "Tell it. Send it. Done — all through chat.",
+    chat_title: "APEX AI Agent", chat_sub: "Tell it. Send it. Done — all through chat.",
     no_contacts: "No contacts yet",
     tab_seed: "Seed Phrase", tab_pk: "Private Key",
   },
   fil: {
-    setup_title: "Maligayang Pagdating sa OctoPay AI",
+    setup_title: "Maligayang Pagdating sa APEX Wallet",
     setup_sub: "Ang iyong AI crypto wallet para sa Southeast Asia. Madali tulad ng pagtext.",
     import_btn: "I-import ang Wallet", create_btn: "Gumawa ng Bago",
     or: "o i-import ang existing",
@@ -3281,12 +3281,12 @@ const T = {
     contacts_title: "Mga Contact", add_contact: "Magdagdag ng Contact",
     contact_name: "Pangalan", contact_addr_lbl: "Wallet Address", save: "I-save",
     faucet_desc: "Ang pag-click sa faucet ay awtomatikong nagkokopya ng iyong address. I-paste ito sa faucet site para makakuha ng libreng testnet MON.",
-    chat_title: "Otto AI", chat_sub: "Sabihin mo lang. Ipapadala. Tapos na — lahat sa chat.",
+    chat_title: "APEX AI Agent", chat_sub: "Sabihin mo lang. Ipapadala. Tapos na — lahat sa chat.",
     no_contacts: "Wala pang contacts",
     tab_seed: "Seed Phrase", tab_pk: "Private Key",
   },
   id: {
-    setup_title: "Selamat Datang di OctoPay AI",
+    setup_title: "Selamat Datang di APEX Wallet",
     setup_sub: "Dompet kripto bertenaga AI untuk Asia Tenggara. Semudah mengirim pesan.",
     import_btn: "Impor Dompet", create_btn: "Buat Baru",
     or: "atau impor yang sudah ada",
@@ -3301,12 +3301,12 @@ const T = {
     contacts_title: "Kontak", add_contact: "Tambah Kontak",
     contact_name: "Nama", contact_addr_lbl: "Alamat Dompet", save: "Simpan",
     faucet_desc: "Mengklik faucet akan otomatis menyalin alamat dompet Anda. Tempelkan di situs faucet untuk mendapatkan testnet MON gratis.",
-    chat_title: "Otto AI", chat_sub: "Katakan saja. Kirim. Selesai — semua lewat chat.",
+    chat_title: "APEX AI Agent", chat_sub: "Katakan saja. Kirim. Selesai — semua lewat chat.",
     no_contacts: "Belum ada kontak",
     tab_seed: "Seed Phrase", tab_pk: "Kunci Privat",
   },
   th: {
-    setup_title: "ยินดีต้อนรับสู่ OctoPay AI",
+    setup_title: "ยินดีต้อนรับสู่ APEX Wallet",
     setup_sub: "กระเป๋าเงินคริปโต AI สำหรับเอเชียตะวันออกเฉียงใต้ ง่ายเหมือนส่งข้อความ",
     import_btn: "นำเข้ากระเป๋าเงิน", create_btn: "สร้างใหม่",
     or: "หรือนำเข้าของเดิม", paste_hint: "มี seed phrase หรือเปล่า?",
@@ -3320,12 +3320,12 @@ const T = {
     contacts_title: "รายชื่อ", add_contact: "เพิ่มผู้ติดต่อ",
     contact_name: "ชื่อ", contact_addr_lbl: "ที่อยู่กระเป๋าเงิน", save: "บันทึก",
     faucet_desc: "การคลิกก๊อกน้ำจะคัดลอกที่อยู่กระเป๋าเงินของคุณโดยอัตโนมัติ วางลงในเว็บก๊อกน้ำเพื่อรับ testnet MON ฟรี",
-    chat_title: "Otto AI", chat_sub: "บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท",
+    chat_title: "APEX AI Agent", chat_sub: "บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท",
     no_contacts: "ยังไม่มีรายชื่อ",
     tab_seed: "Seed Phrase", tab_pk: "คีย์ส่วนตัว",
   },
   vi: {
-    setup_title: "Chào mừng đến OctoPay AI",
+    setup_title: "Chào mừng đến APEX Wallet",
     setup_sub: "Ví crypto AI cho Đông Nam Á. Đơn giản như nhắn tin.",
     import_btn: "Nhập Ví", create_btn: "Tạo Mới",
     or: "hoặc nhập ví hiện có", paste_hint: "Bạn có seed phrase không?",
@@ -3339,12 +3339,12 @@ const T = {
     contacts_title: "Danh bạ", add_contact: "Thêm liên hệ",
     contact_name: "Tên", contact_addr_lbl: "Địa chỉ ví", save: "Lưu",
     faucet_desc: "Nhấp vào vòi sẽ tự động sao chép địa chỉ ví của bạn. Dán vào trang web vòi để nhận testnet MON miễn phí.",
-    chat_title: "Otto AI", chat_sub: "Nói là xong. Gửi ngay. Tất cả qua chat.",
+    chat_title: "APEX AI Agent", chat_sub: "Nói là xong. Gửi ngay. Tất cả qua chat.",
     no_contacts: "Chưa có liên hệ",
     tab_seed: "Seed Phrase", tab_pk: "Khóa riêng tư",
   },
   ms: {
-    setup_title: "Selamat Datang ke OctoPay AI",
+    setup_title: "Selamat Datang ke APEX Wallet",
     setup_sub: "Dompet kripto berkuasa AI untuk Asia Tenggara. Semudah menghantar mesej.",
     import_btn: "Import Dompet", create_btn: "Cipta Baru",
     or: "atau import yang sedia ada", paste_hint: "Ada seed phrase?",
@@ -3358,12 +3358,12 @@ const T = {
     contacts_title: "Kenalan", add_contact: "Tambah Kenalan",
     contact_name: "Nama", contact_addr_lbl: "Alamat Dompet", save: "Simpan",
     faucet_desc: "Mengklik paip akan menyalin alamat dompet anda secara automatik. Tampalkan di laman web paip untuk mendapatkan testnet MON percuma.",
-    chat_title: "Otto AI", chat_sub: "Beritahu saja. Hantar. Selesai — semua melalui chat.",
+    chat_title: "APEX AI Agent", chat_sub: "Beritahu saja. Hantar. Selesai — semua melalui chat.",
     no_contacts: "Tiada kenalan lagi",
     tab_seed: "Seed Phrase", tab_pk: "Kunci Peribadi",
   }  ,
   ko: {
-    setup_title: "OctoPay AI에 오신 것을 환영합니다",
+    setup_title: "APEX Wallet에 오신 것을 환영합니다",
     setup_sub: "동남아시아를 위한 AI 암호화폐 지갑. 문자처럼 간단해요.",
     import_btn: "지갑 가져오기", create_btn: "새로 만들기",
     or: "또는 기존 지갑 가져오기", paste_hint: "시드 문구가 있나요?",
@@ -3377,12 +3377,12 @@ const T = {
     contacts_title: "연락처", add_contact: "연락처 추가",
     contact_name: "이름", contact_addr_lbl: "지갑 주소", save: "저장",
     faucet_desc: "파우셋을 클릭하면 지갑 주소가 자동으로 복사됩니다. 파우셋 사이트에 붙여넣어 무료 테스트넷 MON을 받으세요.",
-    chat_title: "Otto AI", chat_sub: "말만 하세요. 보내세요. 끝 — 모두 채팅으로.",
+    chat_title: "APEX AI Agent", chat_sub: "말만 하세요. 보내세요. 끝 — 모두 채팅으로.",
     no_contacts: "연락처가 없습니다",
     tab_seed: "시드 문구", tab_pk: "개인 키",
   },
   zh: {
-    setup_title: "欢迎使用 OctoPay AI",
+    setup_title: "欢迎使用 APEX Wallet",
     setup_sub: "专为东南亚设计的AI加密货币钱包。像发短信一样简单。",
     import_btn: "导入钱包", create_btn: "创建新钱包",
     or: "或导入现有钱包", paste_hint: "有助记词吗？",
@@ -3396,7 +3396,7 @@ const T = {
     contacts_title: "联系人", add_contact: "添加联系人",
     contact_name: "名称", contact_addr_lbl: "钱包地址", save: "保存",
     faucet_desc: "点击水龙头会自动复制您的钱包地址。粘贴到水龙头网站即可领取免费测试网 MON。",
-    chat_title: "Otto AI", chat_sub: "说出来。发送。完成 — 全部通过聊天。",
+    chat_title: "APEX AI Agent", chat_sub: "说出来。发送。完成 — 全部通过聊天。",
     no_contacts: "暂无联系人",
     tab_seed: "助记词", tab_pk: "私钥",
   }
@@ -3557,7 +3557,7 @@ function connectProvider() {
   refreshBalance();
 }
 
-function showWalletUI() {
+async function showWalletUI() {
   document.getElementById("setupCard").classList.add("hidden");
   document.getElementById("balanceCard").classList.remove("hidden");
   document.getElementById("actionGrid").classList.remove("hidden");
@@ -3578,16 +3578,20 @@ function showWalletUI() {
   // Save wallet to multi-wallet storage — preserve existing name
   const existing = wallets.findIndex(w => w.address.toLowerCase() === wallet.address.toLowerCase());
   if (existing >= 0) {
-    // Wallet already saved — use existing index and preserve name
     activeWalletIndex = existing;
-    // Update private key and mnemonic in case they changed
-    wallets[existing].privateKey = wallet.privateKey;
-    if (wallet.mnemonic?.phrase) wallets[existing].mnemonic = wallet.mnemonic.phrase;
+    // If password is set, encrypt updated keys
+    let pk = wallet.privateKey;
+    let mn = wallet.mnemonic?.phrase || null;
+    if (_sessionPassword) {
+      if (pk && !isEncrypted(pk)) pk = await encryptValue(pk, _sessionPassword);
+      if (mn && !isEncrypted(mn)) mn = await encryptValue(mn, _sessionPassword);
+    }
+    wallets[existing].privateKey = pk;
+    if (mn) wallets[existing].mnemonic = mn;
     saveWalletsToStorage();
   } else {
-    // New wallet — add with default name
     const name = "Wallet " + (wallets.length + 1);
-    addWalletToList(name, wallet.address, wallet.privateKey, wallet.mnemonic?.phrase || null);
+    await addWalletToList(name, wallet.address, wallet.privateKey, wallet.mnemonic?.phrase || null);
     activeWalletIndex = wallets.length - 1;
   }
   document.getElementById("walletSwitcher").classList.remove("hidden");
@@ -3962,7 +3966,7 @@ async function sendChat() {
   thinkingMsg.classList.add("thinking");
 
   const lastContact = contacts.length > 0 ? contacts[contacts.length-1] : null;
-  const systemPrompt = `You are Otto, You are Otto — OctoPay AI's warm, smart AI wallet friend for everyday people in Southeast Asia, especially non-techy users. You understand what people want naturally, even if they type informally.
+  const systemPrompt = `You are APEX, You are APEX — APEX Wallet's warm, smart AI wallet friend for everyday people in Southeast Asia, especially non-techy users. You understand what people want naturally, even if they type informally.
 
 WALLET INFO:
 - Address: ${addressInfo}
@@ -4230,7 +4234,7 @@ function loadChatHistory() {
       // Show fresh welcome for new wallet
       const welcome = document.createElement("div");
       welcome.className = "msg ai";
-      welcome.innerHTML = "Hey! 👋 I'm Otto — your OctoPay AI wallet friend! 🐙 No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 \"How much MON do I have?\"<br>• 📤 \"Send 0.1 MON to Mama\"<br>• 📥 \"How do I receive MON?\"<br>• 👥 \"Save Kuya's wallet address\"<br>• 📋 \"Show my recent transactions\"<br><br>I'm here to help — even if this is your first time using crypto! 🌟";
+      welcome.innerHTML = "Hey! 👋 Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 \"How much MON do I have?\"<br>• 📤 \"Send 0.1 MON to Mama\"<br>• 📥 \"How do I receive MON?\"<br>• 👥 \"Save Kuya's wallet address\"<br>• 📋 \"Show my recent transactions\"<br><br>I'm here to help — even if this is your first time using crypto! 🌟";
       box.appendChild(welcome);
       return;
     }
@@ -4970,7 +4974,7 @@ function shareAddress() {
   if (!wallet) return;
   if (navigator.share) {
     navigator.share({
-      title: "My OctoPay AI Address",
+      title: "My APEX Wallet Address",
       text: "Send MON to my wallet on Monad Testnet:\n" + wallet.address,
     }).catch(() => {});
   } else {
@@ -5213,14 +5217,14 @@ function importAnotherWallet(fromDropdown) {
   openSettings("addWallet");
 }
 
-function confirmAddWallet(pk, mnemonic, address) {
+async function confirmAddWallet(pk, mnemonic, address) {
   const name = document.getElementById("newWalletName")?.value?.trim() || "Wallet " + (wallets.length + 1);
-  addWalletToList(name, address, pk, mnemonic);
-  switchToWallet(wallets.length - 1);
+  await addWalletToList(name, address, pk, mnemonic);
+  await switchToWallet(wallets.length - 1);
   document.getElementById("walletSwitcher").classList.remove("hidden");
 }
 
-function confirmImportWallet() {
+async function confirmImportWallet() {
   const val = document.getElementById("importWalletKey").value.trim();
   const name = document.getElementById("importWalletName")?.value?.trim() || "Wallet " + (wallets.length + 1);
   try {
@@ -5230,8 +5234,8 @@ function confirmImportWallet() {
     } else {
       w = new ethers.Wallet(val);
     }
-    addWalletToList(name, w.address, w.privateKey, w.mnemonic?.phrase || null);
-    switchToWallet(wallets.length - 1);
+    await addWalletToList(name, w.address, w.privateKey, w.mnemonic?.phrase || null);
+    await switchToWallet(wallets.length - 1);
     document.getElementById("walletSwitcher").classList.remove("hidden");
   } catch(e) {
     alert("Invalid key or phrase. Please check and try again.");
@@ -5253,7 +5257,7 @@ function saveWalletName() {
 }
 
 function disconnectWallet() {
-  if (!confirm("Remove this wallet from OctoPay AI? Make sure you have your seed phrase saved!")) return;
+  if (!confirm("Remove this wallet from APEX Wallet? Make sure you have your seed phrase saved!")) return;
   stopReceiveWatcher();
   wallets.splice(activeWalletIndex, 1);
   if (wallets.length === 0) {
@@ -5276,9 +5280,9 @@ const LANG_NAMES = {
 
 // Also add vi/ms/th translations to app T() system
 const T_EXTRA = {
-  vi: { setup_title:"Chào mừng đến OctoPay AI", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"Otto AI", chat_sub:"Nói là xong. Gửi ngay. Tất cả qua chat.", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
-  ms: { setup_title:"Selamat Datang ke OctoPay AI", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"Otto AI", chat_sub:"Beritahu saja. Hantar. Selesai — semua melalui chat.", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
-  th: { setup_title:"ยินดีต้อนรับสู่ OctoPay AI", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"Otto AI", chat_sub:"บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
+  vi: { setup_title:"Chào mừng đến APEX Wallet", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"APEX AI Agent", chat_sub:"Nói là xong. Gửi ngay. Tất cả qua chat.", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
+  ms: { setup_title:"Selamat Datang ke APEX Wallet", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"APEX AI Agent", chat_sub:"Beritahu saja. Hantar. Selesai — semua melalui chat.", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
+  th: { setup_title:"ยินดีต้อนรับสู่ APEX Wallet", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"APEX AI Agent", chat_sub:"บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
 };
 
 let settingsOrigin = "menu"; // "menu" or "walletSwitch"
@@ -5673,25 +5677,25 @@ const OB_SLIDES = [
   {
     tag: "Welcome", 
     title: "Making crypto easy for everyone",
-    desc: "OctoPay AI lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.",
+    desc: "APEX Wallet lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.",
     tip: null
   },
   {
     tag: "Your Wallet",
     title: "Like a digital pocket",
-    desc: "Think of OctoPay AI like a <strong>digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.",
+    desc: "Think of APEX Wallet like a <strong>digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.",
     tip: null
   },
   {
     tag: "⚠️ Important",
     title: "Your secret recovery phrase",
     desc: "When you create a wallet, you'll get <strong>12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.",
-    tip: "✏️ Write it on paper. Never screenshot it. Never share with anyone — not even OctoPay AI support."
+    tip: "✏️ Write it on paper. Never screenshot it. Never share with anyone — not even APEX Wallet support."
   },
   {
     tag: "AI Powered",
     title: "Just talk to your wallet",
-    desc: "No buttons to learn. Just <strong>type what you want</strong> — in your own language — and OctoPay AI does it for you.",
+    desc: "No buttons to learn. Just <strong>type what you want</strong> — in your own language — and APEX Wallet does it for you.",
     tip: null
   },
   {
@@ -5715,13 +5719,13 @@ const OB_LANGS = {
       "Handa ka na magsimula!"
     ],
     descs: [
-      "Ang OctoPay AI ay para sa <strong>pagpapadala at pagtanggap ng pera</strong> nang mabilis at madali — walang kailangang bangko. Kasing simple ng pagtext.",
-      "Isipin ang OctoPay AI bilang <strong>digital na pitaka sa iyong telepono</strong>. Maaari kang mag-ipon, magpadala, at tumanggap ng MON tokens — kahit saan, kahit kailan.",
+      "Ang APEX Wallet ay para sa <strong>pagpapadala at pagtanggap ng pera</strong> nang mabilis at madali — walang kailangang bangko. Kasing simple ng pagtext.",
+      "Isipin ang APEX Wallet bilang <strong>digital na pitaka sa iyong telepono</strong>. Maaari kang mag-ipon, magpadala, at tumanggap ng MON tokens — kahit saan, kahit kailan.",
       "Kapag gumawa ka ng wallet, bibigyan ka ng <strong>12 lihim na salita</strong>. Ito ang tanging paraan upang mabawi ang iyong wallet kung mawala o masira ang iyong telepono.",
-      "Hindi mo kailangang matuto ng mga kumplikadong button. <strong>I-type lang ang gusto mo</strong> — sa iyong sariling wika — at gagawin ito ng OctoPay AI para sa iyo.",
+      "Hindi mo kailangang matuto ng mga kumplikadong button. <strong>I-type lang ang gusto mo</strong> — sa iyong sariling wika — at gagawin ito ng APEX Wallet para sa iyo.",
       "Gumawa ng bagong wallet o i-import ang iyong mayroon na. Ang iyong paglalakbay sa crypto ay nagsisimula na — <strong>simple, ligtas, at sa iyong wika</strong>."
     ],
-    tip: "✏️ Isulat ang 12 salita sa papel. Huwag mag-screenshot. Huwag ibahagi sa kahit sino — kahit sa OctoPay AI support.",
+    tip: "✏️ Isulat ang 12 salita sa papel. Huwag mag-screenshot. Huwag ibahagi sa kahit sino — kahit sa APEX Wallet support.",
     next: ["Magsimula →", "Susunod →", "Susunod →", "Susunod →", "Gumawa ng Wallet"],
     skip: "Laktawan"
   },
@@ -5737,13 +5741,13 @@ const OB_LANGS = {
       "Kamu sudah siap!"
     ],
     descs: [
-      "OctoPay AI memungkinkan kamu <strong>mengirim dan menerima uang</strong> secara instan — tanpa perlu rekening bank. Semudah kirim pesan.",
-      "Bayangkan OctoPay AI sebagai <strong>dompet digital di ponselmu</strong>. Simpan, kirim, dan terima token MON — kapan saja, di mana saja.",
+      "APEX Wallet memungkinkan kamu <strong>mengirim dan menerima uang</strong> secara instan — tanpa perlu rekening bank. Semudah kirim pesan.",
+      "Bayangkan APEX Wallet sebagai <strong>dompet digital di ponselmu</strong>. Simpan, kirim, dan terima token MON — kapan saja, di mana saja.",
       "Saat membuat wallet, kamu akan mendapat <strong>12 kata rahasia</strong>. Ini satu-satunya cara memulihkan wallet jika ponselmu hilang atau rusak.",
-      "Tidak perlu belajar tombol yang rumit. Cukup <strong>ketik apa yang kamu mau</strong> — dalam bahasamu sendiri — dan OctoPay AI yang akan mengerjakannya.",
+      "Tidak perlu belajar tombol yang rumit. Cukup <strong>ketik apa yang kamu mau</strong> — dalam bahasamu sendiri — dan APEX Wallet yang akan mengerjakannya.",
       "Buat wallet baru atau impor yang sudah ada. Perjalanan crypto kamu dimulai sekarang — <strong>mudah, aman, dan dalam bahasamu</strong>."
     ],
-    tip: "✏️ Tulis 12 kata di kertas. Jangan screenshot. Jangan bagikan ke siapapun — termasuk tim OctoPay AI.",
+    tip: "✏️ Tulis 12 kata di kertas. Jangan screenshot. Jangan bagikan ke siapapun — termasuk tim APEX Wallet.",
     next: ["Mulai →", "Selanjutnya →", "Selanjutnya →", "Selanjutnya →", "Buat Wallet"],
     skip: "Lewati"
   },
@@ -5759,13 +5763,13 @@ const OB_LANGS = {
       "이제 시작할 준비가 됐어요!"
     ],
     descs: [
-      "OctoPay AI으로 <strong>즉시 돈을 보내고 받을 수 있어요</strong> — 은행 계좌 없이도요. 문자 보내는 것처럼 쉬워요.",
-      "OctoPay AI을 <strong>휴대폰 속 디지털 지갑</strong>이라고 생각해보세요. MON 토큰을 보관하고, 보내고, 받을 수 있어요 — 언제 어디서든요.",
+      "APEX Wallet으로 <strong>즉시 돈을 보내고 받을 수 있어요</strong> — 은행 계좌 없이도요. 문자 보내는 것처럼 쉬워요.",
+      "APEX Wallet을 <strong>휴대폰 속 디지털 지갑</strong>이라고 생각해보세요. MON 토큰을 보관하고, 보내고, 받을 수 있어요 — 언제 어디서든요.",
       "지갑을 만들면 <strong>12개의 비밀 단어</strong>를 받게 돼요. 이 단어들이 휴대폰을 잃어버렸을 때 지갑을 되찾는 유일한 방법이에요.",
-      "복잡한 버튼을 배울 필요 없어요. <strong>원하는 걸 그냥 입력</strong>하면 OctoPay AI가 알아서 해드려요 — 한국어로도 돼요.",
+      "복잡한 버튼을 배울 필요 없어요. <strong>원하는 걸 그냥 입력</strong>하면 APEX Wallet가 알아서 해드려요 — 한국어로도 돼요.",
       "새 지갑을 만들거나 기존 지갑을 가져오세요. 크립토 여정이 지금 시작돼요 — <strong>쉽고, 안전하고, 내 언어로</strong>."
     ],
-    tip: "✏️ 12개 단어를 종이에 적어두세요. 스크린샷 금지. 누구와도 공유하지 마세요 — OctoPay AI 팀 포함.",
+    tip: "✏️ 12개 단어를 종이에 적어두세요. 스크린샷 금지. 누구와도 공유하지 마세요 — APEX Wallet 팀 포함.",
     next: ["시작하기 →", "다음 →", "다음 →", "다음 →", "지갑 만들기"],
     skip: "건너뛰기"
   },
@@ -5781,13 +5785,13 @@ const OB_LANGS = {
       "你已经准备好了！"
     ],
     descs: [
-      "OctoPay AI 让你能够<strong>即时发送和接收资金</strong> — 无需银行账户。就像发短信一样简单。",
-      "把 OctoPay AI 想象成<strong>手机里的数字钱包</strong>。随时随地存储、发送和接收 MON 代币。",
+      "APEX Wallet 让你能够<strong>即时发送和接收资金</strong> — 无需银行账户。就像发短信一样简单。",
+      "把 APEX Wallet 想象成<strong>手机里的数字钱包</strong>。随时随地存储、发送和接收 MON 代币。",
       "创建钱包时，你会获得 <strong>12个秘密词语</strong>。这是在手机丢失或损坏时恢复钱包的唯一方法。",
-      "无需学习复杂的操作按钮。只需<strong>用自己的语言输入</strong>你想做的事，OctoPay AI 会帮你完成。",
+      "无需学习复杂的操作按钮。只需<strong>用自己的语言输入</strong>你想做的事，APEX Wallet 会帮你完成。",
       "创建新钱包或导入已有钱包。你的加密货币之旅现在开始 — <strong>简单、安全、用你的语言</strong>。"
     ],
-    tip: "✏️ 把12个词写在纸上。不要截图保存。不要与任何人分享 — 包括 OctoPay AI 团队。",
+    tip: "✏️ 把12个词写在纸上。不要截图保存。不要与任何人分享 — 包括 APEX Wallet 团队。",
     next: ["开始 →", "下一步 →", "下一步 →", "下一步 →", "创建钱包"],
     skip: "跳过"
   },
@@ -5803,13 +5807,13 @@ const OB_LANGS = {
       "คุณพร้อมแล้ว!"
     ],
     descs: [
-      "OctoPay AI ให้คุณ<strong>ส่งและรับเงินได้ทันที</strong> — ไม่ต้องมีบัญชีธนาคาร ง่ายเหมือนส่งข้อความ",
-      "ลองนึกถึง OctoPay AI ว่าเป็น<strong>กระเป๋าเงินดิจิทัลในโทรศัพท์</strong> เก็บ ส่ง และรับ MON token ได้ทุกที่ทุกเวลา",
+      "APEX Wallet ให้คุณ<strong>ส่งและรับเงินได้ทันที</strong> — ไม่ต้องมีบัญชีธนาคาร ง่ายเหมือนส่งข้อความ",
+      "ลองนึกถึง APEX Wallet ว่าเป็น<strong>กระเป๋าเงินดิจิทัลในโทรศัพท์</strong> เก็บ ส่ง และรับ MON token ได้ทุกที่ทุกเวลา",
       "เมื่อสร้างกระเป๋าเงิน คุณจะได้รับ<strong>12 คำลับ</strong> นี่คือวิธีเดียวที่จะกู้คืนกระเป๋าเงินหากโทรศัพท์หาย",
-      "ไม่ต้องเรียนรู้ปุ่มที่ซับซ้อน แค่<strong>พิมพ์สิ่งที่ต้องการ</strong>เป็นภาษาของคุณ แล้ว OctoPay AI จะจัดการให้",
+      "ไม่ต้องเรียนรู้ปุ่มที่ซับซ้อน แค่<strong>พิมพ์สิ่งที่ต้องการ</strong>เป็นภาษาของคุณ แล้ว APEX Wallet จะจัดการให้",
       "สร้างกระเป๋าเงินใหม่หรือนำเข้าที่มีอยู่ การเดินทางคริปโตของคุณเริ่มต้นแล้ว — <strong>ง่าย ปลอดภัย ในภาษาของคุณ</strong>"
     ],
-    tip: "✏️ จดคำ 12 คำลงในกระดาษ ห้ามถ่ายภาพหน้าจอ ห้ามแชร์กับใคร — รวมถึงทีม OctoPay AI",
+    tip: "✏️ จดคำ 12 คำลงในกระดาษ ห้ามถ่ายภาพหน้าจอ ห้ามแชร์กับใคร — รวมถึงทีม APEX Wallet",
     next: ["เริ่มต้น →", "ถัดไป →", "ถัดไป →", "ถัดไป →", "สร้างกระเป๋าเงิน"],
     skip: "ข้าม"
   },
@@ -5825,13 +5829,13 @@ const OB_LANGS = {
       "Anda sudah bersedia!"
     ],
     descs: [
-      "OctoPay AI membolehkan anda <strong>menghantar dan menerima wang</strong> dengan segera — tanpa akaun bank. Semudah menghantar mesej.",
-      "Bayangkan OctoPay AI sebagai <strong>dompet digital dalam telefon anda</strong>. Simpan, hantar, dan terima token MON — di mana saja, bila-bila masa.",
+      "APEX Wallet membolehkan anda <strong>menghantar dan menerima wang</strong> dengan segera — tanpa akaun bank. Semudah menghantar mesej.",
+      "Bayangkan APEX Wallet sebagai <strong>dompet digital dalam telefon anda</strong>. Simpan, hantar, dan terima token MON — di mana saja, bila-bila masa.",
       "Apabila anda mencipta dompet, anda akan mendapat <strong>12 perkataan rahsia</strong>. Inilah satu-satunya cara memulihkan dompet jika telefon anda hilang.",
-      "Tidak perlu belajar butang yang rumit. Hanya <strong>taip apa yang anda mahu</strong> dalam bahasa anda, dan OctoPay AI akan menguruskannya.",
+      "Tidak perlu belajar butang yang rumit. Hanya <strong>taip apa yang anda mahu</strong> dalam bahasa anda, dan APEX Wallet akan menguruskannya.",
       "Cipta dompet baru atau import yang sedia ada. Perjalanan kripto anda bermula sekarang — <strong>mudah, selamat, dalam bahasa anda</strong>."
     ],
-    tip: "✏️ Tulis 12 perkataan di atas kertas. Jangan tangkap skrin. Jangan kongsi dengan sesiapa — termasuk pasukan OctoPay AI.",
+    tip: "✏️ Tulis 12 perkataan di atas kertas. Jangan tangkap skrin. Jangan kongsi dengan sesiapa — termasuk pasukan APEX Wallet.",
     next: ["Mula →", "Seterusnya →", "Seterusnya →", "Seterusnya →", "Cipta Dompet"],
     skip: "Langkau"
   },
@@ -5847,13 +5851,13 @@ const OB_LANGS = {
       "Bạn đã sẵn sàng!"
     ],
     descs: [
-      "OctoPay AI cho phép bạn <strong>gửi và nhận tiền ngay lập tức</strong> — không cần tài khoản ngân hàng. Dễ như nhắn tin.",
-      "Hãy nghĩ OctoPay AI như <strong>ví kỹ thuật số trong điện thoại</strong>. Lưu trữ, gửi và nhận token MON — mọi lúc mọi nơi.",
+      "APEX Wallet cho phép bạn <strong>gửi và nhận tiền ngay lập tức</strong> — không cần tài khoản ngân hàng. Dễ như nhắn tin.",
+      "Hãy nghĩ APEX Wallet như <strong>ví kỹ thuật số trong điện thoại</strong>. Lưu trữ, gửi và nhận token MON — mọi lúc mọi nơi.",
       "Khi tạo ví, bạn sẽ nhận được <strong>12 từ bí mật</strong>. Đây là cách duy nhất để khôi phục ví nếu mất điện thoại.",
-      "Không cần học các nút phức tạp. Chỉ cần <strong>gõ những gì bạn muốn</strong> bằng ngôn ngữ của bạn, OctoPay AI sẽ làm cho bạn.",
+      "Không cần học các nút phức tạp. Chỉ cần <strong>gõ những gì bạn muốn</strong> bằng ngôn ngữ của bạn, APEX Wallet sẽ làm cho bạn.",
       "Tạo ví mới hoặc nhập ví hiện có. Hành trình crypto của bạn bắt đầu ngay bây giờ — <strong>đơn giản, an toàn, bằng ngôn ngữ của bạn</strong>."
     ],
-    tip: "✏️ Viết 12 từ lên giấy. Không chụp màn hình. Không chia sẻ với bất kỳ ai — kể cả nhóm OctoPay AI.",
+    tip: "✏️ Viết 12 từ lên giấy. Không chụp màn hình. Không chia sẻ với bất kỳ ai — kể cả nhóm APEX Wallet.",
     next: ["Bắt Đầu →", "Tiếp Theo →", "Tiếp Theo →", "Tiếp Theo →", "Tạo Ví"],
     skip: "Bỏ Qua"
   }
@@ -6383,7 +6387,7 @@ updatePinToggleUI();
 
       <div class="info-card" style="background:var(--red-soft);border-color:rgba(255,87,87,0.2)">
         <div style="font-size:12px;color:var(--red);line-height:1.6">
-          ⚠️ <strong>Warning:</strong> Never share your seed phrase or private key with anyone — not even OctoPay AI support. Anyone with these can access your wallet.
+          ⚠️ <strong>Warning:</strong> Never share your seed phrase or private key with anyone — not even APEX Wallet support. Anyone with these can access your wallet.
         </div>
       </div>
     </div>
@@ -6472,7 +6476,7 @@ updatePinToggleUI();
 <div class="pin-overlay hidden" id="pinOverlay">
   <div class="pin-logo">🐙</div>
   <div class="pin-title" id="pinTitle">Welcome Back</div>
-  <div class="pin-subtitle" id="pinSubtitle">Enter your password to unlock OctoPay AI</div>
+  <div class="pin-subtitle" id="pinSubtitle">Enter your password to unlock APEX Wallet</div>
   <div style="width:100%;max-width:320px;margin-bottom:16px;position:relative">
     <input type="password" id="pwInput"
       placeholder="Enter password..."
