@@ -6,35 +6,35 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0a0f">
-<title>APEX WALLET</title>
+<meta name="theme-color" content="#060612">
+<title>OctoPay AI</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root {
-  --bg: #0a0a0f;
-  --card: #111118;
-  --card2: #16161f;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0eeff;
-  --muted: #6b6880;
-  --muted2: #9490a8;
-  --purple: #7c5cfc;
-  --purple2: #9d82ff;
-  --purple-soft: rgba(124,92,252,0.12);
-  --purple-border: rgba(124,92,252,0.25);
-  --green: #22d47c;
-  --green-soft: rgba(34,212,124,0.1);
+  --bg: #060612;
+  --card: #0d1b3e;
+  --card2: #0a1628;
+  --border: rgba(0,201,167,0.1);
+  --border2: rgba(0,201,167,0.18);
+  --text: #e2e8f0;
+  --muted: #4a5568;
+  --muted2: #718096;
+  --purple: #00c9a7;
+  --purple2: #00e5ff;
+  --purple-soft: rgba(0,201,167,0.1);
+  --purple-border: rgba(0,201,167,0.25);
+  --green: #00c9a7;
+  --green-soft: rgba(0,201,167,0.1);
   --red: #ff5757;
   --red-soft: rgba(255,87,87,0.1);
   --yellow: #ffbd2e;
   --yellow-soft: rgba(255,189,46,0.1);
   --mono: 'JetBrains Mono', monospace;
-  --sans: 'Plus Jakarta Sans', sans-serif;
+  --sans: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
   --radius: 16px;
   --radius-sm: 10px;
 }
@@ -387,7 +387,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 
 /* BALANCE CARD */
 .balance-card {
-  background: linear-gradient(135deg, #111118 0%, #16101f 100%);
+  background: linear-gradient(135deg, #0d1b3e 0%, #060a1a 100%);
   border: 1px solid var(--purple-border);
 }
 
@@ -888,7 +888,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 
 
 /* THEMES */
-body.theme-purple { --purple:#7c5cfc; --purple2:#9d82ff; }
+body.theme-teal { --purple:#00c9a7; --purple2:#00e5ff; }
 body.theme-green  { --purple:#22d47c; --purple2:#5effa8; --purple-soft:rgba(34,212,124,0.12); --purple-border:rgba(34,212,124,0.25); }
 body.theme-blue   { --purple:#3b82f6; --purple2:#60a5fa; --purple-soft:rgba(59,130,246,0.12); --purple-border:rgba(59,130,246,0.25); }
 body.theme-orange { --purple:#f97316; --purple2:#fb923c; --purple-soft:rgba(249,115,22,0.12); --purple-border:rgba(249,115,22,0.25); }
@@ -973,7 +973,7 @@ body.theme-pink   { --purple:#ec4899; --purple2:#f472b6; --purple-soft:rgba(236,
   position: relative; cursor: pointer; transition: background 0.2s;
   flex-shrink: 0;
 }
-.mode-toggle.light { background: var(--purple); border-color: var(--purple); }
+.mode-toggle.light { background: linear-gradient(135deg, #00c9a7, #0067a3); border-color: #00c9a7; }
 .mode-toggle-knob {
   width: 14px; height: 14px; background: var(--muted2);
   border-radius: 50%; position: absolute; top: 2px; left: 2px;
@@ -1640,7 +1640,7 @@ body { overscroll-behavior-y: contain; }
 
 
 /* ═══════════════════════════════════════
-   APEX WALLET — NATIVE APP REDESIGN V9
+   OctoPay AI — NATIVE APP REDESIGN V9
    ═══════════════════════════════════════ */
 
 /* BODY */
@@ -1655,8 +1655,9 @@ body {
   align-items: center;
   padding: 0 0 80px;
   background-image:
-    radial-gradient(ellipse at 30% 0%, rgba(108,92,231,0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, rgba(0,206,201,0.06) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 60% at 50% 0%, #0d2b5e 0%, #060612 70%),
+    radial-gradient(circle 300px at 20% 80%, rgba(0,201,167,0.08) 0%, transparent 70%),
+    radial-gradient(circle 200px at 80% 20%, rgba(0,229,255,0.06) 0%, transparent 60%);
 }
 
 /* ─── HEADER ──────────────────────────── */
@@ -1683,15 +1684,15 @@ header {
   background: linear-gradient(135deg, var(--purple), var(--purple2));
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px; box-shadow: 0 4px 12px rgba(108,92,231,0.4);
+  font-size: 18px; box-shadow: 0 4px 12px rgba(0,165,138,0.4);
 }
-.logo-text { font-size: 14px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-.logo-text span { color: var(--purple2); }
+.logo-text { font-size: 14px; font-weight: 800; letter-spacing: -0.3px; font-family: 'Syne', var(--sans); background: linear-gradient(90deg, #fff 30%, #00c9a7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-transform: none; }
+.logo-text span { -webkit-text-fill-color: #00e5ff; }
 .header-right { display: flex; align-items: center; gap: 6px; }
 .network-pill {
   font-family: var(--mono); font-size: 9px; font-weight: 500;
-  background: rgba(0,206,201,0.1); color: var(--green);
-  border: 1px solid rgba(0,206,201,0.2);
+  background: rgba(0,201,167,0.12); color: #00c9a7;
+  border: 1px solid rgba(0,201,167,0.3);
   padding: 4px 9px; border-radius: 20px; letter-spacing: 0.06em;
   display: flex; align-items: center; gap: 5px;
 }
@@ -1713,7 +1714,7 @@ header {
 .hero-wallet-name {
   font-size: 15px; font-weight: 800; color: var(--text);
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  margin-bottom: 20px; cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .hero-wallet-name .chevron { font-size: 10px; color: var(--muted2); }
@@ -1724,7 +1725,7 @@ header {
 
 .balance-big {
   font-size: 44px; font-weight: 800; letter-spacing: -0.03em; line-height: 1;
-  background: linear-gradient(135deg, #fff 30%, var(--purple2) 100%);
+  background: linear-gradient(135deg, #fff 30%, #00e5ff 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -1748,10 +1749,10 @@ header {
 .hero-btn-send {
   background: var(--purple);
   color: white;
-  box-shadow: 0 4px 20px rgba(108,92,231,0.35);
+  box-shadow: 0 4px 20px rgba(0,201,167,0.25);
 }
 
-.hero-btn-send:hover { background: #5a4dd4; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(108,92,231,0.45); }
+.hero-btn-send:hover { background: #5a4dd4; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,165,138,0.45); }
 
 .hero-btn-receive {
   background: var(--card2);
@@ -1821,8 +1822,8 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 
 .btn { font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 14px 16px; border-radius: var(--radius-sm); border: 1.5px solid var(--border2); background: var(--card2); color: var(--text); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn:hover { border-color: var(--purple); color: var(--purple2); transform: translateY(-1px); }
-.btn-primary { background: var(--purple); color: white; border-color: var(--purple); box-shadow: 0 4px 16px rgba(108,92,231,0.3); }
-.btn-primary:hover { background: #5a4dd4; border-color: #5a4dd4; color: white; box-shadow: 0 6px 20px rgba(108,92,231,0.4); }
+.btn-primary { background: var(--purple); color: white; border-color: var(--purple); box-shadow: 0 4px 16px rgba(0,165,138,0.3); }
+.btn-primary:hover { background: #5a4dd4; border-color: #5a4dd4; color: white; box-shadow: 0 6px 20px rgba(0,165,138,0.4); }
 .btn-full { width: 100%; }
 .btn-sm { font-size: 12px; padding: 8px 14px; border-radius: var(--radius-xs); }
 .btn-danger { border-color: var(--red); color: var(--red); background: var(--red-soft); }
@@ -1875,7 +1876,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 /* ─── CHAT ────────────────────────────── */
 .chat-wrap { width: 100%; max-width: 480px; padding: 0 20px; }
 .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.chat-avatar { width: 38px; height: 38px; background: var(--purple); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(108,92,231,0.3); }
+.chat-avatar { width: 38px; height: 38px; background: linear-gradient(135deg, #00c9a7, #0d1b3e); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,201,167,0.35); }
 .chat-title { font-size: 15px; font-weight: 800; }
 .chat-sub { font-size: 11px; color: var(--muted2); }
 
@@ -1896,7 +1897,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 .chat-input-row { display: flex; gap: 8px; background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 12px; }
 .chat-input { flex: 1; font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--card2); color: var(--text); outline: none; transition: border-color 0.15s; }
 .chat-input:focus { border-color: var(--purple); }
-.chat-send { font-size: 18px; width: 46px; height: 46px; border: none; border-radius: var(--radius-sm); background: var(--purple); color: white; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(108,92,231,0.3); }
+.chat-send { font-size: 18px; width: 46px; height: 46px; border: none; border-radius: var(--radius-sm); background: var(--purple); color: white; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,165,138,0.3); }
 .chat-send:hover { background: #5a4dd4; transform: scale(1.05); }
 
 /* ─── CHAT MAXIMIZE ───────────────────────────── */
@@ -1974,7 +1975,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 /* ─── BOTTOM NAV ──────────────────────── */
 .bottom-nav {
   display: none; position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(13,14,20,0.92); border-top: 1px solid var(--border);
+  background: rgba(6,6,18,0.92); border-top: 1px solid var(--border);
   padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
   z-index: 100; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
 }
@@ -1991,7 +1992,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 .card { width: 100%; max-width: 480px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 12px; animation: slideUp 0.3s ease; }
 .card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
 .setup-hero { text-align: center; padding: 8px 0 20px; }
-.setup-icon { width: 72px; height: 72px; background: var(--purple-soft); border: 1px solid var(--purple-border); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(108,92,231,0.2); }
+.setup-icon { width: 72px; height: 72px; background: var(--purple-soft); border: 1px solid var(--purple-border); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(0,165,138,0.2); }
 .setup-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
 .setup-sub { font-size: 13px; color: var(--muted2); line-height: 1.6; }
 .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
@@ -2008,7 +2009,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 .seed-word-input { position: relative; }
 .seed-word-input .num { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 9px; color: var(--muted); pointer-events: none; }
 .seed-word-input input { font-size: 13px; padding: 10px 8px 10px 24px; border-radius: 10px; }
-.seed-word-input input.filled { border-color: rgba(108,92,231,0.4); background: var(--purple-soft); }
+.seed-word-input input.filled { border-color: rgba(0,165,138,0.4); background: var(--purple-soft); }
 .paste-hint { font-size: 12px; color: var(--muted2); text-align: center; margin-bottom: 10px; }
 .paste-hint span { color: var(--purple2); cursor: pointer; font-weight: 700; }
 
@@ -2045,7 +2046,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
   border-radius: 22px;
   display: flex; align-items: center; justify-content: center;
   font-size: 32px; margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(108,92,231,0.4);
+  box-shadow: 0 8px 32px rgba(0,165,138,0.4);
 }
 
 .pin-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; text-align: center; }
@@ -2230,7 +2231,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
   border: 1px solid var(--border2); border-radius: 13px;
   position: relative; cursor: pointer; transition: all 0.2s;
 }
-.toggle-switch.on { background: var(--purple); border-color: var(--purple); }
+.toggle-switch.on { background: linear-gradient(135deg, #00c9a7, #0067a3); border-color: #00c9a7; }
 .toggle-knob {
   width: 20px; height: 20px; background: var(--muted2);
   border-radius: 50%; position: absolute; top: 2px; left: 2px;
@@ -2251,7 +2252,7 @@ header {
   border-bottom: none;
   position: sticky;
   top: 0;
-  background: rgba(13,14,20,0.92);
+  background: rgba(6,6,18,0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   z-index: 50;
@@ -2311,7 +2312,7 @@ body.light-mode header {
 
 body.light-mode .logo-text { color: #0d0e20; }
 body.light-mode .logo-text span { color: var(--purple); }
-body.light-mode .balance-big { background: linear-gradient(135deg, #0d0e20 30%, var(--purple) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+body.light-mode .balance-big { background: linear-gradient(135deg, #e2e8f0 30%, #00c9a7 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 body.light-mode .hero-greeting { color: var(--muted2); }
 body.light-mode .hero-wallet-name { color: #0d0e20; }
 body.light-mode .balance-sub-label { color: var(--muted2); }
@@ -2457,8 +2458,8 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 /* SLIDE 1 — Welcome */
 .ob-welcome-ring {
   width: 200px; height: 200px; border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(108,92,231,0.3), rgba(0,206,201,0.1));
-  border: 1.5px solid rgba(108,92,231,0.2);
+  background: radial-gradient(circle at 30% 30%, rgba(0,165,138,0.3), rgba(0,206,201,0.1));
+  border: 1.5px solid rgba(0,165,138,0.2);
   display: flex; align-items: center; justify-content: center;
   position: relative;
   animation: float 3s ease-in-out infinite;
@@ -2475,7 +2476,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
 .ob-orbit {
   position: absolute; border-radius: 50%;
-  border: 1px dashed rgba(108,92,231,0.3);
+  border: 1px dashed rgba(0,165,138,0.3);
   animation: spin 8s linear infinite;
 }
 
@@ -2564,7 +2565,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   display: flex; align-items: center; gap: 8px;
 }
 
-.ob-chat-avatar { width: 28px; height: 28px; background: var(--purple); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.ob-chat-avatar { width: 28px; height: 28px; background: linear-gradient(135deg, #00c9a7, #0d1b3e); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 .ob-chat-name { font-size: 12px; font-weight: 700; }
 
 .ob-chat-messages { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -2596,7 +2597,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   background: linear-gradient(135deg, var(--purple), var(--green));
   display: flex; align-items: center; justify-content: center;
   font-size: 64px;
-  box-shadow: 0 0 60px rgba(108,92,231,0.4), 0 0 30px rgba(0,206,201,0.2);
+  box-shadow: 0 0 60px rgba(0,165,138,0.4), 0 0 30px rgba(0,206,201,0.2);
   animation: float 3s ease-in-out infinite;
 }
 
@@ -2641,10 +2642,10 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   background: var(--purple); color: white; border: none;
   font-family: var(--sans); font-size: 16px; font-weight: 800;
   cursor: pointer; transition: all 0.2s;
-  box-shadow: 0 4px 20px rgba(108,92,231,0.35);
+  box-shadow: 0 4px 20px rgba(0,201,167,0.25);
   letter-spacing: 0.02em;
 }
-.ob-btn-primary:hover { background: #5a4dd4; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(108,92,231,0.45); }
+.ob-btn-primary:hover { background: #5a4dd4; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,165,138,0.45); }
 .ob-btn-primary:active { transform: translateY(0); }
 
 .ob-btn-secondary {
@@ -2674,7 +2675,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
 
 /* SETUP CARD BUTTON HOVER */
-#btn_create:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108,92,231,0.45) !important; }
+#btn_create:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,165,138,0.45) !important; }
 #btn_import:hover { border-color: var(--purple-border) !important; background: var(--purple-soft) !important; }
 #btn_import:hover > div > div:last-child { color: var(--purple2) !important; }
 
@@ -2713,7 +2714,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
   <!-- Progress dots -->
   <div style="width:100%;max-width:480px;padding:16px 24px 0;display:flex;gap:6px">
-    <div id="obDot0" style="height:4px;border-radius:2px;flex:1;background:#6c5ce7;transition:background 0.3s"></div>
+    <div id="obDot0" style="height:4px;border-radius:2px;flex:1;background:#00a58a;transition:background 0.3s"></div>
     <div id="obDot1" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
     <div id="obDot2" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
     <div id="obDot3" style="height:4px;border-radius:2px;flex:1;background:rgba(255,255,255,0.12);transition:background 0.3s"></div>
@@ -2729,13 +2730,43 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
       <!-- SLIDE 0: Welcome + Language -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
-        <!-- Canvas orbit animation -->
+        <!-- Canvas orbit animation + Otto mascot -->
         <div style="height:260px;width:100%;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
           <canvas id="flagOrbitCanvas" width="300" height="260" style="position:absolute;top:0;left:50%;transform:translateX(-50%)"></canvas>
-          <div style="width:88px;height:88px;border-radius:26px;background:linear-gradient(135deg,#6c5ce7,#a29bfe);display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 0 40px rgba(108,92,231,0.6),0 0 80px rgba(108,92,231,0.2);animation:float 3s ease-in-out infinite;position:relative;z-index:5">⬡</div>
+          <div style="position:relative;z-index:5;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 28px rgba(0,201,167,0.4))">
+            <svg viewBox="0 0 200 220" width="110" height="110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="ob1" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#1a5c7a"/><stop offset="100%" stop-color="#0a2a4a"/></radialGradient>
+                <radialGradient id="ob2" cx="50%" cy="30%" r="55%"><stop offset="0%" stop-color="#00c9a7" stop-opacity="0.3"/><stop offset="100%" stop-color="#0a2a4a" stop-opacity="0"/></radialGradient>
+                <radialGradient id="of1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1e6f8f"/><stop offset="100%" stop-color="#0d3f5c"/></radialGradient>
+                <filter id="ogw"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <linearGradient id="otg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0f4a6a"/><stop offset="100%" stop-color="#082030"/></linearGradient>
+                <radialGradient id="ops" cx="30%" cy="30%" r="40%"><stop offset="0%" stop-color="#fff" stop-opacity="0.9"/><stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/></radialGradient>
+              </defs>
+              <path d="M 58 148 Q 28 165 22 185 Q 18 200 30 205 Q 42 208 48 195 Q 52 183 60 172" fill="url(#otg)" stroke="rgba(0,201,167,0.3)" stroke-width="1"/>
+              <path d="M 72 155 Q 55 172 50 192 Q 47 208 60 210 Q 70 211 74 198 Q 76 186 82 175" fill="url(#otg)" stroke="rgba(0,201,167,0.25)" stroke-width="1"/>
+              <path d="M 88 158 Q 80 178 78 198 Q 77 212 90 214 Q 100 215 102 200 Q 103 186 100 170" fill="url(#otg)"/>
+              <path d="M 112 158 Q 118 178 120 198 Q 121 212 110 214 Q 100 215 98 200 Q 97 186 100 170" fill="url(#otg)"/>
+              <path d="M 128 155 Q 144 172 148 192 Q 151 208 140 210 Q 130 211 126 198 Q 124 186 118 175" fill="url(#otg)" stroke="rgba(0,201,167,0.25)" stroke-width="1"/>
+              <path d="M 142 148 Q 172 165 178 185 Q 182 200 170 205 Q 158 208 152 195 Q 148 183 140 172" fill="url(#otg)" stroke="rgba(0,201,167,0.3)" stroke-width="1"/>
+              <ellipse cx="100" cy="105" rx="68" ry="72" fill="url(#ob1)"/>
+              <ellipse cx="100" cy="105" rx="68" ry="72" fill="url(#ob2)"/>
+              <ellipse cx="100" cy="105" rx="68" ry="72" fill="none" stroke="rgba(0,201,167,0.35)" stroke-width="1.5" filter="url(#ogw)"/>
+              <rect x="55" y="78" width="90" height="60" rx="18" fill="url(#of1)"/>
+              <rect x="55" y="78" width="90" height="60" rx="18" fill="none" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
+              <circle cx="78" cy="106" r="14" fill="#0a1628"/><circle cx="78" cy="106" r="8" fill="#00c9a7" opacity="0.9"/><circle cx="78" cy="106" r="5" fill="#00ffc8"/><circle cx="78" cy="106" r="3" fill="#001020"/><circle cx="80" cy="103" r="2" fill="url(#ops)"/>
+              <circle cx="122" cy="106" r="14" fill="#0a1628"/><circle cx="122" cy="106" r="8" fill="#00c9a7" opacity="0.9"/><circle cx="122" cy="106" r="5" fill="#00ffc8"/><circle cx="122" cy="106" r="3" fill="#001020"/><circle cx="124" cy="103" r="2" fill="url(#ops)"/>
+              <rect id="bl" x="64" y="98" width="28" height="0" rx="6" fill="#0d3f5c"><animate attributeName="height" values="0;16;0" dur="4s" begin="2s" repeatCount="indefinite"/></rect>
+              <rect id="br" x="108" y="98" width="28" height="0" rx="6" fill="#0d3f5c"><animate attributeName="height" values="0;16;0" dur="4s" begin="2s" repeatCount="indefinite"/></rect>
+              <path d="M 82 125 Q 100 136 118 125" stroke="rgba(0,201,167,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <line x1="100" y1="33" x2="100" y2="10" stroke="rgba(0,201,167,0.6)" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="100" cy="8" r="5" fill="#00c9a7"><animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/></circle>
+              <text x="100" y="148" text-anchor="middle" font-size="8" fill="rgba(0,201,167,0.5)" font-family="monospace">◈ OTTO.AI ◈</text>
+            </svg>
+          </div>
         </div>
-        <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
-        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to APEX! 👋</div>
+        <div style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Welcome</div>
+        <div id="obTitle0" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Welcome to OctoPay AI! 👋</div>
         <div id="obDesc0" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:16px">The crypto wallet made for <strong style="color:#eeedf5">Southeast Asia</strong>. Send money home in seconds — no bank, no fees, no stress.</div>
         <!-- Language picker — rendered by JS so selection state works -->
         <div style="font-size:11px;font-weight:700;color:#5a5870;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Choose your language</div>
@@ -2746,18 +2777,18 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
         <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px">
           <div style="width:230px;background:#13141c;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:float 3s ease-in-out infinite">
-            <div style="font-size:26px;font-weight:800;background:linear-gradient(135deg,#fff,#a29bfe);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3px">12.50 MON</div>
+            <div style="font-size:26px;font-weight:800;background:linear-gradient(135deg,#fff,#00c9a7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:3px">12.50 MON</div>
             <div style="font-size:10px;color:#8886a0;font-family:monospace;margin-bottom:14px">Your Balance • Monad Testnet</div>
             <div style="background:#1a1b26;border-radius:7px;padding:7px 10px;font-family:monospace;font-size:9px;color:#8886a0;margin-bottom:11px;text-align:left">0xeCe0ed0A...Ea3BAf</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
-              <div style="background:#6c5ce7;color:white;padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↗ Send</div>
+              <div style="background:#00c9a7;color:#060612;padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↗ Send</div>
               <div style="background:#1f2030;color:#eeedf5;border:1px solid rgba(255,255,255,0.1);padding:8px;border-radius:8px;font-size:11px;font-weight:700;text-align:center">↙ Receive</div>
             </div>
           </div>
         </div>
-        <div id="obTag1" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Your Wallet</div>
+        <div id="obTag1" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Your Wallet</div>
         <div id="obTitle1" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Like a digital pocket</div>
-        <div id="obDesc1" style="font-size:14px;color:#8886a0;line-height:1.7">Think of APEX Wallet like a <strong style="color:#eeedf5">digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.</div>
+        <div id="obDesc1" style="font-size:14px;color:#8886a0;line-height:1.7">Think of OctoPay AI like a <strong style="color:#eeedf5">digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.</div>
       </div>
 
       <!-- SLIDE 2: Seed phrase -->
@@ -2765,18 +2796,18 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <div style="height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;margin-bottom:24px">
           <div style="font-size:40px;animation:pulse-scale 2s ease-in-out infinite">🔑</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:260px">
-            <div style="background:rgba(108,92,231,0.15);border:1px solid rgba(108,92,231,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">1</span><span style="font-size:11px;font-weight:700;color:#a29bfe;font-family:monospace">apple</span></div>
-            <div style="background:rgba(108,92,231,0.15);border:1px solid rgba(108,92,231,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">2</span><span style="font-size:11px;font-weight:700;color:#a29bfe;font-family:monospace">river</span></div>
-            <div style="background:rgba(108,92,231,0.15);border:1px solid rgba(108,92,231,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">3</span><span style="font-size:11px;font-weight:700;color:#a29bfe;font-family:monospace">stone</span></div>
+            <div style="background:rgba(0,165,138,0.15);border:1px solid rgba(0,165,138,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">1</span><span style="font-size:11px;font-weight:700;color:#00c9a7;font-family:monospace">apple</span></div>
+            <div style="background:rgba(0,165,138,0.15);border:1px solid rgba(0,165,138,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">2</span><span style="font-size:11px;font-weight:700;color:#00c9a7;font-family:monospace">river</span></div>
+            <div style="background:rgba(0,165,138,0.15);border:1px solid rgba(0,165,138,0.35);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">3</span><span style="font-size:11px;font-weight:700;color:#00c9a7;font-family:monospace">stone</span></div>
             <div style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">4</span><span style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">cloud</span></div>
             <div style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">5</span><span style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">music</span></div>
             <div style="background:#1a1b26;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 6px;text-align:center"><span style="font-size:8px;color:#6b6880;display:block">6</span><span style="font-size:11px;font-weight:600;color:#eeedf5;font-family:monospace">flame</span></div>
           </div>
         </div>
-        <div id="obTag2" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">⚠️ Important</div>
+        <div id="obTag2" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">⚠️ Important</div>
         <div id="obTitle2" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Your secret recovery phrase</div>
         <div id="obDesc2" style="font-size:14px;color:#8886a0;line-height:1.7;margin-bottom:12px">When you create a wallet, you'll get <strong style="color:#eeedf5">12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.</div>
-        <div id="obTip2" style="padding:12px 16px;background:rgba(253,203,110,0.1);border:1px solid rgba(253,203,110,0.2);border-radius:12px;font-size:13px;color:#fdcb6e;line-height:1.5;text-align:left;width:100%">✏️ Write it on paper. Never screenshot it. Never share with anyone — not even APEX support.</div>
+        <div id="obTip2" style="padding:12px 16px;background:rgba(253,203,110,0.1);border:1px solid rgba(253,203,110,0.2);border-radius:12px;font-size:13px;color:#fdcb6e;line-height:1.5;text-align:left;width:100%">✏️ Write it on paper. Never screenshot it. Never share with anyone — not even OctoPay AI support.</div>
       </div>
 
       <!-- SLIDE 3: AI Chat -->
@@ -2784,29 +2815,29 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
         <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;width:100%">
           <div style="width:100%;max-width:270px;background:#13141c;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden">
             <div style="padding:12px 14px;background:#1a1b26;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px">
-              <div style="width:28px;height:28px;background:#6c5ce7;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div>
-              <div style="font-size:12px;font-weight:700;color:#eeedf5">APEX AI Agent</div>
+              <div style="width:28px;height:28px;background:#00a58a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px">🤖</div>
+              <div style="font-size:12px;font-weight:700;color:#00c9a7">Otto · OctoPay AI</div>
               <div style="margin-left:auto;width:6px;height:6px;background:#00cec9;border-radius:50%"></div>
             </div>
             <div style="padding:12px;display:flex;flex-direction:column;gap:7px">
-              <div style="background:#6c5ce7;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12px;align-self:flex-end;max-width:85%">Send 1 MON to Mama</div>
+              <div style="background:#00a58a;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12px;align-self:flex-end;max-width:85%">Send 1 MON to Mama</div>
               <div style="background:#1a1b26;color:#eeedf5;padding:8px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:11px;align-self:flex-start;max-width:90%;font-family:monospace">Got it! Sending 1 MON to Mama. Confirm? ✅</div>
-              <div style="background:#6c5ce7;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12px;align-self:flex-end;max-width:85%">What's my balance?</div>
+              <div style="background:#00a58a;color:white;padding:8px 12px;border-radius:12px;border-bottom-right-radius:3px;font-size:12px;align-self:flex-end;max-width:85%">What's my balance?</div>
               <div style="background:#1a1b26;color:#eeedf5;padding:8px 12px;border-radius:12px;border-bottom-left-radius:3px;font-size:11px;align-self:flex-start;max-width:85%;font-family:monospace">You have 12.50 MON 💰</div>
             </div>
           </div>
         </div>
-        <div id="obTag3" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">AI Powered</div>
+        <div id="obTag3" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">AI Powered</div>
         <div id="obTitle3" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">Just talk to your wallet</div>
-        <div id="obDesc3" style="font-size:14px;color:#8886a0;line-height:1.7">No buttons to learn. Just <strong style="color:#eeedf5">type what you want</strong> — in your own language — and APEX does it for you.</div>
+        <div id="obDesc3" style="font-size:14px;color:#8886a0;line-height:1.7">No buttons to learn. Just <strong style="color:#eeedf5">type what you want</strong> — in your own language — and OctoPay AI does it for you.</div>
       </div>
 
       <!-- SLIDE 4: Ready -->
       <div style="min-width:100%;padding:24px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
         <div style="height:220px;display:flex;align-items:center;justify-content:center;margin-bottom:24px">
-          <div style="width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#6c5ce7,#00cec9);display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 0 60px rgba(108,92,231,0.5),0 0 30px rgba(0,206,201,0.3);animation:float 3s ease-in-out infinite">🚀</div>
+          <div style="width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#00a58a,#00cec9);display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 0 60px rgba(0,165,138,0.5),0 0 30px rgba(0,206,201,0.3);animation:float 3s ease-in-out infinite">🚀</div>
         </div>
-        <div id="obTag4" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a29bfe;background:rgba(108,92,231,0.12);border:1px solid rgba(108,92,231,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Let's Go!</div>
+        <div id="obTag4" style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#00c9a7;background:rgba(0,165,138,0.12);border:1px solid rgba(0,165,138,0.22);padding:4px 12px;border-radius:20px;margin-bottom:12px">Let's Go!</div>
         <div id="obTitle4" style="font-size:22px;font-weight:800;margin-bottom:10px;color:#eeedf5;line-height:1.2">You're ready to start</div>
         <div id="obDesc4" style="font-size:14px;color:#8886a0;line-height:1.7">Create a new wallet or import an existing one. Your journey starts now — <strong style="color:#eeedf5">simple, safe, and in your language</strong>.</div>
       </div>
@@ -2816,7 +2847,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
   <!-- Bottom buttons -->
   <div style="width:100%;max-width:480px;padding:20px 24px calc(20px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px">
-    <button id="obNextBtn" onclick="obNext()" style="width:100%;padding:16px;border-radius:14px;background:#6c5ce7;color:white;border:none;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(108,92,231,0.4);letter-spacing:0.02em">Get Started →</button>
+    <button id="obNextBtn" onclick="obNext()" style="width:100%;padding:16px;border-radius:14px;background:#00a58a;color:white;border:none;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(0,165,138,0.4);letter-spacing:0.02em">Get Started →</button>
     <button id="obBackBtn" onclick="obBack()" style="display:none;width:100%;padding:14px;border-radius:14px;background:transparent;color:#8886a0;border:1.5px solid rgba(255,255,255,0.1);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">← Back</button>
   </div>
 
@@ -2825,8 +2856,8 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
 <header>
   <div class="logo">
-    <div class="logo-icon">⬡</div>
-    <div class="logo-text">APEX <span>WALLET</span></div>
+    <div class="logo-icon">🐙</div>
+    <div class="logo-text">OctoPay <span>AI</span></div>
   </div>
   <div class="header-right" style="display:flex;align-items:center;gap:5px;flex:1;justify-content:flex-end;min-width:0">
     <div class="wallet-dropdown-wrap hidden" id="walletSwitcher">
@@ -2891,8 +2922,8 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 
   <!-- LOGO HERO -->
   <div style="text-align:center;padding:32px 24px 24px">
-    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--purple),var(--purple2));border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 8px 32px rgba(108,92,231,0.35)">⬡</div>
-    <div style="font-size:26px;font-weight:800;margin-bottom:8px;letter-spacing:-0.01em" id="lbl_setup_title">Welcome to APEX</div>
+    <div style="width:80px;height:80px;background:linear-gradient(135deg,#00c9a7,#0d1b3e);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 8px 32px rgba(0,201,167,0.3)">🐙</div>
+    <div style="font-size:26px;font-weight:800;margin-bottom:8px;letter-spacing:-0.01em" id="lbl_setup_title">Welcome to OctoPay AI</div>
     <div style="font-size:14px;color:var(--muted2);line-height:1.6;max-width:280px;margin:0 auto" id="lbl_setup_sub">Your AI-powered crypto wallet for Southeast Asia</div>
   </div>
 
@@ -2900,7 +2931,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <div style="padding:0 20px;display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
 
     <!-- CREATE NEW WALLET -->
-    <button onclick="createWallet()" id="btn_create" style="width:100%;background:var(--purple);border:none;border-radius:16px;padding:20px;cursor:pointer;text-align:left;transition:all 0.2s;box-shadow:0 4px 20px rgba(108,92,231,0.3)">
+    <button onclick="createWallet()" id="btn_create" style="width:100%;background:var(--purple);border:none;border-radius:16px;padding:20px;cursor:pointer;text-align:left;transition:all 0.2s;box-shadow:0 4px 20px rgba(0,165,138,0.3)">
       <div style="display:flex;align-items:center;gap:14px">
         <div style="width:46px;height:46px;background:rgba(255,255,255,0.15);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">✨</div>
         <div style="flex:1;text-align:left">
@@ -2928,7 +2959,7 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
   <!-- SECURITY BADGE -->
   <div style="margin:0 20px 20px;padding:12px 16px;background:var(--green-soft);border:1px solid rgba(0,206,201,0.2);border-radius:12px;display:flex;align-items:center;gap:10px">
     <span style="font-size:18px">🔒</span>
-    <div style="font-size:12px;color:var(--green);line-height:1.5;font-weight:600">Self-custody wallet — only you control your funds. APEX never stores your keys.</div>
+    <div style="font-size:12px;color:var(--green);line-height:1.5;font-weight:600">Self-custody wallet — only you control your funds. OctoPay AI never stores your keys.</div>
   </div>
 
   <!-- IMPORT SECTION -->
@@ -3168,16 +3199,16 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 <!-- CHAT -->
 <div class="chat-wrap hidden" id="chatWrap">
   <div class="chat-header">
-    <div class="chat-avatar">🤖</div>
+    <div class="chat-avatar">🐙</div>
     <div>
-      <div class="chat-title" id="lbl_chat_title">APEX AI Agent</div>
+      <div class="chat-title" id="lbl_chat_title">Otto AI</div>
       <div class="chat-sub" id="lbl_chat_sub">Tell it. Send it. Done — all through chat.</div>
     </div>
     <div class="chat-maximize-btn" onclick="openChatFullscreen()" title="Expand chat">⛶</div>
   </div>
 
   <div class="chat-box" id="chatBox">
-    <div class="msg ai" id="welcomeMsg">Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 "How much MON do I have?"<br>• 📤 "Send 0.1 MON to Mama"<br>• 📥 "How do I receive MON?"<br>• 👥 "Save Kuya's wallet address"<br>• 📋 "Show my recent transactions"<br><br>I'm here to help — even if this is your first time using crypto! 🌟</div>
+    <div class="msg ai" id="welcomeMsg">Hey! 👋 I'm Otto — your OctoPay AI wallet friend! 🐙 No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 "How much MON do I have?"<br>• 📤 "Send 0.1 MON to Mama"<br>• 📥 "How do I receive MON?"<br>• 👥 "Save Kuya's wallet address"<br>• 📋 "Show my recent transactions"<br><br>I'm here to help — even if this is your first time using crypto! 🌟</div>
   </div>
   <div class="chat-input-row">
     <input type="text" class="chat-input" id="chatInput" placeholder="Type here..." onkeydown="if(event.key==='Enter')sendChat()"/>
@@ -3188,9 +3219,9 @@ body.light-mode .toast { background: #fff; border-color: rgba(0,0,0,0.15); color
 <!-- CHAT FULLSCREEN OVERLAY -->
 <div class="chat-fullscreen" id="chatFullscreen">
   <div class="chat-fullscreen-header">
-    <div class="chat-avatar">🤖</div>
+    <div class="chat-avatar">🐙</div>
     <div>
-      <div class="chat-title">APEX AI Agent</div>
+      <div class="chat-title">Otto AI</div>
       <div class="chat-sub">Tell it. Send it. Done — all through chat.</div>
     </div>
     <div class="chat-fullscreen-minimize" onclick="closeChatFullscreen()" title="Minimize">⊡</div>
@@ -3216,7 +3247,7 @@ const MONAD_RPC = "https://testnet-rpc.monad.xyz";
 // ─── TRANSLATIONS ────────────────────────────────
 const T = {
   en: {
-    setup_title: "Welcome to APEX",
+    setup_title: "Welcome to OctoPay AI",
     setup_sub: "Your AI-powered crypto wallet for Southeast Asia. Simple as texting.",
     import_btn: "Import Wallet", create_btn: "Create New",
     or: "or import existing", paste_hint: "Have a seed phrase?",
@@ -3230,12 +3261,12 @@ const T = {
     contacts_title: "Contacts", add_contact: "Add Contact",
     contact_name: "Name", contact_addr_lbl: "Wallet Address", save: "Save",
     faucet_desc: "Clicking a faucet automatically copies your wallet address. Paste it on the faucet site to claim free testnet MON.",
-    chat_title: "APEX AI Agent", chat_sub: "Tell it. Send it. Done — all through chat.",
+    chat_title: "Otto AI", chat_sub: "Tell it. Send it. Done — all through chat.",
     no_contacts: "No contacts yet",
     tab_seed: "Seed Phrase", tab_pk: "Private Key",
   },
   fil: {
-    setup_title: "Maligayang Pagdating sa APEX",
+    setup_title: "Maligayang Pagdating sa OctoPay AI",
     setup_sub: "Ang iyong AI crypto wallet para sa Southeast Asia. Madali tulad ng pagtext.",
     import_btn: "I-import ang Wallet", create_btn: "Gumawa ng Bago",
     or: "o i-import ang existing",
@@ -3250,12 +3281,12 @@ const T = {
     contacts_title: "Mga Contact", add_contact: "Magdagdag ng Contact",
     contact_name: "Pangalan", contact_addr_lbl: "Wallet Address", save: "I-save",
     faucet_desc: "Ang pag-click sa faucet ay awtomatikong nagkokopya ng iyong address. I-paste ito sa faucet site para makakuha ng libreng testnet MON.",
-    chat_title: "APEX AI Agent", chat_sub: "Sabihin mo lang. Ipapadala. Tapos na — lahat sa chat.",
+    chat_title: "Otto AI", chat_sub: "Sabihin mo lang. Ipapadala. Tapos na — lahat sa chat.",
     no_contacts: "Wala pang contacts",
     tab_seed: "Seed Phrase", tab_pk: "Private Key",
   },
   id: {
-    setup_title: "Selamat Datang di APEX",
+    setup_title: "Selamat Datang di OctoPay AI",
     setup_sub: "Dompet kripto bertenaga AI untuk Asia Tenggara. Semudah mengirim pesan.",
     import_btn: "Impor Dompet", create_btn: "Buat Baru",
     or: "atau impor yang sudah ada",
@@ -3270,12 +3301,12 @@ const T = {
     contacts_title: "Kontak", add_contact: "Tambah Kontak",
     contact_name: "Nama", contact_addr_lbl: "Alamat Dompet", save: "Simpan",
     faucet_desc: "Mengklik faucet akan otomatis menyalin alamat dompet Anda. Tempelkan di situs faucet untuk mendapatkan testnet MON gratis.",
-    chat_title: "APEX AI Agent", chat_sub: "Katakan saja. Kirim. Selesai — semua lewat chat.",
+    chat_title: "Otto AI", chat_sub: "Katakan saja. Kirim. Selesai — semua lewat chat.",
     no_contacts: "Belum ada kontak",
     tab_seed: "Seed Phrase", tab_pk: "Kunci Privat",
   },
   th: {
-    setup_title: "ยินดีต้อนรับสู่ APEX",
+    setup_title: "ยินดีต้อนรับสู่ OctoPay AI",
     setup_sub: "กระเป๋าเงินคริปโต AI สำหรับเอเชียตะวันออกเฉียงใต้ ง่ายเหมือนส่งข้อความ",
     import_btn: "นำเข้ากระเป๋าเงิน", create_btn: "สร้างใหม่",
     or: "หรือนำเข้าของเดิม", paste_hint: "มี seed phrase หรือเปล่า?",
@@ -3289,12 +3320,12 @@ const T = {
     contacts_title: "รายชื่อ", add_contact: "เพิ่มผู้ติดต่อ",
     contact_name: "ชื่อ", contact_addr_lbl: "ที่อยู่กระเป๋าเงิน", save: "บันทึก",
     faucet_desc: "การคลิกก๊อกน้ำจะคัดลอกที่อยู่กระเป๋าเงินของคุณโดยอัตโนมัติ วางลงในเว็บก๊อกน้ำเพื่อรับ testnet MON ฟรี",
-    chat_title: "APEX AI Agent", chat_sub: "บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท",
+    chat_title: "Otto AI", chat_sub: "บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท",
     no_contacts: "ยังไม่มีรายชื่อ",
     tab_seed: "Seed Phrase", tab_pk: "คีย์ส่วนตัว",
   },
   vi: {
-    setup_title: "Chào mừng đến APEX",
+    setup_title: "Chào mừng đến OctoPay AI",
     setup_sub: "Ví crypto AI cho Đông Nam Á. Đơn giản như nhắn tin.",
     import_btn: "Nhập Ví", create_btn: "Tạo Mới",
     or: "hoặc nhập ví hiện có", paste_hint: "Bạn có seed phrase không?",
@@ -3308,12 +3339,12 @@ const T = {
     contacts_title: "Danh bạ", add_contact: "Thêm liên hệ",
     contact_name: "Tên", contact_addr_lbl: "Địa chỉ ví", save: "Lưu",
     faucet_desc: "Nhấp vào vòi sẽ tự động sao chép địa chỉ ví của bạn. Dán vào trang web vòi để nhận testnet MON miễn phí.",
-    chat_title: "APEX AI Agent", chat_sub: "Nói là xong. Gửi ngay. Tất cả qua chat.",
+    chat_title: "Otto AI", chat_sub: "Nói là xong. Gửi ngay. Tất cả qua chat.",
     no_contacts: "Chưa có liên hệ",
     tab_seed: "Seed Phrase", tab_pk: "Khóa riêng tư",
   },
   ms: {
-    setup_title: "Selamat Datang ke APEX",
+    setup_title: "Selamat Datang ke OctoPay AI",
     setup_sub: "Dompet kripto berkuasa AI untuk Asia Tenggara. Semudah menghantar mesej.",
     import_btn: "Import Dompet", create_btn: "Cipta Baru",
     or: "atau import yang sedia ada", paste_hint: "Ada seed phrase?",
@@ -3327,12 +3358,12 @@ const T = {
     contacts_title: "Kenalan", add_contact: "Tambah Kenalan",
     contact_name: "Nama", contact_addr_lbl: "Alamat Dompet", save: "Simpan",
     faucet_desc: "Mengklik paip akan menyalin alamat dompet anda secara automatik. Tampalkan di laman web paip untuk mendapatkan testnet MON percuma.",
-    chat_title: "APEX AI Agent", chat_sub: "Beritahu saja. Hantar. Selesai — semua melalui chat.",
+    chat_title: "Otto AI", chat_sub: "Beritahu saja. Hantar. Selesai — semua melalui chat.",
     no_contacts: "Tiada kenalan lagi",
     tab_seed: "Seed Phrase", tab_pk: "Kunci Peribadi",
   }  ,
   ko: {
-    setup_title: "APEX에 오신 것을 환영합니다",
+    setup_title: "OctoPay AI에 오신 것을 환영합니다",
     setup_sub: "동남아시아를 위한 AI 암호화폐 지갑. 문자처럼 간단해요.",
     import_btn: "지갑 가져오기", create_btn: "새로 만들기",
     or: "또는 기존 지갑 가져오기", paste_hint: "시드 문구가 있나요?",
@@ -3346,12 +3377,12 @@ const T = {
     contacts_title: "연락처", add_contact: "연락처 추가",
     contact_name: "이름", contact_addr_lbl: "지갑 주소", save: "저장",
     faucet_desc: "파우셋을 클릭하면 지갑 주소가 자동으로 복사됩니다. 파우셋 사이트에 붙여넣어 무료 테스트넷 MON을 받으세요.",
-    chat_title: "APEX AI 에이전트", chat_sub: "말만 하세요. 보내세요. 끝 — 모두 채팅으로.",
+    chat_title: "Otto AI", chat_sub: "말만 하세요. 보내세요. 끝 — 모두 채팅으로.",
     no_contacts: "연락처가 없습니다",
     tab_seed: "시드 문구", tab_pk: "개인 키",
   },
   zh: {
-    setup_title: "欢迎使用 APEX",
+    setup_title: "欢迎使用 OctoPay AI",
     setup_sub: "专为东南亚设计的AI加密货币钱包。像发短信一样简单。",
     import_btn: "导入钱包", create_btn: "创建新钱包",
     or: "或导入现有钱包", paste_hint: "有助记词吗？",
@@ -3365,7 +3396,7 @@ const T = {
     contacts_title: "联系人", add_contact: "添加联系人",
     contact_name: "名称", contact_addr_lbl: "钱包地址", save: "保存",
     faucet_desc: "点击水龙头会自动复制您的钱包地址。粘贴到水龙头网站即可领取免费测试网 MON。",
-    chat_title: "APEX AI 助手", chat_sub: "说出来。发送。完成 — 全部通过聊天。",
+    chat_title: "Otto AI", chat_sub: "说出来。发送。完成 — 全部通过聊天。",
     no_contacts: "暂无联系人",
     tab_seed: "助记词", tab_pk: "私钥",
   }
@@ -3931,7 +3962,7 @@ async function sendChat() {
   thinkingMsg.classList.add("thinking");
 
   const lastContact = contacts.length > 0 ? contacts[contacts.length-1] : null;
-  const systemPrompt = `You are APEX — a warm, smart AI wallet friend for everyday people in Southeast Asia, especially non-techy users. You understand what people want naturally, even if they type informally.
+  const systemPrompt = `You are Otto, You are Otto — OctoPay AI's warm, smart AI wallet friend for everyday people in Southeast Asia, especially non-techy users. You understand what people want naturally, even if they type informally.
 
 WALLET INFO:
 - Address: ${addressInfo}
@@ -4199,7 +4230,7 @@ function loadChatHistory() {
       // Show fresh welcome for new wallet
       const welcome = document.createElement("div");
       welcome.className = "msg ai";
-      welcome.innerHTML = "Hey! 👋 I'm APEX — I make crypto easy for you! No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 \"How much MON do I have?\"<br>• 📤 \"Send 0.1 MON to Mama\"<br>• 📥 \"How do I receive MON?\"<br>• 👥 \"Save Kuya's wallet address\"<br>• 📋 \"Show my recent transactions\"<br><br>I'm here to help — even if this is your first time using crypto! 🌟";
+      welcome.innerHTML = "Hey! 👋 I'm Otto — your OctoPay AI wallet friend! 🐙 No complicated steps, just talk to me naturally.<br><br>Try saying:<br>• 💰 \"How much MON do I have?\"<br>• 📤 \"Send 0.1 MON to Mama\"<br>• 📥 \"How do I receive MON?\"<br>• 👥 \"Save Kuya's wallet address\"<br>• 📋 \"Show my recent transactions\"<br><br>I'm here to help — even if this is your first time using crypto! 🌟";
       box.appendChild(welcome);
       return;
     }
@@ -4230,7 +4261,81 @@ function loadChatHistory() {
 // ═══════════════════════════════════════
 const PIN_KEY = "apex_pin_hash";
 const PIN_ENABLED_KEY = "apex_pin_enabled";
+const ENC_SALT_KEY = "apex_enc_salt";
 let setPwStep = 1;
+let _sessionPassword = null; // holds password in memory for duration of session
+
+// ─── AES-GCM CRYPTO HELPERS ──────────────────────
+async function deriveKey(password, salt) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false, ["encrypt", "decrypt"]
+  );
+}
+
+async function encryptValue(plaintext, password) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey(password, salt);
+  const enc = new TextEncoder();
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(plaintext));
+  // Pack: salt(16) + iv(12) + ciphertext → base64
+  const combined = new Uint8Array(16 + 12 + ciphertext.byteLength);
+  combined.set(salt, 0);
+  combined.set(iv, 16);
+  combined.set(new Uint8Array(ciphertext), 28);
+  return btoa(String.fromCharCode(...combined));
+}
+
+async function decryptValue(encoded, password) {
+  try {
+    const combined = Uint8Array.from(atob(encoded), c => c.charCodeAt(0));
+    const salt = combined.slice(0, 16);
+    const iv = combined.slice(16, 28);
+    const ciphertext = combined.slice(28);
+    const key = await deriveKey(password, salt);
+    const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ciphertext);
+    return new TextDecoder().decode(plaintext);
+  } catch { return null; }
+}
+
+function isEncrypted(val) {
+  // Encrypted values are base64, plain private keys start with 0x
+  return val && !val.startsWith("0x") && val.length > 60;
+}
+
+// Encrypt all wallet keys with password
+async function encryptAllWallets(password) {
+  for (let w of wallets) {
+    if (w.privateKey && !isEncrypted(w.privateKey)) {
+      w.privateKey = await encryptValue(w.privateKey, password);
+    }
+    if (w.mnemonic && !isEncrypted(w.mnemonic)) {
+      w.mnemonic = await encryptValue(w.mnemonic, password);
+    }
+  }
+  saveWalletsToStorage();
+}
+
+// Decrypt all wallet keys with password
+async function decryptAllWallets(password) {
+  for (let w of wallets) {
+    if (w.privateKey && isEncrypted(w.privateKey)) {
+      const dec = await decryptValue(w.privateKey, password);
+      if (dec) w.privateKey = dec;
+    }
+    if (w.mnemonic && isEncrypted(w.mnemonic)) {
+      const dec = await decryptValue(w.mnemonic, password);
+      if (dec) w.mnemonic = dec;
+    }
+  }
+}
 
 function hashPin(pw) {
   let h = 5381;
@@ -4257,11 +4362,21 @@ function showPinLock() {
   setTimeout(() => { if (input) input.focus(); }, 300);
 }
 
-function verifyPin() {
+async function verifyPin() {
   const pw = document.getElementById("pwInput")?.value || "";
   if (!pw) return;
   const stored = localStorage.getItem(PIN_KEY);
   if (hashPin(pw) === stored) {
+    _sessionPassword = pw;
+    // Decrypt wallets in memory for this session
+    await decryptAllWallets(pw);
+    // Re-connect active wallet with decrypted key
+    if (wallets[activeWalletIndex]?.privateKey) {
+      try {
+        wallet = new ethers.Wallet(wallets[activeWalletIndex].privateKey);
+        connectProvider();
+      } catch(e) {}
+    }
     document.getElementById("pinOverlay").classList.add("hidden");
     showToast("✓ Wallet unlocked!");
   } else {
@@ -4281,21 +4396,29 @@ function togglePwVisibility(id) {
 }
 
 function pinForgot() {
-  if (confirm("Reset password? You can set a new one in Settings.")) {
+  if (confirm("Reset password? Your wallets will be removed for safety — make sure you have your seed phrases saved!")) {
     localStorage.removeItem(PIN_KEY);
     localStorage.removeItem(PIN_ENABLED_KEY);
+    localStorage.removeItem("apex_wallets");
+    _sessionPassword = null;
     document.getElementById("pinOverlay").classList.add("hidden");
     updatePinToggleUI();
-    showToast("Password removed. Set a new one in Settings.");
+    showToast("Password removed. Please re-import your wallets.");
+    setTimeout(() => location.reload(), 1500);
   }
 }
 
 // ─── SET PASSWORD ──────────────────────
 function togglePinLock() {
   if (isPinEnabled()) {
-    if (confirm("Remove password lock?")) {
+    if (confirm("Remove password lock? This will also decrypt your stored keys.")) {
+      // Decrypt before removing lock
+      if (_sessionPassword) {
+        decryptAllWallets(_sessionPassword).then(() => saveWalletsToStorage());
+      }
       localStorage.removeItem(PIN_KEY);
       localStorage.removeItem(PIN_ENABLED_KEY);
+      _sessionPassword = null;
       updatePinToggleUI();
       showToast("Password lock disabled");
     }
@@ -4316,7 +4439,6 @@ function togglePinLock() {
 
 function updateSetPwStep() {
   const pw = document.getElementById("setPwInput")?.value || "";
-  // Show strength meter
   const strengthWrap = document.getElementById("pwStrengthWrap");
   if (pw.length > 0) {
     strengthWrap.classList.remove("hidden");
@@ -4343,7 +4465,7 @@ function calcPwStrength(pw) {
   return Math.max(1, Math.min(4, s));
 }
 
-function confirmSetPin() {
+async function confirmSetPin() {
   if (setPwStep === 1) {
     const pw = document.getElementById("setPwInput")?.value || "";
     if (pw.length < 6) {
@@ -4364,11 +4486,14 @@ function confirmSetPin() {
       if (confInp) { confInp.value = ""; confInp.style.borderColor = "var(--red)"; setTimeout(() => confInp.style.borderColor = "", 600); confInp.focus(); }
       return;
     }
+    // Save hash + encrypt all wallet keys
     localStorage.setItem(PIN_KEY, hashPin(pw));
     localStorage.setItem(PIN_ENABLED_KEY, "true");
+    _sessionPassword = pw;
+    await encryptAllWallets(pw);
     document.getElementById("setPinOverlay").classList.add("hidden");
     updatePinToggleUI();
-    showToast("🔐 Password lock enabled!");
+    showToast("🔐 Password lock enabled! Keys encrypted.");
   }
 }
 
@@ -4393,7 +4518,7 @@ function updatePinToggleUI() {
   const label = document.getElementById("pinStatusLabel");
   const enabled = isPinEnabled();
   if (toggle) toggle.classList.toggle("on", enabled);
-  if (label) label.textContent = enabled ? "Password lock is ON" : "Protect wallet with a password";
+  if (label) label.textContent = enabled ? "🔐 Keys encrypted & locked" : "Protect wallet with a password";
 }
 
 // Lock when switching away
@@ -4845,7 +4970,7 @@ function shareAddress() {
   if (!wallet) return;
   if (navigator.share) {
     navigator.share({
-      title: "My APEX Wallet Address",
+      title: "My OctoPay AI Address",
       text: "Send MON to my wallet on Monad Testnet:\n" + wallet.address,
     }).catch(() => {});
   } else {
@@ -4976,18 +5101,30 @@ function loadWalletsFromStorage() {
   return false;
 }
 
-function addWalletToList(name, address, privateKey, mnemonic) {
-  wallets.push({ name, address, privateKey, mnemonic: mnemonic || null });
+async function addWalletToList(name, address, privateKey, mnemonic) {
+  let pk = privateKey;
+  let mn = mnemonic || null;
+  // If password is already set, encrypt new wallet keys immediately
+  if (_sessionPassword) {
+    if (pk && !isEncrypted(pk)) pk = await encryptValue(pk, _sessionPassword);
+    if (mn && !isEncrypted(mn)) mn = await encryptValue(mn, _sessionPassword);
+  }
+  wallets.push({ name, address, privateKey: pk, mnemonic: mn });
   saveWalletsToStorage();
 }
 
-function switchToWallet(idx) {
+async function switchToWallet(idx) {
   stopReceiveWatcher();
   activeWalletIndex = idx;
   saveWalletsToStorage();
   const w = wallets[idx];
   try {
-    wallet = new ethers.Wallet(w.privateKey);
+    let pk = w.privateKey;
+    // If encrypted and session password available, decrypt on the fly
+    if (isEncrypted(pk) && _sessionPassword) {
+      pk = await decryptValue(pk, _sessionPassword) || pk;
+    }
+    wallet = new ethers.Wallet(pk);
     connectProvider();
     document.getElementById("addrDisplay").textContent = wallet.address;
     document.getElementById("receiveAddr").textContent = wallet.address;
@@ -5116,7 +5253,7 @@ function saveWalletName() {
 }
 
 function disconnectWallet() {
-  if (!confirm("Remove this wallet from APEX? Make sure you have your seed phrase saved!")) return;
+  if (!confirm("Remove this wallet from OctoPay AI? Make sure you have your seed phrase saved!")) return;
   stopReceiveWatcher();
   wallets.splice(activeWalletIndex, 1);
   if (wallets.length === 0) {
@@ -5139,9 +5276,9 @@ const LANG_NAMES = {
 
 // Also add vi/ms/th translations to app T() system
 const T_EXTRA = {
-  vi: { setup_title:"Chào mừng đến APEX", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"Trợ lý AI APEX", chat_sub:"Nói là xong. Gửi ngay. Tất cả qua chat.", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
-  ms: { setup_title:"Selamat Datang ke APEX", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"Ejen AI APEX", chat_sub:"Beritahu saja. Hantar. Selesai — semua melalui chat.", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
-  th: { setup_title:"ยินดีต้อนรับสู่ APEX", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"AI Agent APEX", chat_sub:"บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
+  vi: { setup_title:"Chào mừng đến OctoPay AI", send:"Gửi", receive:"Nhận", contacts:"Danh bạ", balance:"Số dư", your_address:"Địa chỉ của bạn", copy:"Sao chép", send_title:"Gửi MON", to:"Đến (địa chỉ hoặc tên)", amount:"Số lượng (MON)", send_btn:"Gửi", receive_title:"Nhận MON", contacts_title:"Danh bạ", add_contact:"Thêm liên hệ", contact_name:"Tên", contact_addr_lbl:"Địa chỉ ví", save:"Lưu", no_contacts:"Chưa có liên hệ", tab_seed:"Cụm từ hạt giống", tab_pk:"Khóa riêng", faucet_desc:"Nhấp vào vòi để sao chép địa chỉ tự động.", chat_title:"Otto AI", chat_sub:"Nói là xong. Gửi ngay. Tất cả qua chat.", network:"Monad Testnet", lbl_or:"hoặc nhập ví hiện có", import_btn:"Nhập Ví", create_btn:"Tạo Mới", saved:"Đã lưu — Tiếp tục", mnemonic_warn:"Viết 12 từ này theo thứ tự và lưu trữ an toàn. Không bao giờ chia sẻ!", copy_addr:"Sao chép địa chỉ", paste_hint:"Có cụm từ hạt giống không?" },
+  ms: { setup_title:"Selamat Datang ke OctoPay AI", send:"Hantar", receive:"Terima", contacts:"Kenalan", balance:"Baki", your_address:"Alamat Anda", copy:"Salin", send_title:"Hantar MON", to:"Kepada (alamat atau nama)", amount:"Jumlah (MON)", send_btn:"Hantar", receive_title:"Terima MON", contacts_title:"Kenalan", add_contact:"Tambah Kenalan", contact_name:"Nama", contact_addr_lbl:"Alamat Dompet", save:"Simpan", no_contacts:"Tiada kenalan lagi", tab_seed:"Frasa Benih", tab_pk:"Kunci Peribadi", faucet_desc:"Klik paip untuk salin alamat secara automatik.", chat_title:"Otto AI", chat_sub:"Beritahu saja. Hantar. Selesai — semua melalui chat.", network:"Monad Testnet", lbl_or:"atau import dompet sedia ada", import_btn:"Import Dompet", create_btn:"Cipta Baru", saved:"Disimpan — Teruskan", mnemonic_warn:"Tulis 12 perkataan ini mengikut urutan dan simpan dengan selamat. Jangan kongsi!", copy_addr:"Salin Alamat", paste_hint:"Ada frasa benih?" },
+  th: { setup_title:"ยินดีต้อนรับสู่ OctoPay AI", send:"ส่ง", receive:"รับ", contacts:"รายชื่อ", balance:"ยอดคงเหลือ", your_address:"ที่อยู่ของคุณ", copy:"คัดลอก", send_title:"ส่ง MON", to:"ถึง (ที่อยู่หรือชื่อ)", amount:"จำนวน (MON)", send_btn:"ส่ง", receive_title:"รับ MON", contacts_title:"รายชื่อ", add_contact:"เพิ่มรายชื่อ", contact_name:"ชื่อ", contact_addr_lbl:"ที่อยู่กระเป๋าเงิน", save:"บันทึก", no_contacts:"ยังไม่มีรายชื่อ", tab_seed:"วลีกู้คืน", tab_pk:"คีย์ส่วนตัว", faucet_desc:"คลิกก๊อกน้ำเพื่อคัดลอกที่อยู่โดยอัตโนมัติ", chat_title:"Otto AI", chat_sub:"บอกมาเลย ส่งได้เลย เสร็จ — ทุกอย่างผ่านแชท", network:"Monad Testnet", lbl_or:"หรือนำเข้ากระเป๋าเงินที่มีอยู่", import_btn:"นำเข้ากระเป๋าเงิน", create_btn:"สร้างใหม่", saved:"บันทึกแล้ว — ต่อไป", mnemonic_warn:"เขียน 12 คำตามลำดับและเก็บไว้อย่างปลอดภัย ห้ามแชร์!", copy_addr:"คัดลอกที่อยู่", paste_hint:"มีวลีกู้คืนไหม?" }
 };
 
 let settingsOrigin = "menu"; // "menu" or "walletSwitch"
@@ -5355,8 +5492,8 @@ function setTheme(name, el) {
 }
 
 function loadTheme() {
-  const saved = localStorage.getItem("apex_theme") || "purple";
-  document.body.className = "theme-" + saved;
+  const saved = localStorage.getItem("apex_theme") || "teal";
+  document.body.className = "theme-" + (saved === 'purple' ? 'teal' : saved);
   document.querySelectorAll(".theme-dot").forEach(d => {
     if (d.getAttribute("onclick").includes(saved)) d.classList.add("active");
     else d.classList.remove("active");
@@ -5536,25 +5673,25 @@ const OB_SLIDES = [
   {
     tag: "Welcome", 
     title: "Making crypto easy for everyone",
-    desc: "APEX Wallet lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.",
+    desc: "OctoPay AI lets you <strong>send and receive money</strong> instantly — no bank needed. As easy as texting.",
     tip: null
   },
   {
     tag: "Your Wallet",
     title: "Like a digital pocket",
-    desc: "Think of APEX Wallet like a <strong>digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.",
+    desc: "Think of OctoPay AI like a <strong>digital wallet in your phone</strong>. Store, send, and receive MON tokens — anytime, anywhere.",
     tip: null
   },
   {
     tag: "⚠️ Important",
     title: "Your secret recovery phrase",
     desc: "When you create a wallet, you'll get <strong>12 secret words</strong>. This is the only way to recover your wallet if you lose your phone.",
-    tip: "✏️ Write it on paper. Never screenshot it. Never share with anyone — not even APEX support."
+    tip: "✏️ Write it on paper. Never screenshot it. Never share with anyone — not even OctoPay AI support."
   },
   {
     tag: "AI Powered",
     title: "Just talk to your wallet",
-    desc: "No buttons to learn. Just <strong>type what you want</strong> — in your own language — and APEX does it for you.",
+    desc: "No buttons to learn. Just <strong>type what you want</strong> — in your own language — and OctoPay AI does it for you.",
     tip: null
   },
   {
@@ -5578,13 +5715,13 @@ const OB_LANGS = {
       "Handa ka na magsimula!"
     ],
     descs: [
-      "Ang APEX Wallet ay para sa <strong>pagpapadala at pagtanggap ng pera</strong> nang mabilis at madali — walang kailangang bangko. Kasing simple ng pagtext.",
-      "Isipin ang APEX Wallet bilang <strong>digital na pitaka sa iyong telepono</strong>. Maaari kang mag-ipon, magpadala, at tumanggap ng MON tokens — kahit saan, kahit kailan.",
+      "Ang OctoPay AI ay para sa <strong>pagpapadala at pagtanggap ng pera</strong> nang mabilis at madali — walang kailangang bangko. Kasing simple ng pagtext.",
+      "Isipin ang OctoPay AI bilang <strong>digital na pitaka sa iyong telepono</strong>. Maaari kang mag-ipon, magpadala, at tumanggap ng MON tokens — kahit saan, kahit kailan.",
       "Kapag gumawa ka ng wallet, bibigyan ka ng <strong>12 lihim na salita</strong>. Ito ang tanging paraan upang mabawi ang iyong wallet kung mawala o masira ang iyong telepono.",
-      "Hindi mo kailangang matuto ng mga kumplikadong button. <strong>I-type lang ang gusto mo</strong> — sa iyong sariling wika — at gagawin ito ng APEX para sa iyo.",
+      "Hindi mo kailangang matuto ng mga kumplikadong button. <strong>I-type lang ang gusto mo</strong> — sa iyong sariling wika — at gagawin ito ng OctoPay AI para sa iyo.",
       "Gumawa ng bagong wallet o i-import ang iyong mayroon na. Ang iyong paglalakbay sa crypto ay nagsisimula na — <strong>simple, ligtas, at sa iyong wika</strong>."
     ],
-    tip: "✏️ Isulat ang 12 salita sa papel. Huwag mag-screenshot. Huwag ibahagi sa kahit sino — kahit sa APEX support.",
+    tip: "✏️ Isulat ang 12 salita sa papel. Huwag mag-screenshot. Huwag ibahagi sa kahit sino — kahit sa OctoPay AI support.",
     next: ["Magsimula →", "Susunod →", "Susunod →", "Susunod →", "Gumawa ng Wallet"],
     skip: "Laktawan"
   },
@@ -5600,13 +5737,13 @@ const OB_LANGS = {
       "Kamu sudah siap!"
     ],
     descs: [
-      "APEX Wallet memungkinkan kamu <strong>mengirim dan menerima uang</strong> secara instan — tanpa perlu rekening bank. Semudah kirim pesan.",
-      "Bayangkan APEX Wallet sebagai <strong>dompet digital di ponselmu</strong>. Simpan, kirim, dan terima token MON — kapan saja, di mana saja.",
+      "OctoPay AI memungkinkan kamu <strong>mengirim dan menerima uang</strong> secara instan — tanpa perlu rekening bank. Semudah kirim pesan.",
+      "Bayangkan OctoPay AI sebagai <strong>dompet digital di ponselmu</strong>. Simpan, kirim, dan terima token MON — kapan saja, di mana saja.",
       "Saat membuat wallet, kamu akan mendapat <strong>12 kata rahasia</strong>. Ini satu-satunya cara memulihkan wallet jika ponselmu hilang atau rusak.",
-      "Tidak perlu belajar tombol yang rumit. Cukup <strong>ketik apa yang kamu mau</strong> — dalam bahasamu sendiri — dan APEX akan mengerjakannya.",
+      "Tidak perlu belajar tombol yang rumit. Cukup <strong>ketik apa yang kamu mau</strong> — dalam bahasamu sendiri — dan OctoPay AI yang akan mengerjakannya.",
       "Buat wallet baru atau impor yang sudah ada. Perjalanan crypto kamu dimulai sekarang — <strong>mudah, aman, dan dalam bahasamu</strong>."
     ],
-    tip: "✏️ Tulis 12 kata di kertas. Jangan screenshot. Jangan bagikan ke siapapun — termasuk tim APEX.",
+    tip: "✏️ Tulis 12 kata di kertas. Jangan screenshot. Jangan bagikan ke siapapun — termasuk tim OctoPay AI.",
     next: ["Mulai →", "Selanjutnya →", "Selanjutnya →", "Selanjutnya →", "Buat Wallet"],
     skip: "Lewati"
   },
@@ -5622,13 +5759,13 @@ const OB_LANGS = {
       "이제 시작할 준비가 됐어요!"
     ],
     descs: [
-      "APEX Wallet으로 <strong>즉시 돈을 보내고 받을 수 있어요</strong> — 은행 계좌 없이도요. 문자 보내는 것처럼 쉬워요.",
-      "APEX Wallet을 <strong>휴대폰 속 디지털 지갑</strong>이라고 생각해보세요. MON 토큰을 보관하고, 보내고, 받을 수 있어요 — 언제 어디서든요.",
+      "OctoPay AI으로 <strong>즉시 돈을 보내고 받을 수 있어요</strong> — 은행 계좌 없이도요. 문자 보내는 것처럼 쉬워요.",
+      "OctoPay AI을 <strong>휴대폰 속 디지털 지갑</strong>이라고 생각해보세요. MON 토큰을 보관하고, 보내고, 받을 수 있어요 — 언제 어디서든요.",
       "지갑을 만들면 <strong>12개의 비밀 단어</strong>를 받게 돼요. 이 단어들이 휴대폰을 잃어버렸을 때 지갑을 되찾는 유일한 방법이에요.",
-      "복잡한 버튼을 배울 필요 없어요. <strong>원하는 걸 그냥 입력</strong>하면 APEX가 알아서 해드려요 — 한국어로도 돼요.",
+      "복잡한 버튼을 배울 필요 없어요. <strong>원하는 걸 그냥 입력</strong>하면 OctoPay AI가 알아서 해드려요 — 한국어로도 돼요.",
       "새 지갑을 만들거나 기존 지갑을 가져오세요. 크립토 여정이 지금 시작돼요 — <strong>쉽고, 안전하고, 내 언어로</strong>."
     ],
-    tip: "✏️ 12개 단어를 종이에 적어두세요. 스크린샷 금지. 누구와도 공유하지 마세요 — APEX 직원 포함.",
+    tip: "✏️ 12개 단어를 종이에 적어두세요. 스크린샷 금지. 누구와도 공유하지 마세요 — OctoPay AI 팀 포함.",
     next: ["시작하기 →", "다음 →", "다음 →", "다음 →", "지갑 만들기"],
     skip: "건너뛰기"
   },
@@ -5644,13 +5781,13 @@ const OB_LANGS = {
       "你已经准备好了！"
     ],
     descs: [
-      "APEX Wallet 让你能够<strong>即时发送和接收资金</strong> — 无需银行账户。就像发短信一样简单。",
-      "把 APEX Wallet 想象成<strong>手机里的数字钱包</strong>。随时随地存储、发送和接收 MON 代币。",
+      "OctoPay AI 让你能够<strong>即时发送和接收资金</strong> — 无需银行账户。就像发短信一样简单。",
+      "把 OctoPay AI 想象成<strong>手机里的数字钱包</strong>。随时随地存储、发送和接收 MON 代币。",
       "创建钱包时，你会获得 <strong>12个秘密词语</strong>。这是在手机丢失或损坏时恢复钱包的唯一方法。",
-      "无需学习复杂的操作按钮。只需<strong>用自己的语言输入</strong>你想做的事，APEX 会帮你完成。",
+      "无需学习复杂的操作按钮。只需<strong>用自己的语言输入</strong>你想做的事，OctoPay AI 会帮你完成。",
       "创建新钱包或导入已有钱包。你的加密货币之旅现在开始 — <strong>简单、安全、用你的语言</strong>。"
     ],
-    tip: "✏️ 把12个词写在纸上。不要截图保存。不要与任何人分享 — 包括 APEX 工作人员。",
+    tip: "✏️ 把12个词写在纸上。不要截图保存。不要与任何人分享 — 包括 OctoPay AI 团队。",
     next: ["开始 →", "下一步 →", "下一步 →", "下一步 →", "创建钱包"],
     skip: "跳过"
   },
@@ -5666,13 +5803,13 @@ const OB_LANGS = {
       "คุณพร้อมแล้ว!"
     ],
     descs: [
-      "APEX Wallet ให้คุณ<strong>ส่งและรับเงินได้ทันที</strong> — ไม่ต้องมีบัญชีธนาคาร ง่ายเหมือนส่งข้อความ",
-      "ลองนึกถึง APEX Wallet ว่าเป็น<strong>กระเป๋าเงินดิจิทัลในโทรศัพท์</strong> เก็บ ส่ง และรับ MON token ได้ทุกที่ทุกเวลา",
+      "OctoPay AI ให้คุณ<strong>ส่งและรับเงินได้ทันที</strong> — ไม่ต้องมีบัญชีธนาคาร ง่ายเหมือนส่งข้อความ",
+      "ลองนึกถึง OctoPay AI ว่าเป็น<strong>กระเป๋าเงินดิจิทัลในโทรศัพท์</strong> เก็บ ส่ง และรับ MON token ได้ทุกที่ทุกเวลา",
       "เมื่อสร้างกระเป๋าเงิน คุณจะได้รับ<strong>12 คำลับ</strong> นี่คือวิธีเดียวที่จะกู้คืนกระเป๋าเงินหากโทรศัพท์หาย",
-      "ไม่ต้องเรียนรู้ปุ่มที่ซับซ้อน แค่<strong>พิมพ์สิ่งที่ต้องการ</strong>เป็นภาษาของคุณ แล้ว APEX จะจัดการให้",
+      "ไม่ต้องเรียนรู้ปุ่มที่ซับซ้อน แค่<strong>พิมพ์สิ่งที่ต้องการ</strong>เป็นภาษาของคุณ แล้ว OctoPay AI จะจัดการให้",
       "สร้างกระเป๋าเงินใหม่หรือนำเข้าที่มีอยู่ การเดินทางคริปโตของคุณเริ่มต้นแล้ว — <strong>ง่าย ปลอดภัย ในภาษาของคุณ</strong>"
     ],
-    tip: "✏️ จดคำ 12 คำลงในกระดาษ ห้ามถ่ายภาพหน้าจอ ห้ามแชร์กับใคร — รวมถึงทีม APEX",
+    tip: "✏️ จดคำ 12 คำลงในกระดาษ ห้ามถ่ายภาพหน้าจอ ห้ามแชร์กับใคร — รวมถึงทีม OctoPay AI",
     next: ["เริ่มต้น →", "ถัดไป →", "ถัดไป →", "ถัดไป →", "สร้างกระเป๋าเงิน"],
     skip: "ข้าม"
   },
@@ -5688,13 +5825,13 @@ const OB_LANGS = {
       "Anda sudah bersedia!"
     ],
     descs: [
-      "APEX Wallet membolehkan anda <strong>menghantar dan menerima wang</strong> dengan segera — tanpa akaun bank. Semudah menghantar mesej.",
-      "Bayangkan APEX Wallet sebagai <strong>dompet digital dalam telefon anda</strong>. Simpan, hantar, dan terima token MON — di mana saja, bila-bila masa.",
+      "OctoPay AI membolehkan anda <strong>menghantar dan menerima wang</strong> dengan segera — tanpa akaun bank. Semudah menghantar mesej.",
+      "Bayangkan OctoPay AI sebagai <strong>dompet digital dalam telefon anda</strong>. Simpan, hantar, dan terima token MON — di mana saja, bila-bila masa.",
       "Apabila anda mencipta dompet, anda akan mendapat <strong>12 perkataan rahsia</strong>. Inilah satu-satunya cara memulihkan dompet jika telefon anda hilang.",
-      "Tidak perlu belajar butang yang rumit. Hanya <strong>taip apa yang anda mahu</strong> dalam bahasa anda, dan APEX akan menguruskannya.",
+      "Tidak perlu belajar butang yang rumit. Hanya <strong>taip apa yang anda mahu</strong> dalam bahasa anda, dan OctoPay AI akan menguruskannya.",
       "Cipta dompet baru atau import yang sedia ada. Perjalanan kripto anda bermula sekarang — <strong>mudah, selamat, dalam bahasa anda</strong>."
     ],
-    tip: "✏️ Tulis 12 perkataan di atas kertas. Jangan tangkap skrin. Jangan kongsi dengan sesiapa — termasuk pasukan APEX.",
+    tip: "✏️ Tulis 12 perkataan di atas kertas. Jangan tangkap skrin. Jangan kongsi dengan sesiapa — termasuk pasukan OctoPay AI.",
     next: ["Mula →", "Seterusnya →", "Seterusnya →", "Seterusnya →", "Cipta Dompet"],
     skip: "Langkau"
   },
@@ -5710,13 +5847,13 @@ const OB_LANGS = {
       "Bạn đã sẵn sàng!"
     ],
     descs: [
-      "APEX Wallet cho phép bạn <strong>gửi và nhận tiền ngay lập tức</strong> — không cần tài khoản ngân hàng. Dễ như nhắn tin.",
-      "Hãy nghĩ APEX Wallet như <strong>ví kỹ thuật số trong điện thoại</strong>. Lưu trữ, gửi và nhận token MON — mọi lúc mọi nơi.",
+      "OctoPay AI cho phép bạn <strong>gửi và nhận tiền ngay lập tức</strong> — không cần tài khoản ngân hàng. Dễ như nhắn tin.",
+      "Hãy nghĩ OctoPay AI như <strong>ví kỹ thuật số trong điện thoại</strong>. Lưu trữ, gửi và nhận token MON — mọi lúc mọi nơi.",
       "Khi tạo ví, bạn sẽ nhận được <strong>12 từ bí mật</strong>. Đây là cách duy nhất để khôi phục ví nếu mất điện thoại.",
-      "Không cần học các nút phức tạp. Chỉ cần <strong>gõ những gì bạn muốn</strong> bằng ngôn ngữ của bạn, APEX sẽ làm cho bạn.",
+      "Không cần học các nút phức tạp. Chỉ cần <strong>gõ những gì bạn muốn</strong> bằng ngôn ngữ của bạn, OctoPay AI sẽ làm cho bạn.",
       "Tạo ví mới hoặc nhập ví hiện có. Hành trình crypto của bạn bắt đầu ngay bây giờ — <strong>đơn giản, an toàn, bằng ngôn ngữ của bạn</strong>."
     ],
-    tip: "✏️ Viết 12 từ lên giấy. Không chụp màn hình. Không chia sẻ với bất kỳ ai — kể cả nhóm APEX.",
+    tip: "✏️ Viết 12 từ lên giấy. Không chụp màn hình. Không chia sẻ với bất kỳ ai — kể cả nhóm OctoPay AI.",
     next: ["Bắt Đầu →", "Tiếp Theo →", "Tiếp Theo →", "Tiếp Theo →", "Tạo Ví"],
     skip: "Bỏ Qua"
   }
@@ -5797,7 +5934,7 @@ function drawOrbit() {
   // Draw orbit rings
   orbitCtx.beginPath();
   orbitCtx.arc(cx, cy, r1, 0, Math.PI * 2);
-  orbitCtx.strokeStyle = "rgba(108,92,231,0.25)";
+  orbitCtx.strokeStyle = "rgba(0,165,138,0.25)";
   orbitCtx.setLineDash([4, 4]);
   orbitCtx.lineWidth = 1;
   orbitCtx.stroke();
@@ -5820,9 +5957,9 @@ function drawOrbit() {
     // Glow for selected
     if (isSelected) {
       orbitCtx.save();
-      orbitCtx.shadowColor = "#6c5ce7";
+      orbitCtx.shadowColor = "#00a58a";
       orbitCtx.shadowBlur = 18;
-      orbitCtx.fillStyle = "rgba(108,92,231,0.3)";
+      orbitCtx.fillStyle = "rgba(0,165,138,0.3)";
       orbitCtx.beginPath();
       orbitCtx.ellipse(x, y, fw/2+6, fh/2+6, 0, 0, Math.PI*2);
       orbitCtx.fill();
@@ -5857,7 +5994,7 @@ function drawOrbit() {
       orbitCtx.beginPath();
       orbitCtx.arc(x, y, fw/2, 0, Math.PI*2);
       orbitCtx.fill();
-      orbitCtx.fillStyle = "#a29bfe";
+      orbitCtx.fillStyle = "#00c9a7";
       orbitCtx.font = "bold " + (isSelected ? 12 : 10) + "px sans-serif";
       orbitCtx.textAlign = "center";
       orbitCtx.textBaseline = "middle";
@@ -5868,7 +6005,7 @@ function drawOrbit() {
     if (isSelected) {
       orbitCtx.beginPath();
       orbitCtx.arc(x, y, fw/2+4, 0, Math.PI*2);
-      orbitCtx.strokeStyle = "#a29bfe";
+      orbitCtx.strokeStyle = "#00c9a7";
       orbitCtx.lineWidth = 2;
       orbitCtx.stroke();
     }
@@ -5950,7 +6087,7 @@ function renderObSlide(idx) {
   for (let i = 0; i < OB_TOTAL; i++) {
     const d = document.getElementById("obDot" + i);
     if (!d) continue;
-    d.style.background = i < idx ? "#a29bfe" : i === idx ? "#6c5ce7" : "rgba(255,255,255,0.12)";
+    d.style.background = i < idx ? "#00c9a7" : i === idx ? "#00a58a" : "rgba(255,255,255,0.12)";
   }
 
   // Translate content
@@ -5985,8 +6122,8 @@ function renderObSlide(idx) {
   if (nextBtn) {
     nextBtn.textContent = nextLabels[idx];
     nextBtn.style.background = idx === OB_TOTAL - 1
-      ? "linear-gradient(135deg,#6c5ce7,#00cec9)"
-      : "#6c5ce7";
+      ? "linear-gradient(135deg,#00a58a,#00cec9)"
+      : "#00a58a";
   }
   if (backBtn) backBtn.style.display = idx === 0 ? "none" : "block";
   if (skipBtn) {
@@ -6026,7 +6163,7 @@ function renderObLangPicker() {
         align-items: center;
         gap: 6px;
         ${isActive
-          ? "background:#6c5ce7;border:1.5px solid #6c5ce7;color:white;box-shadow:0 4px 14px rgba(108,92,231,0.4);"
+          ? "background:#00a58a;border:1.5px solid #00a58a;color:white;box-shadow:0 4px 14px rgba(0,165,138,0.4);"
           : "background:#1a1b26;border:1.5px solid rgba(255,255,255,0.12);color:#8886a0;"
         }
       ">${opt.flag} ${opt.label}</div>`;
@@ -6246,7 +6383,7 @@ updatePinToggleUI();
 
       <div class="info-card" style="background:var(--red-soft);border-color:rgba(255,87,87,0.2)">
         <div style="font-size:12px;color:var(--red);line-height:1.6">
-          ⚠️ <strong>Warning:</strong> Never share your seed phrase or private key with anyone — not even APEX support. Anyone with these can access your wallet.
+          ⚠️ <strong>Warning:</strong> Never share your seed phrase or private key with anyone — not even OctoPay AI support. Anyone with these can access your wallet.
         </div>
       </div>
     </div>
@@ -6333,9 +6470,9 @@ updatePinToggleUI();
 
 <!-- PASSWORD LOCK OVERLAY -->
 <div class="pin-overlay hidden" id="pinOverlay">
-  <div class="pin-logo">⬡</div>
+  <div class="pin-logo">🐙</div>
   <div class="pin-title" id="pinTitle">Welcome Back</div>
-  <div class="pin-subtitle" id="pinSubtitle">Enter your password to unlock APEX Wallet</div>
+  <div class="pin-subtitle" id="pinSubtitle">Enter your password to unlock OctoPay AI</div>
   <div style="width:100%;max-width:320px;margin-bottom:16px;position:relative">
     <input type="password" id="pwInput"
       placeholder="Enter password..."
